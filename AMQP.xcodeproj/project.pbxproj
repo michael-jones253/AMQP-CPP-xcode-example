@@ -6,8 +6,288 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B23A095F1AE0A22F00533FFA /* AMQPSTL.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A095E1AE0A22F00533FFA /* AMQPSTL.h */; };
+		B23A09611AE0A22F00533FFA /* AMQPSTLPriv.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09601AE0A22F00533FFA /* AMQPSTLPriv.h */; };
+		B23A09631AE0A22F00533FFA /* AMQPSTL.cp in Sources */ = {isa = PBXBuildFile; fileRef = B23A09621AE0A22F00533FFA /* AMQPSTL.cp */; };
+		B23A096F1AE0A77000533FFA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A096E1AE0A77000533FFA /* main.cpp */; };
+		B23A09731AE0A86500533FFA /* libAMQPSTL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */; };
+		B23A09991AE0AEDF00533FFA /* array.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09751AE0AEDF00533FFA /* array.h */; };
+		B23A099A1AE0AEDF00533FFA /* booleanset.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09761AE0AEDF00533FFA /* booleanset.h */; };
+		B23A099B1AE0AEDF00533FFA /* buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09771AE0AEDF00533FFA /* buffer.h */; };
+		B23A099C1AE0AEDF00533FFA /* bytebuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09781AE0AEDF00533FFA /* bytebuffer.h */; };
+		B23A099D1AE0AEDF00533FFA /* callbacks.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09791AE0AEDF00533FFA /* callbacks.h */; };
+		B23A099E1AE0AEDF00533FFA /* channel.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A097A1AE0AEDF00533FFA /* channel.h */; };
+		B23A099F1AE0AEDF00533FFA /* channelimpl.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A097B1AE0AEDF00533FFA /* channelimpl.h */; };
+		B23A09A01AE0AEDF00533FFA /* classes.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A097C1AE0AEDF00533FFA /* classes.h */; };
+		B23A09A11AE0AEDF00533FFA /* connection.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A097E1AE0AEDF00533FFA /* connection.h */; };
+		B23A09A21AE0AEDF00533FFA /* connectionhandler.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A097F1AE0AEDF00533FFA /* connectionhandler.h */; };
+		B23A09A31AE0AEDF00533FFA /* connectionimpl.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09801AE0AEDF00533FFA /* connectionimpl.h */; };
+		B23A09A41AE0AEDF00533FFA /* decimalfield.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09811AE0AEDF00533FFA /* decimalfield.h */; };
+		B23A09A51AE0AEDF00533FFA /* deferred.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09821AE0AEDF00533FFA /* deferred.h */; };
+		B23A09A61AE0AEDF00533FFA /* deferredcancel.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09831AE0AEDF00533FFA /* deferredcancel.h */; };
+		B23A09A71AE0AEDF00533FFA /* deferredconsumer.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09841AE0AEDF00533FFA /* deferredconsumer.h */; };
+		B23A09A81AE0AEDF00533FFA /* deferreddelete.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09851AE0AEDF00533FFA /* deferreddelete.h */; };
+		B23A09A91AE0AEDF00533FFA /* deferredget.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09861AE0AEDF00533FFA /* deferredget.h */; };
+		B23A09AA1AE0AEDF00533FFA /* deferredqueue.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09871AE0AEDF00533FFA /* deferredqueue.h */; };
+		B23A09AB1AE0AEDF00533FFA /* endian.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09881AE0AEDF00533FFA /* endian.h */; };
+		B23A09AC1AE0AEDF00533FFA /* entityimpl.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09891AE0AEDF00533FFA /* entityimpl.h */; };
+		B23A09AD1AE0AEDF00533FFA /* envelope.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A098A1AE0AEDF00533FFA /* envelope.h */; };
+		B23A09AE1AE0AEDF00533FFA /* exchangetype.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A098B1AE0AEDF00533FFA /* exchangetype.h */; };
+		B23A09AF1AE0AEDF00533FFA /* field.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A098C1AE0AEDF00533FFA /* field.h */; };
+		B23A09B01AE0AEDF00533FFA /* fieldproxy.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A098D1AE0AEDF00533FFA /* fieldproxy.h */; };
+		B23A09B11AE0AEDF00533FFA /* flags.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A098E1AE0AEDF00533FFA /* flags.h */; };
+		B23A09B21AE0AEDF00533FFA /* login.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A098F1AE0AEDF00533FFA /* login.h */; };
+		B23A09B31AE0AEDF00533FFA /* message.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09901AE0AEDF00533FFA /* message.h */; };
+		B23A09B41AE0AEDF00533FFA /* metadata.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09911AE0AEDF00533FFA /* metadata.h */; };
+		B23A09B51AE0AEDF00533FFA /* monitor.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09921AE0AEDF00533FFA /* monitor.h */; };
+		B23A09B61AE0AEDF00533FFA /* numericfield.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09931AE0AEDF00533FFA /* numericfield.h */; };
+		B23A09B71AE0AEDF00533FFA /* outbuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09941AE0AEDF00533FFA /* outbuffer.h */; };
+		B23A09B81AE0AEDF00533FFA /* receivedframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09951AE0AEDF00533FFA /* receivedframe.h */; };
+		B23A09B91AE0AEDF00533FFA /* stringfield.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09961AE0AEDF00533FFA /* stringfield.h */; };
+		B23A09BA1AE0AEDF00533FFA /* table.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09971AE0AEDF00533FFA /* table.h */; };
+		B23A09BB1AE0AEDF00533FFA /* watchable.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09981AE0AEDF00533FFA /* watchable.h */; };
+		B23A0A181AE0AFA500533FFA /* array.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A09BD1AE0AFA500533FFA /* array.cpp */; };
+		B23A0A191AE0AFA500533FFA /* basicackframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09BE1AE0AFA500533FFA /* basicackframe.h */; };
+		B23A0A1A1AE0AFA500533FFA /* basiccancelframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09BF1AE0AFA500533FFA /* basiccancelframe.h */; };
+		B23A0A1B1AE0AFA500533FFA /* basiccancelokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09C01AE0AFA500533FFA /* basiccancelokframe.h */; };
+		B23A0A1C1AE0AFA500533FFA /* basicconsumeframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09C11AE0AFA500533FFA /* basicconsumeframe.h */; };
+		B23A0A1D1AE0AFA500533FFA /* basicconsumeokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09C21AE0AFA500533FFA /* basicconsumeokframe.h */; };
+		B23A0A1E1AE0AFA500533FFA /* basicdeliverframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09C31AE0AFA500533FFA /* basicdeliverframe.h */; };
+		B23A0A1F1AE0AFA500533FFA /* basicframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09C41AE0AFA500533FFA /* basicframe.h */; };
+		B23A0A201AE0AFA500533FFA /* basicgetemptyframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09C51AE0AFA500533FFA /* basicgetemptyframe.h */; };
+		B23A0A211AE0AFA500533FFA /* basicgetframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09C61AE0AFA500533FFA /* basicgetframe.h */; };
+		B23A0A221AE0AFA500533FFA /* basicgetokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09C71AE0AFA500533FFA /* basicgetokframe.h */; };
+		B23A0A231AE0AFA500533FFA /* basicheaderframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09C81AE0AFA500533FFA /* basicheaderframe.h */; };
+		B23A0A241AE0AFA500533FFA /* basicnackframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09C91AE0AFA500533FFA /* basicnackframe.h */; };
+		B23A0A251AE0AFA500533FFA /* basicpublishframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09CA1AE0AFA500533FFA /* basicpublishframe.h */; };
+		B23A0A261AE0AFA500533FFA /* basicqosframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09CB1AE0AFA500533FFA /* basicqosframe.h */; };
+		B23A0A271AE0AFA500533FFA /* basicqosokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09CC1AE0AFA500533FFA /* basicqosokframe.h */; };
+		B23A0A281AE0AFA500533FFA /* basicrecoverasyncframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09CD1AE0AFA500533FFA /* basicrecoverasyncframe.h */; };
+		B23A0A291AE0AFA500533FFA /* basicrecoverframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09CE1AE0AFA500533FFA /* basicrecoverframe.h */; };
+		B23A0A2A1AE0AFA500533FFA /* basicrecoverokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09CF1AE0AFA500533FFA /* basicrecoverokframe.h */; };
+		B23A0A2B1AE0AFA500533FFA /* basicrejectframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09D01AE0AFA500533FFA /* basicrejectframe.h */; };
+		B23A0A2C1AE0AFA500533FFA /* basicreturnframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09D11AE0AFA500533FFA /* basicreturnframe.h */; };
+		B23A0A2D1AE0AFA500533FFA /* bodyframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09D21AE0AFA500533FFA /* bodyframe.h */; };
+		B23A0A2E1AE0AFA500533FFA /* channelcloseframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09D31AE0AFA500533FFA /* channelcloseframe.h */; };
+		B23A0A2F1AE0AFA500533FFA /* channelcloseokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09D41AE0AFA500533FFA /* channelcloseokframe.h */; };
+		B23A0A301AE0AFA500533FFA /* channelflowframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09D51AE0AFA500533FFA /* channelflowframe.h */; };
+		B23A0A311AE0AFA500533FFA /* channelflowokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09D61AE0AFA500533FFA /* channelflowokframe.h */; };
+		B23A0A321AE0AFA500533FFA /* channelframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09D71AE0AFA500533FFA /* channelframe.h */; };
+		B23A0A331AE0AFA500533FFA /* channelimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A09D81AE0AFA500533FFA /* channelimpl.cpp */; };
+		B23A0A341AE0AFA500533FFA /* channelopenframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09D91AE0AFA500533FFA /* channelopenframe.h */; };
+		B23A0A351AE0AFA500533FFA /* channelopenokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09DA1AE0AFA500533FFA /* channelopenokframe.h */; };
+		B23A0A361AE0AFA500533FFA /* connectioncloseframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09DB1AE0AFA500533FFA /* connectioncloseframe.h */; };
+		B23A0A371AE0AFA500533FFA /* connectioncloseokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09DC1AE0AFA500533FFA /* connectioncloseokframe.h */; };
+		B23A0A381AE0AFA500533FFA /* connectionframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09DD1AE0AFA500533FFA /* connectionframe.h */; };
+		B23A0A391AE0AFA500533FFA /* connectionimpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A09DE1AE0AFA500533FFA /* connectionimpl.cpp */; };
+		B23A0A3A1AE0AFA500533FFA /* connectionopenframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09DF1AE0AFA500533FFA /* connectionopenframe.h */; };
+		B23A0A3B1AE0AFA500533FFA /* connectionopenokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09E01AE0AFA500533FFA /* connectionopenokframe.h */; };
+		B23A0A3C1AE0AFA500533FFA /* connectionsecureframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09E11AE0AFA500533FFA /* connectionsecureframe.h */; };
+		B23A0A3D1AE0AFA500533FFA /* connectionsecureokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09E21AE0AFA500533FFA /* connectionsecureokframe.h */; };
+		B23A0A3E1AE0AFA500533FFA /* connectionstartframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09E31AE0AFA500533FFA /* connectionstartframe.h */; };
+		B23A0A3F1AE0AFA500533FFA /* connectionstartokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09E41AE0AFA500533FFA /* connectionstartokframe.h */; };
+		B23A0A401AE0AFA500533FFA /* connectiontuneframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09E51AE0AFA500533FFA /* connectiontuneframe.h */; };
+		B23A0A411AE0AFA500533FFA /* connectiontuneokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09E61AE0AFA500533FFA /* connectiontuneokframe.h */; };
+		B23A0A421AE0AFA500533FFA /* consumedmessage.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09E71AE0AFA500533FFA /* consumedmessage.h */; };
+		B23A0A431AE0AFA500533FFA /* deferredcancel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A09E81AE0AFA500533FFA /* deferredcancel.cpp */; };
+		B23A0A441AE0AFA500533FFA /* deferredconsumer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A09E91AE0AFA500533FFA /* deferredconsumer.cpp */; };
+		B23A0A451AE0AFA500533FFA /* deferredget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A09EA1AE0AFA500533FFA /* deferredget.cpp */; };
+		B23A0A461AE0AFA500533FFA /* exception.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09EB1AE0AFA500533FFA /* exception.h */; };
+		B23A0A471AE0AFA500533FFA /* exchangebindframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09EC1AE0AFA500533FFA /* exchangebindframe.h */; };
+		B23A0A481AE0AFA500533FFA /* exchangebindokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09ED1AE0AFA500533FFA /* exchangebindokframe.h */; };
+		B23A0A491AE0AFA500533FFA /* exchangedeclareframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09EE1AE0AFA500533FFA /* exchangedeclareframe.h */; };
+		B23A0A4A1AE0AFA500533FFA /* exchangedeclareokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09EF1AE0AFA500533FFA /* exchangedeclareokframe.h */; };
+		B23A0A4B1AE0AFA500533FFA /* exchangedeleteframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09F01AE0AFA500533FFA /* exchangedeleteframe.h */; };
+		B23A0A4C1AE0AFA500533FFA /* exchangedeleteokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09F11AE0AFA500533FFA /* exchangedeleteokframe.h */; };
+		B23A0A4D1AE0AFA500533FFA /* exchangeframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09F21AE0AFA500533FFA /* exchangeframe.h */; };
+		B23A0A4E1AE0AFA500533FFA /* exchangeunbindframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09F31AE0AFA500533FFA /* exchangeunbindframe.h */; };
+		B23A0A4F1AE0AFA500533FFA /* exchangeunbindokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09F41AE0AFA500533FFA /* exchangeunbindokframe.h */; };
+		B23A0A501AE0AFA500533FFA /* extframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09F51AE0AFA500533FFA /* extframe.h */; };
+		B23A0A511AE0AFA500533FFA /* field.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A09F61AE0AFA500533FFA /* field.cpp */; };
+		B23A0A521AE0AFA500533FFA /* flags.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A09F71AE0AFA500533FFA /* flags.cpp */; };
+		B23A0A531AE0AFA500533FFA /* frame.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09F81AE0AFA500533FFA /* frame.h */; };
+		B23A0A541AE0AFA500533FFA /* framecheck.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09F91AE0AFA500533FFA /* framecheck.h */; };
+		B23A0A551AE0AFA500533FFA /* headerframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09FA1AE0AFA500533FFA /* headerframe.h */; };
+		B23A0A561AE0AFA500533FFA /* heartbeatframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09FB1AE0AFA500533FFA /* heartbeatframe.h */; };
+		B23A0A571AE0AFA500533FFA /* includes.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09FC1AE0AFA500533FFA /* includes.h */; };
+		B23A0A581AE0AFA500533FFA /* messageimpl.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09FD1AE0AFA500533FFA /* messageimpl.h */; };
+		B23A0A591AE0AFA500533FFA /* methodframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09FE1AE0AFA500533FFA /* methodframe.h */; };
+		B23A0A5A1AE0AFA500533FFA /* protocolexception.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09FF1AE0AFA500533FFA /* protocolexception.h */; };
+		B23A0A5B1AE0AFA500533FFA /* protocolheaderframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A001AE0AFA500533FFA /* protocolheaderframe.h */; };
+		B23A0A5C1AE0AFA500533FFA /* queuebindframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A011AE0AFA500533FFA /* queuebindframe.h */; };
+		B23A0A5D1AE0AFA500533FFA /* queuebindokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A021AE0AFA500533FFA /* queuebindokframe.h */; };
+		B23A0A5E1AE0AFA500533FFA /* queuedeclareframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A031AE0AFA500533FFA /* queuedeclareframe.h */; };
+		B23A0A5F1AE0AFA500533FFA /* queuedeclareokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A041AE0AFA500533FFA /* queuedeclareokframe.h */; };
+		B23A0A601AE0AFA500533FFA /* queuedeleteframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A051AE0AFA500533FFA /* queuedeleteframe.h */; };
+		B23A0A611AE0AFA500533FFA /* queuedeleteokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A061AE0AFA500533FFA /* queuedeleteokframe.h */; };
+		B23A0A621AE0AFA500533FFA /* queueframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A071AE0AFA500533FFA /* queueframe.h */; };
+		B23A0A631AE0AFA500533FFA /* queuepurgeframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A081AE0AFA500533FFA /* queuepurgeframe.h */; };
+		B23A0A641AE0AFA500533FFA /* queuepurgeokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A091AE0AFA500533FFA /* queuepurgeokframe.h */; };
+		B23A0A651AE0AFA500533FFA /* queueunbindframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A0A1AE0AFA500533FFA /* queueunbindframe.h */; };
+		B23A0A661AE0AFA500533FFA /* queueunbindokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A0B1AE0AFA500533FFA /* queueunbindokframe.h */; };
+		B23A0A671AE0AFA500533FFA /* receivedframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A0A0C1AE0AFA500533FFA /* receivedframe.cpp */; };
+		B23A0A681AE0AFA500533FFA /* reducedbuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A0D1AE0AFA500533FFA /* reducedbuffer.h */; };
+		B23A0A691AE0AFA500533FFA /* returnedmessage.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A0E1AE0AFA500533FFA /* returnedmessage.h */; };
+		B23A0A6A1AE0AFA500533FFA /* table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A0A0F1AE0AFA500533FFA /* table.cpp */; };
+		B23A0A6B1AE0AFA500533FFA /* transactioncommitframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A101AE0AFA500533FFA /* transactioncommitframe.h */; };
+		B23A0A6C1AE0AFA500533FFA /* transactioncommitokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A111AE0AFA500533FFA /* transactioncommitokframe.h */; };
+		B23A0A6D1AE0AFA500533FFA /* transactionframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A121AE0AFA500533FFA /* transactionframe.h */; };
+		B23A0A6E1AE0AFA500533FFA /* transactionrollbackframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A131AE0AFA500533FFA /* transactionrollbackframe.h */; };
+		B23A0A6F1AE0AFA500533FFA /* transactionrollbackokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A141AE0AFA500533FFA /* transactionrollbackokframe.h */; };
+		B23A0A701AE0AFA500533FFA /* transactionselectframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A151AE0AFA500533FFA /* transactionselectframe.h */; };
+		B23A0A711AE0AFA500533FFA /* transactionselectokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A161AE0AFA500533FFA /* transactionselectokframe.h */; };
+		B23A0A721AE0AFA500533FFA /* watchable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A0A171AE0AFA500533FFA /* watchable.cpp */; };
+		B23A0A741AE0AFF200533FFA /* amqpcpp.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A731AE0AFF200533FFA /* amqpcpp.h */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B23A096A1AE0A77000533FFA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		B23A09511AE0A1F800533FFA /* libAMQP.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libAMQP.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libAMQPSTL.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		B23A095E1AE0A22F00533FFA /* AMQPSTL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMQPSTL.h; sourceTree = "<group>"; };
+		B23A09601AE0A22F00533FFA /* AMQPSTLPriv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMQPSTLPriv.h; sourceTree = "<group>"; };
+		B23A09621AE0A22F00533FFA /* AMQPSTL.cp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AMQPSTL.cp; sourceTree = "<group>"; };
+		B23A096C1AE0A77000533FFA /* Sender */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Sender; sourceTree = BUILT_PRODUCTS_DIR; };
+		B23A096E1AE0A77000533FFA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		B23A09751AE0AEDF00533FFA /* array.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = array.h; path = amqpcpp/array.h; sourceTree = "<group>"; };
+		B23A09761AE0AEDF00533FFA /* booleanset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = booleanset.h; path = amqpcpp/booleanset.h; sourceTree = "<group>"; };
+		B23A09771AE0AEDF00533FFA /* buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = buffer.h; path = amqpcpp/buffer.h; sourceTree = "<group>"; };
+		B23A09781AE0AEDF00533FFA /* bytebuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bytebuffer.h; path = amqpcpp/bytebuffer.h; sourceTree = "<group>"; };
+		B23A09791AE0AEDF00533FFA /* callbacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = callbacks.h; path = amqpcpp/callbacks.h; sourceTree = "<group>"; };
+		B23A097A1AE0AEDF00533FFA /* channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = channel.h; path = amqpcpp/channel.h; sourceTree = "<group>"; };
+		B23A097B1AE0AEDF00533FFA /* channelimpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = channelimpl.h; path = amqpcpp/channelimpl.h; sourceTree = "<group>"; };
+		B23A097C1AE0AEDF00533FFA /* classes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = classes.h; path = amqpcpp/classes.h; sourceTree = "<group>"; };
+		B23A097E1AE0AEDF00533FFA /* connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connection.h; path = amqpcpp/connection.h; sourceTree = "<group>"; };
+		B23A097F1AE0AEDF00533FFA /* connectionhandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectionhandler.h; path = amqpcpp/connectionhandler.h; sourceTree = "<group>"; };
+		B23A09801AE0AEDF00533FFA /* connectionimpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectionimpl.h; path = amqpcpp/connectionimpl.h; sourceTree = "<group>"; };
+		B23A09811AE0AEDF00533FFA /* decimalfield.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = decimalfield.h; path = amqpcpp/decimalfield.h; sourceTree = "<group>"; };
+		B23A09821AE0AEDF00533FFA /* deferred.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = deferred.h; path = amqpcpp/deferred.h; sourceTree = "<group>"; };
+		B23A09831AE0AEDF00533FFA /* deferredcancel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = deferredcancel.h; path = amqpcpp/deferredcancel.h; sourceTree = "<group>"; };
+		B23A09841AE0AEDF00533FFA /* deferredconsumer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = deferredconsumer.h; path = amqpcpp/deferredconsumer.h; sourceTree = "<group>"; };
+		B23A09851AE0AEDF00533FFA /* deferreddelete.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = deferreddelete.h; path = amqpcpp/deferreddelete.h; sourceTree = "<group>"; };
+		B23A09861AE0AEDF00533FFA /* deferredget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = deferredget.h; path = amqpcpp/deferredget.h; sourceTree = "<group>"; };
+		B23A09871AE0AEDF00533FFA /* deferredqueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = deferredqueue.h; path = amqpcpp/deferredqueue.h; sourceTree = "<group>"; };
+		B23A09881AE0AEDF00533FFA /* endian.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = endian.h; path = amqpcpp/endian.h; sourceTree = "<group>"; };
+		B23A09891AE0AEDF00533FFA /* entityimpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = entityimpl.h; path = amqpcpp/entityimpl.h; sourceTree = "<group>"; };
+		B23A098A1AE0AEDF00533FFA /* envelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = envelope.h; path = amqpcpp/envelope.h; sourceTree = "<group>"; };
+		B23A098B1AE0AEDF00533FFA /* exchangetype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exchangetype.h; path = amqpcpp/exchangetype.h; sourceTree = "<group>"; };
+		B23A098C1AE0AEDF00533FFA /* field.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = field.h; path = amqpcpp/field.h; sourceTree = "<group>"; };
+		B23A098D1AE0AEDF00533FFA /* fieldproxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fieldproxy.h; path = amqpcpp/fieldproxy.h; sourceTree = "<group>"; };
+		B23A098E1AE0AEDF00533FFA /* flags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = flags.h; path = amqpcpp/flags.h; sourceTree = "<group>"; };
+		B23A098F1AE0AEDF00533FFA /* login.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = login.h; path = amqpcpp/login.h; sourceTree = "<group>"; };
+		B23A09901AE0AEDF00533FFA /* message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = message.h; path = amqpcpp/message.h; sourceTree = "<group>"; };
+		B23A09911AE0AEDF00533FFA /* metadata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = metadata.h; path = amqpcpp/metadata.h; sourceTree = "<group>"; };
+		B23A09921AE0AEDF00533FFA /* monitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = monitor.h; path = amqpcpp/monitor.h; sourceTree = "<group>"; };
+		B23A09931AE0AEDF00533FFA /* numericfield.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = numericfield.h; path = amqpcpp/numericfield.h; sourceTree = "<group>"; };
+		B23A09941AE0AEDF00533FFA /* outbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = outbuffer.h; path = amqpcpp/outbuffer.h; sourceTree = "<group>"; };
+		B23A09951AE0AEDF00533FFA /* receivedframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = receivedframe.h; path = amqpcpp/receivedframe.h; sourceTree = "<group>"; };
+		B23A09961AE0AEDF00533FFA /* stringfield.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = stringfield.h; path = amqpcpp/stringfield.h; sourceTree = "<group>"; };
+		B23A09971AE0AEDF00533FFA /* table.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = table.h; path = amqpcpp/table.h; sourceTree = "<group>"; };
+		B23A09981AE0AEDF00533FFA /* watchable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = watchable.h; path = amqpcpp/watchable.h; sourceTree = "<group>"; };
+		B23A09BD1AE0AFA500533FFA /* array.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = array.cpp; path = src/array.cpp; sourceTree = "<group>"; };
+		B23A09BE1AE0AFA500533FFA /* basicackframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicackframe.h; path = src/basicackframe.h; sourceTree = "<group>"; };
+		B23A09BF1AE0AFA500533FFA /* basiccancelframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basiccancelframe.h; path = src/basiccancelframe.h; sourceTree = "<group>"; };
+		B23A09C01AE0AFA500533FFA /* basiccancelokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basiccancelokframe.h; path = src/basiccancelokframe.h; sourceTree = "<group>"; };
+		B23A09C11AE0AFA500533FFA /* basicconsumeframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicconsumeframe.h; path = src/basicconsumeframe.h; sourceTree = "<group>"; };
+		B23A09C21AE0AFA500533FFA /* basicconsumeokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicconsumeokframe.h; path = src/basicconsumeokframe.h; sourceTree = "<group>"; };
+		B23A09C31AE0AFA500533FFA /* basicdeliverframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicdeliverframe.h; path = src/basicdeliverframe.h; sourceTree = "<group>"; };
+		B23A09C41AE0AFA500533FFA /* basicframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicframe.h; path = src/basicframe.h; sourceTree = "<group>"; };
+		B23A09C51AE0AFA500533FFA /* basicgetemptyframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicgetemptyframe.h; path = src/basicgetemptyframe.h; sourceTree = "<group>"; };
+		B23A09C61AE0AFA500533FFA /* basicgetframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicgetframe.h; path = src/basicgetframe.h; sourceTree = "<group>"; };
+		B23A09C71AE0AFA500533FFA /* basicgetokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicgetokframe.h; path = src/basicgetokframe.h; sourceTree = "<group>"; };
+		B23A09C81AE0AFA500533FFA /* basicheaderframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicheaderframe.h; path = src/basicheaderframe.h; sourceTree = "<group>"; };
+		B23A09C91AE0AFA500533FFA /* basicnackframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicnackframe.h; path = src/basicnackframe.h; sourceTree = "<group>"; };
+		B23A09CA1AE0AFA500533FFA /* basicpublishframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicpublishframe.h; path = src/basicpublishframe.h; sourceTree = "<group>"; };
+		B23A09CB1AE0AFA500533FFA /* basicqosframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicqosframe.h; path = src/basicqosframe.h; sourceTree = "<group>"; };
+		B23A09CC1AE0AFA500533FFA /* basicqosokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicqosokframe.h; path = src/basicqosokframe.h; sourceTree = "<group>"; };
+		B23A09CD1AE0AFA500533FFA /* basicrecoverasyncframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicrecoverasyncframe.h; path = src/basicrecoverasyncframe.h; sourceTree = "<group>"; };
+		B23A09CE1AE0AFA500533FFA /* basicrecoverframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicrecoverframe.h; path = src/basicrecoverframe.h; sourceTree = "<group>"; };
+		B23A09CF1AE0AFA500533FFA /* basicrecoverokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicrecoverokframe.h; path = src/basicrecoverokframe.h; sourceTree = "<group>"; };
+		B23A09D01AE0AFA500533FFA /* basicrejectframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicrejectframe.h; path = src/basicrejectframe.h; sourceTree = "<group>"; };
+		B23A09D11AE0AFA500533FFA /* basicreturnframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = basicreturnframe.h; path = src/basicreturnframe.h; sourceTree = "<group>"; };
+		B23A09D21AE0AFA500533FFA /* bodyframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = bodyframe.h; path = src/bodyframe.h; sourceTree = "<group>"; };
+		B23A09D31AE0AFA500533FFA /* channelcloseframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = channelcloseframe.h; path = src/channelcloseframe.h; sourceTree = "<group>"; };
+		B23A09D41AE0AFA500533FFA /* channelcloseokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = channelcloseokframe.h; path = src/channelcloseokframe.h; sourceTree = "<group>"; };
+		B23A09D51AE0AFA500533FFA /* channelflowframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = channelflowframe.h; path = src/channelflowframe.h; sourceTree = "<group>"; };
+		B23A09D61AE0AFA500533FFA /* channelflowokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = channelflowokframe.h; path = src/channelflowokframe.h; sourceTree = "<group>"; };
+		B23A09D71AE0AFA500533FFA /* channelframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = channelframe.h; path = src/channelframe.h; sourceTree = "<group>"; };
+		B23A09D81AE0AFA500533FFA /* channelimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = channelimpl.cpp; path = src/channelimpl.cpp; sourceTree = "<group>"; };
+		B23A09D91AE0AFA500533FFA /* channelopenframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = channelopenframe.h; path = src/channelopenframe.h; sourceTree = "<group>"; };
+		B23A09DA1AE0AFA500533FFA /* channelopenokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = channelopenokframe.h; path = src/channelopenokframe.h; sourceTree = "<group>"; };
+		B23A09DB1AE0AFA500533FFA /* connectioncloseframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectioncloseframe.h; path = src/connectioncloseframe.h; sourceTree = "<group>"; };
+		B23A09DC1AE0AFA500533FFA /* connectioncloseokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectioncloseokframe.h; path = src/connectioncloseokframe.h; sourceTree = "<group>"; };
+		B23A09DD1AE0AFA500533FFA /* connectionframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectionframe.h; path = src/connectionframe.h; sourceTree = "<group>"; };
+		B23A09DE1AE0AFA500533FFA /* connectionimpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = connectionimpl.cpp; path = src/connectionimpl.cpp; sourceTree = "<group>"; };
+		B23A09DF1AE0AFA500533FFA /* connectionopenframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectionopenframe.h; path = src/connectionopenframe.h; sourceTree = "<group>"; };
+		B23A09E01AE0AFA500533FFA /* connectionopenokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectionopenokframe.h; path = src/connectionopenokframe.h; sourceTree = "<group>"; };
+		B23A09E11AE0AFA500533FFA /* connectionsecureframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectionsecureframe.h; path = src/connectionsecureframe.h; sourceTree = "<group>"; };
+		B23A09E21AE0AFA500533FFA /* connectionsecureokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectionsecureokframe.h; path = src/connectionsecureokframe.h; sourceTree = "<group>"; };
+		B23A09E31AE0AFA500533FFA /* connectionstartframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectionstartframe.h; path = src/connectionstartframe.h; sourceTree = "<group>"; };
+		B23A09E41AE0AFA500533FFA /* connectionstartokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectionstartokframe.h; path = src/connectionstartokframe.h; sourceTree = "<group>"; };
+		B23A09E51AE0AFA500533FFA /* connectiontuneframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectiontuneframe.h; path = src/connectiontuneframe.h; sourceTree = "<group>"; };
+		B23A09E61AE0AFA500533FFA /* connectiontuneokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = connectiontuneokframe.h; path = src/connectiontuneokframe.h; sourceTree = "<group>"; };
+		B23A09E71AE0AFA500533FFA /* consumedmessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = consumedmessage.h; path = src/consumedmessage.h; sourceTree = "<group>"; };
+		B23A09E81AE0AFA500533FFA /* deferredcancel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = deferredcancel.cpp; path = src/deferredcancel.cpp; sourceTree = "<group>"; };
+		B23A09E91AE0AFA500533FFA /* deferredconsumer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = deferredconsumer.cpp; path = src/deferredconsumer.cpp; sourceTree = "<group>"; };
+		B23A09EA1AE0AFA500533FFA /* deferredget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = deferredget.cpp; path = src/deferredget.cpp; sourceTree = "<group>"; };
+		B23A09EB1AE0AFA500533FFA /* exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exception.h; path = src/exception.h; sourceTree = "<group>"; };
+		B23A09EC1AE0AFA500533FFA /* exchangebindframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exchangebindframe.h; path = src/exchangebindframe.h; sourceTree = "<group>"; };
+		B23A09ED1AE0AFA500533FFA /* exchangebindokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exchangebindokframe.h; path = src/exchangebindokframe.h; sourceTree = "<group>"; };
+		B23A09EE1AE0AFA500533FFA /* exchangedeclareframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exchangedeclareframe.h; path = src/exchangedeclareframe.h; sourceTree = "<group>"; };
+		B23A09EF1AE0AFA500533FFA /* exchangedeclareokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exchangedeclareokframe.h; path = src/exchangedeclareokframe.h; sourceTree = "<group>"; };
+		B23A09F01AE0AFA500533FFA /* exchangedeleteframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exchangedeleteframe.h; path = src/exchangedeleteframe.h; sourceTree = "<group>"; };
+		B23A09F11AE0AFA500533FFA /* exchangedeleteokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exchangedeleteokframe.h; path = src/exchangedeleteokframe.h; sourceTree = "<group>"; };
+		B23A09F21AE0AFA500533FFA /* exchangeframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exchangeframe.h; path = src/exchangeframe.h; sourceTree = "<group>"; };
+		B23A09F31AE0AFA500533FFA /* exchangeunbindframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exchangeunbindframe.h; path = src/exchangeunbindframe.h; sourceTree = "<group>"; };
+		B23A09F41AE0AFA500533FFA /* exchangeunbindokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = exchangeunbindokframe.h; path = src/exchangeunbindokframe.h; sourceTree = "<group>"; };
+		B23A09F51AE0AFA500533FFA /* extframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = extframe.h; path = src/extframe.h; sourceTree = "<group>"; };
+		B23A09F61AE0AFA500533FFA /* field.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = field.cpp; path = src/field.cpp; sourceTree = "<group>"; };
+		B23A09F71AE0AFA500533FFA /* flags.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = flags.cpp; path = src/flags.cpp; sourceTree = "<group>"; };
+		B23A09F81AE0AFA500533FFA /* frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = frame.h; path = src/frame.h; sourceTree = "<group>"; };
+		B23A09F91AE0AFA500533FFA /* framecheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = framecheck.h; path = src/framecheck.h; sourceTree = "<group>"; };
+		B23A09FA1AE0AFA500533FFA /* headerframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = headerframe.h; path = src/headerframe.h; sourceTree = "<group>"; };
+		B23A09FB1AE0AFA500533FFA /* heartbeatframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = heartbeatframe.h; path = src/heartbeatframe.h; sourceTree = "<group>"; };
+		B23A09FC1AE0AFA500533FFA /* includes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = includes.h; path = src/includes.h; sourceTree = "<group>"; };
+		B23A09FD1AE0AFA500533FFA /* messageimpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = messageimpl.h; path = src/messageimpl.h; sourceTree = "<group>"; };
+		B23A09FE1AE0AFA500533FFA /* methodframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = methodframe.h; path = src/methodframe.h; sourceTree = "<group>"; };
+		B23A09FF1AE0AFA500533FFA /* protocolexception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = protocolexception.h; path = src/protocolexception.h; sourceTree = "<group>"; };
+		B23A0A001AE0AFA500533FFA /* protocolheaderframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = protocolheaderframe.h; path = src/protocolheaderframe.h; sourceTree = "<group>"; };
+		B23A0A011AE0AFA500533FFA /* queuebindframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queuebindframe.h; path = src/queuebindframe.h; sourceTree = "<group>"; };
+		B23A0A021AE0AFA500533FFA /* queuebindokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queuebindokframe.h; path = src/queuebindokframe.h; sourceTree = "<group>"; };
+		B23A0A031AE0AFA500533FFA /* queuedeclareframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queuedeclareframe.h; path = src/queuedeclareframe.h; sourceTree = "<group>"; };
+		B23A0A041AE0AFA500533FFA /* queuedeclareokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queuedeclareokframe.h; path = src/queuedeclareokframe.h; sourceTree = "<group>"; };
+		B23A0A051AE0AFA500533FFA /* queuedeleteframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queuedeleteframe.h; path = src/queuedeleteframe.h; sourceTree = "<group>"; };
+		B23A0A061AE0AFA500533FFA /* queuedeleteokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queuedeleteokframe.h; path = src/queuedeleteokframe.h; sourceTree = "<group>"; };
+		B23A0A071AE0AFA500533FFA /* queueframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queueframe.h; path = src/queueframe.h; sourceTree = "<group>"; };
+		B23A0A081AE0AFA500533FFA /* queuepurgeframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queuepurgeframe.h; path = src/queuepurgeframe.h; sourceTree = "<group>"; };
+		B23A0A091AE0AFA500533FFA /* queuepurgeokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queuepurgeokframe.h; path = src/queuepurgeokframe.h; sourceTree = "<group>"; };
+		B23A0A0A1AE0AFA500533FFA /* queueunbindframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queueunbindframe.h; path = src/queueunbindframe.h; sourceTree = "<group>"; };
+		B23A0A0B1AE0AFA500533FFA /* queueunbindokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = queueunbindokframe.h; path = src/queueunbindokframe.h; sourceTree = "<group>"; };
+		B23A0A0C1AE0AFA500533FFA /* receivedframe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = receivedframe.cpp; path = src/receivedframe.cpp; sourceTree = "<group>"; };
+		B23A0A0D1AE0AFA500533FFA /* reducedbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = reducedbuffer.h; path = src/reducedbuffer.h; sourceTree = "<group>"; };
+		B23A0A0E1AE0AFA500533FFA /* returnedmessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = returnedmessage.h; path = src/returnedmessage.h; sourceTree = "<group>"; };
+		B23A0A0F1AE0AFA500533FFA /* table.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = table.cpp; path = src/table.cpp; sourceTree = "<group>"; };
+		B23A0A101AE0AFA500533FFA /* transactioncommitframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = transactioncommitframe.h; path = src/transactioncommitframe.h; sourceTree = "<group>"; };
+		B23A0A111AE0AFA500533FFA /* transactioncommitokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = transactioncommitokframe.h; path = src/transactioncommitokframe.h; sourceTree = "<group>"; };
+		B23A0A121AE0AFA500533FFA /* transactionframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = transactionframe.h; path = src/transactionframe.h; sourceTree = "<group>"; };
+		B23A0A131AE0AFA500533FFA /* transactionrollbackframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = transactionrollbackframe.h; path = src/transactionrollbackframe.h; sourceTree = "<group>"; };
+		B23A0A141AE0AFA500533FFA /* transactionrollbackokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = transactionrollbackokframe.h; path = src/transactionrollbackokframe.h; sourceTree = "<group>"; };
+		B23A0A151AE0AFA500533FFA /* transactionselectframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = transactionselectframe.h; path = src/transactionselectframe.h; sourceTree = "<group>"; };
+		B23A0A161AE0AFA500533FFA /* transactionselectokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = transactionselectokframe.h; path = src/transactionselectokframe.h; sourceTree = "<group>"; };
+		B23A0A171AE0AFA500533FFA /* watchable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = watchable.cpp; path = src/watchable.cpp; sourceTree = "<group>"; };
+		B23A0A731AE0AFF200533FFA /* amqpcpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = amqpcpp.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -18,12 +298,29 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B23A09591AE0A22F00533FFA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B23A09691AE0A77000533FFA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B23A09731AE0A86500533FFA /* libAMQPSTL.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		B23A09481AE0A1F800533FFA = {
 			isa = PBXGroup;
 			children = (
+				B23A095D1AE0A22F00533FFA /* AMQPSTL */,
+				B23A096D1AE0A77000533FFA /* Sender */,
 				B23A09521AE0A1F800533FFA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -32,8 +329,171 @@
 			isa = PBXGroup;
 			children = (
 				B23A09511AE0A1F800533FFA /* libAMQP.dylib */,
+				B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */,
+				B23A096C1AE0A77000533FFA /* Sender */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		B23A095D1AE0A22F00533FFA /* AMQPSTL */ = {
+			isa = PBXGroup;
+			children = (
+				B23A095E1AE0A22F00533FFA /* AMQPSTL.h */,
+				B23A0A731AE0AFF200533FFA /* amqpcpp.h */,
+				B23A09BC1AE0AF5400533FFA /* src */,
+				B23A09741AE0AA2B00533FFA /* amqpcpp */,
+				B23A09601AE0A22F00533FFA /* AMQPSTLPriv.h */,
+				B23A09621AE0A22F00533FFA /* AMQPSTL.cp */,
+			);
+			path = AMQPSTL;
+			sourceTree = "<group>";
+		};
+		B23A096D1AE0A77000533FFA /* Sender */ = {
+			isa = PBXGroup;
+			children = (
+				B23A096E1AE0A77000533FFA /* main.cpp */,
+			);
+			path = Sender;
+			sourceTree = "<group>";
+		};
+		B23A09741AE0AA2B00533FFA /* amqpcpp */ = {
+			isa = PBXGroup;
+			children = (
+				B23A09751AE0AEDF00533FFA /* array.h */,
+				B23A09761AE0AEDF00533FFA /* booleanset.h */,
+				B23A09771AE0AEDF00533FFA /* buffer.h */,
+				B23A09781AE0AEDF00533FFA /* bytebuffer.h */,
+				B23A09791AE0AEDF00533FFA /* callbacks.h */,
+				B23A097A1AE0AEDF00533FFA /* channel.h */,
+				B23A097B1AE0AEDF00533FFA /* channelimpl.h */,
+				B23A097C1AE0AEDF00533FFA /* classes.h */,
+				B23A097E1AE0AEDF00533FFA /* connection.h */,
+				B23A097F1AE0AEDF00533FFA /* connectionhandler.h */,
+				B23A09801AE0AEDF00533FFA /* connectionimpl.h */,
+				B23A09811AE0AEDF00533FFA /* decimalfield.h */,
+				B23A09821AE0AEDF00533FFA /* deferred.h */,
+				B23A09831AE0AEDF00533FFA /* deferredcancel.h */,
+				B23A09841AE0AEDF00533FFA /* deferredconsumer.h */,
+				B23A09851AE0AEDF00533FFA /* deferreddelete.h */,
+				B23A09861AE0AEDF00533FFA /* deferredget.h */,
+				B23A09871AE0AEDF00533FFA /* deferredqueue.h */,
+				B23A09881AE0AEDF00533FFA /* endian.h */,
+				B23A09891AE0AEDF00533FFA /* entityimpl.h */,
+				B23A098A1AE0AEDF00533FFA /* envelope.h */,
+				B23A098B1AE0AEDF00533FFA /* exchangetype.h */,
+				B23A098C1AE0AEDF00533FFA /* field.h */,
+				B23A098D1AE0AEDF00533FFA /* fieldproxy.h */,
+				B23A098E1AE0AEDF00533FFA /* flags.h */,
+				B23A098F1AE0AEDF00533FFA /* login.h */,
+				B23A09901AE0AEDF00533FFA /* message.h */,
+				B23A09911AE0AEDF00533FFA /* metadata.h */,
+				B23A09921AE0AEDF00533FFA /* monitor.h */,
+				B23A09931AE0AEDF00533FFA /* numericfield.h */,
+				B23A09941AE0AEDF00533FFA /* outbuffer.h */,
+				B23A09951AE0AEDF00533FFA /* receivedframe.h */,
+				B23A09961AE0AEDF00533FFA /* stringfield.h */,
+				B23A09971AE0AEDF00533FFA /* table.h */,
+				B23A09981AE0AEDF00533FFA /* watchable.h */,
+			);
+			name = amqpcpp;
+			sourceTree = "<group>";
+		};
+		B23A09BC1AE0AF5400533FFA /* src */ = {
+			isa = PBXGroup;
+			children = (
+				B23A09BD1AE0AFA500533FFA /* array.cpp */,
+				B23A09BE1AE0AFA500533FFA /* basicackframe.h */,
+				B23A09BF1AE0AFA500533FFA /* basiccancelframe.h */,
+				B23A09C01AE0AFA500533FFA /* basiccancelokframe.h */,
+				B23A09C11AE0AFA500533FFA /* basicconsumeframe.h */,
+				B23A09C21AE0AFA500533FFA /* basicconsumeokframe.h */,
+				B23A09C31AE0AFA500533FFA /* basicdeliverframe.h */,
+				B23A09C41AE0AFA500533FFA /* basicframe.h */,
+				B23A09C51AE0AFA500533FFA /* basicgetemptyframe.h */,
+				B23A09C61AE0AFA500533FFA /* basicgetframe.h */,
+				B23A09C71AE0AFA500533FFA /* basicgetokframe.h */,
+				B23A09C81AE0AFA500533FFA /* basicheaderframe.h */,
+				B23A09C91AE0AFA500533FFA /* basicnackframe.h */,
+				B23A09CA1AE0AFA500533FFA /* basicpublishframe.h */,
+				B23A09CB1AE0AFA500533FFA /* basicqosframe.h */,
+				B23A09CC1AE0AFA500533FFA /* basicqosokframe.h */,
+				B23A09CD1AE0AFA500533FFA /* basicrecoverasyncframe.h */,
+				B23A09CE1AE0AFA500533FFA /* basicrecoverframe.h */,
+				B23A09CF1AE0AFA500533FFA /* basicrecoverokframe.h */,
+				B23A09D01AE0AFA500533FFA /* basicrejectframe.h */,
+				B23A09D11AE0AFA500533FFA /* basicreturnframe.h */,
+				B23A09D21AE0AFA500533FFA /* bodyframe.h */,
+				B23A09D31AE0AFA500533FFA /* channelcloseframe.h */,
+				B23A09D41AE0AFA500533FFA /* channelcloseokframe.h */,
+				B23A09D51AE0AFA500533FFA /* channelflowframe.h */,
+				B23A09D61AE0AFA500533FFA /* channelflowokframe.h */,
+				B23A09D71AE0AFA500533FFA /* channelframe.h */,
+				B23A09D81AE0AFA500533FFA /* channelimpl.cpp */,
+				B23A09D91AE0AFA500533FFA /* channelopenframe.h */,
+				B23A09DA1AE0AFA500533FFA /* channelopenokframe.h */,
+				B23A09DB1AE0AFA500533FFA /* connectioncloseframe.h */,
+				B23A09DC1AE0AFA500533FFA /* connectioncloseokframe.h */,
+				B23A09DD1AE0AFA500533FFA /* connectionframe.h */,
+				B23A09DE1AE0AFA500533FFA /* connectionimpl.cpp */,
+				B23A09DF1AE0AFA500533FFA /* connectionopenframe.h */,
+				B23A09E01AE0AFA500533FFA /* connectionopenokframe.h */,
+				B23A09E11AE0AFA500533FFA /* connectionsecureframe.h */,
+				B23A09E21AE0AFA500533FFA /* connectionsecureokframe.h */,
+				B23A09E31AE0AFA500533FFA /* connectionstartframe.h */,
+				B23A09E41AE0AFA500533FFA /* connectionstartokframe.h */,
+				B23A09E51AE0AFA500533FFA /* connectiontuneframe.h */,
+				B23A09E61AE0AFA500533FFA /* connectiontuneokframe.h */,
+				B23A09E71AE0AFA500533FFA /* consumedmessage.h */,
+				B23A09E81AE0AFA500533FFA /* deferredcancel.cpp */,
+				B23A09E91AE0AFA500533FFA /* deferredconsumer.cpp */,
+				B23A09EA1AE0AFA500533FFA /* deferredget.cpp */,
+				B23A09EB1AE0AFA500533FFA /* exception.h */,
+				B23A09EC1AE0AFA500533FFA /* exchangebindframe.h */,
+				B23A09ED1AE0AFA500533FFA /* exchangebindokframe.h */,
+				B23A09EE1AE0AFA500533FFA /* exchangedeclareframe.h */,
+				B23A09EF1AE0AFA500533FFA /* exchangedeclareokframe.h */,
+				B23A09F01AE0AFA500533FFA /* exchangedeleteframe.h */,
+				B23A09F11AE0AFA500533FFA /* exchangedeleteokframe.h */,
+				B23A09F21AE0AFA500533FFA /* exchangeframe.h */,
+				B23A09F31AE0AFA500533FFA /* exchangeunbindframe.h */,
+				B23A09F41AE0AFA500533FFA /* exchangeunbindokframe.h */,
+				B23A09F51AE0AFA500533FFA /* extframe.h */,
+				B23A09F61AE0AFA500533FFA /* field.cpp */,
+				B23A09F71AE0AFA500533FFA /* flags.cpp */,
+				B23A09F81AE0AFA500533FFA /* frame.h */,
+				B23A09F91AE0AFA500533FFA /* framecheck.h */,
+				B23A09FA1AE0AFA500533FFA /* headerframe.h */,
+				B23A09FB1AE0AFA500533FFA /* heartbeatframe.h */,
+				B23A09FC1AE0AFA500533FFA /* includes.h */,
+				B23A09FD1AE0AFA500533FFA /* messageimpl.h */,
+				B23A09FE1AE0AFA500533FFA /* methodframe.h */,
+				B23A09FF1AE0AFA500533FFA /* protocolexception.h */,
+				B23A0A001AE0AFA500533FFA /* protocolheaderframe.h */,
+				B23A0A011AE0AFA500533FFA /* queuebindframe.h */,
+				B23A0A021AE0AFA500533FFA /* queuebindokframe.h */,
+				B23A0A031AE0AFA500533FFA /* queuedeclareframe.h */,
+				B23A0A041AE0AFA500533FFA /* queuedeclareokframe.h */,
+				B23A0A051AE0AFA500533FFA /* queuedeleteframe.h */,
+				B23A0A061AE0AFA500533FFA /* queuedeleteokframe.h */,
+				B23A0A071AE0AFA500533FFA /* queueframe.h */,
+				B23A0A081AE0AFA500533FFA /* queuepurgeframe.h */,
+				B23A0A091AE0AFA500533FFA /* queuepurgeokframe.h */,
+				B23A0A0A1AE0AFA500533FFA /* queueunbindframe.h */,
+				B23A0A0B1AE0AFA500533FFA /* queueunbindokframe.h */,
+				B23A0A0C1AE0AFA500533FFA /* receivedframe.cpp */,
+				B23A0A0D1AE0AFA500533FFA /* reducedbuffer.h */,
+				B23A0A0E1AE0AFA500533FFA /* returnedmessage.h */,
+				B23A0A0F1AE0AFA500533FFA /* table.cpp */,
+				B23A0A101AE0AFA500533FFA /* transactioncommitframe.h */,
+				B23A0A111AE0AFA500533FFA /* transactioncommitokframe.h */,
+				B23A0A121AE0AFA500533FFA /* transactionframe.h */,
+				B23A0A131AE0AFA500533FFA /* transactionrollbackframe.h */,
+				B23A0A141AE0AFA500533FFA /* transactionrollbackokframe.h */,
+				B23A0A151AE0AFA500533FFA /* transactionselectframe.h */,
+				B23A0A161AE0AFA500533FFA /* transactionselectokframe.h */,
+				B23A0A171AE0AFA500533FFA /* watchable.cpp */,
+			);
+			name = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -43,6 +503,131 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B23A095A1AE0A22F00533FFA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B23A0A211AE0AFA500533FFA /* basicgetframe.h in Headers */,
+				B23A099F1AE0AEDF00533FFA /* channelimpl.h in Headers */,
+				B23A09A71AE0AEDF00533FFA /* deferredconsumer.h in Headers */,
+				B23A0A3D1AE0AFA500533FFA /* connectionsecureokframe.h in Headers */,
+				B23A0A6C1AE0AFA500533FFA /* transactioncommitokframe.h in Headers */,
+				B23A0A471AE0AFA500533FFA /* exchangebindframe.h in Headers */,
+				B23A0A571AE0AFA500533FFA /* includes.h in Headers */,
+				B23A0A6E1AE0AFA500533FFA /* transactionrollbackframe.h in Headers */,
+				B23A09AB1AE0AEDF00533FFA /* endian.h in Headers */,
+				B23A09A91AE0AEDF00533FFA /* deferredget.h in Headers */,
+				B23A09B51AE0AEDF00533FFA /* monitor.h in Headers */,
+				B23A099E1AE0AEDF00533FFA /* channel.h in Headers */,
+				B23A0A5A1AE0AFA500533FFA /* protocolexception.h in Headers */,
+				B23A0A611AE0AFA500533FFA /* queuedeleteokframe.h in Headers */,
+				B23A0A3C1AE0AFA500533FFA /* connectionsecureframe.h in Headers */,
+				B23A0A2C1AE0AFA500533FFA /* basicreturnframe.h in Headers */,
+				B23A0A351AE0AFA500533FFA /* channelopenokframe.h in Headers */,
+				B23A0A3F1AE0AFA500533FFA /* connectionstartokframe.h in Headers */,
+				B23A09B41AE0AEDF00533FFA /* metadata.h in Headers */,
+				B23A0A221AE0AFA500533FFA /* basicgetokframe.h in Headers */,
+				B23A0A581AE0AFA500533FFA /* messageimpl.h in Headers */,
+				B23A0A4E1AE0AFA500533FFA /* exchangeunbindframe.h in Headers */,
+				B23A09B81AE0AEDF00533FFA /* receivedframe.h in Headers */,
+				B23A0A481AE0AFA500533FFA /* exchangebindokframe.h in Headers */,
+				B23A09991AE0AEDF00533FFA /* array.h in Headers */,
+				B23A0A491AE0AFA500533FFA /* exchangedeclareframe.h in Headers */,
+				B23A09BA1AE0AEDF00533FFA /* table.h in Headers */,
+				B23A0A5D1AE0AFA500533FFA /* queuebindokframe.h in Headers */,
+				B23A0A621AE0AFA500533FFA /* queueframe.h in Headers */,
+				B23A0A601AE0AFA500533FFA /* queuedeleteframe.h in Headers */,
+				B23A09A31AE0AEDF00533FFA /* connectionimpl.h in Headers */,
+				B23A0A6B1AE0AFA500533FFA /* transactioncommitframe.h in Headers */,
+				B23A0A691AE0AFA500533FFA /* returnedmessage.h in Headers */,
+				B23A09B91AE0AEDF00533FFA /* stringfield.h in Headers */,
+				B23A0A591AE0AFA500533FFA /* methodframe.h in Headers */,
+				B23A0A741AE0AFF200533FFA /* amqpcpp.h in Headers */,
+				B23A09BB1AE0AEDF00533FFA /* watchable.h in Headers */,
+				B23A09611AE0A22F00533FFA /* AMQPSTLPriv.h in Headers */,
+				B23A0A6D1AE0AFA500533FFA /* transactionframe.h in Headers */,
+				B23A0A321AE0AFA500533FFA /* channelframe.h in Headers */,
+				B23A099D1AE0AEDF00533FFA /* callbacks.h in Headers */,
+				B23A09AE1AE0AEDF00533FFA /* exchangetype.h in Headers */,
+				B23A09A01AE0AEDF00533FFA /* classes.h in Headers */,
+				B23A0A421AE0AFA500533FFA /* consumedmessage.h in Headers */,
+				B23A0A651AE0AFA500533FFA /* queueunbindframe.h in Headers */,
+				B23A0A401AE0AFA500533FFA /* connectiontuneframe.h in Headers */,
+				B23A0A281AE0AFA500533FFA /* basicrecoverasyncframe.h in Headers */,
+				B23A0A1A1AE0AFA500533FFA /* basiccancelframe.h in Headers */,
+				B23A0A551AE0AFA500533FFA /* headerframe.h in Headers */,
+				B23A0A201AE0AFA500533FFA /* basicgetemptyframe.h in Headers */,
+				B23A0A2F1AE0AFA500533FFA /* channelcloseokframe.h in Headers */,
+				B23A0A5E1AE0AFA500533FFA /* queuedeclareframe.h in Headers */,
+				B23A0A301AE0AFA500533FFA /* channelflowframe.h in Headers */,
+				B23A0A241AE0AFA500533FFA /* basicnackframe.h in Headers */,
+				B23A09AF1AE0AEDF00533FFA /* field.h in Headers */,
+				B23A0A631AE0AFA500533FFA /* queuepurgeframe.h in Headers */,
+				B23A0A3A1AE0AFA500533FFA /* connectionopenframe.h in Headers */,
+				B23A099A1AE0AEDF00533FFA /* booleanset.h in Headers */,
+				B23A0A711AE0AFA500533FFA /* transactionselectokframe.h in Headers */,
+				B23A0A2A1AE0AFA500533FFA /* basicrecoverokframe.h in Headers */,
+				B23A09A51AE0AEDF00533FFA /* deferred.h in Headers */,
+				B23A0A461AE0AFA500533FFA /* exception.h in Headers */,
+				B23A0A641AE0AFA500533FFA /* queuepurgeokframe.h in Headers */,
+				B23A09B21AE0AEDF00533FFA /* login.h in Headers */,
+				B23A0A361AE0AFA500533FFA /* connectioncloseframe.h in Headers */,
+				B23A099B1AE0AEDF00533FFA /* buffer.h in Headers */,
+				B23A099C1AE0AEDF00533FFA /* bytebuffer.h in Headers */,
+				B23A0A191AE0AFA500533FFA /* basicackframe.h in Headers */,
+				B23A0A4F1AE0AFA500533FFA /* exchangeunbindokframe.h in Headers */,
+				B23A09A81AE0AEDF00533FFA /* deferreddelete.h in Headers */,
+				B23A0A381AE0AFA500533FFA /* connectionframe.h in Headers */,
+				B23A0A661AE0AFA500533FFA /* queueunbindokframe.h in Headers */,
+				B23A0A5B1AE0AFA500533FFA /* protocolheaderframe.h in Headers */,
+				B23A0A541AE0AFA500533FFA /* framecheck.h in Headers */,
+				B23A09A11AE0AEDF00533FFA /* connection.h in Headers */,
+				B23A0A311AE0AFA500533FFA /* channelflowokframe.h in Headers */,
+				B23A09AA1AE0AEDF00533FFA /* deferredqueue.h in Headers */,
+				B23A09A41AE0AEDF00533FFA /* decimalfield.h in Headers */,
+				B23A0A6F1AE0AFA500533FFA /* transactionrollbackokframe.h in Headers */,
+				B23A0A531AE0AFA500533FFA /* frame.h in Headers */,
+				B23A0A4B1AE0AFA500533FFA /* exchangedeleteframe.h in Headers */,
+				B23A0A701AE0AFA500533FFA /* transactionselectframe.h in Headers */,
+				B23A0A271AE0AFA500533FFA /* basicqosokframe.h in Headers */,
+				B23A0A261AE0AFA500533FFA /* basicqosframe.h in Headers */,
+				B23A0A4C1AE0AFA500533FFA /* exchangedeleteokframe.h in Headers */,
+				B23A0A411AE0AFA500533FFA /* connectiontuneokframe.h in Headers */,
+				B23A0A1E1AE0AFA500533FFA /* basicdeliverframe.h in Headers */,
+				B23A09B01AE0AEDF00533FFA /* fieldproxy.h in Headers */,
+				B23A0A5F1AE0AFA500533FFA /* queuedeclareokframe.h in Headers */,
+				B23A09AD1AE0AEDF00533FFA /* envelope.h in Headers */,
+				B23A09A61AE0AEDF00533FFA /* deferredcancel.h in Headers */,
+				B23A095F1AE0A22F00533FFA /* AMQPSTL.h in Headers */,
+				B23A09B61AE0AEDF00533FFA /* numericfield.h in Headers */,
+				B23A0A2E1AE0AFA500533FFA /* channelcloseframe.h in Headers */,
+				B23A0A1F1AE0AFA500533FFA /* basicframe.h in Headers */,
+				B23A0A3B1AE0AFA500533FFA /* connectionopenokframe.h in Headers */,
+				B23A0A681AE0AFA500533FFA /* reducedbuffer.h in Headers */,
+				B23A0A1C1AE0AFA500533FFA /* basicconsumeframe.h in Headers */,
+				B23A0A4D1AE0AFA500533FFA /* exchangeframe.h in Headers */,
+				B23A0A3E1AE0AFA500533FFA /* connectionstartframe.h in Headers */,
+				B23A0A371AE0AFA500533FFA /* connectioncloseokframe.h in Headers */,
+				B23A0A2D1AE0AFA500533FFA /* bodyframe.h in Headers */,
+				B23A0A561AE0AFA500533FFA /* heartbeatframe.h in Headers */,
+				B23A0A251AE0AFA500533FFA /* basicpublishframe.h in Headers */,
+				B23A09B71AE0AEDF00533FFA /* outbuffer.h in Headers */,
+				B23A0A5C1AE0AFA500533FFA /* queuebindframe.h in Headers */,
+				B23A0A501AE0AFA500533FFA /* extframe.h in Headers */,
+				B23A0A1D1AE0AFA500533FFA /* basicconsumeokframe.h in Headers */,
+				B23A0A4A1AE0AFA500533FFA /* exchangedeclareokframe.h in Headers */,
+				B23A09B11AE0AEDF00533FFA /* flags.h in Headers */,
+				B23A09A21AE0AEDF00533FFA /* connectionhandler.h in Headers */,
+				B23A0A2B1AE0AFA500533FFA /* basicrejectframe.h in Headers */,
+				B23A09B31AE0AEDF00533FFA /* message.h in Headers */,
+				B23A09AC1AE0AEDF00533FFA /* entityimpl.h in Headers */,
+				B23A0A231AE0AFA500533FFA /* basicheaderframe.h in Headers */,
+				B23A0A291AE0AFA500533FFA /* basicrecoverframe.h in Headers */,
+				B23A0A341AE0AFA500533FFA /* channelopenframe.h in Headers */,
+				B23A0A1B1AE0AFA500533FFA /* basiccancelokframe.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,6 +651,40 @@
 			productReference = B23A09511AE0A1F800533FFA /* libAMQP.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
+		B23A095B1AE0A22F00533FFA /* AMQPSTL */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B23A09641AE0A22F00533FFA /* Build configuration list for PBXNativeTarget "AMQPSTL" */;
+			buildPhases = (
+				B23A09581AE0A22F00533FFA /* Sources */,
+				B23A09591AE0A22F00533FFA /* Frameworks */,
+				B23A095A1AE0A22F00533FFA /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AMQPSTL;
+			productName = AMQPSTL;
+			productReference = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */;
+			productType = "com.apple.product-type.library.dynamic";
+		};
+		B23A096B1AE0A77000533FFA /* Sender */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B23A09701AE0A77000533FFA /* Build configuration list for PBXNativeTarget "Sender" */;
+			buildPhases = (
+				B23A09681AE0A77000533FFA /* Sources */,
+				B23A09691AE0A77000533FFA /* Frameworks */,
+				B23A096A1AE0A77000533FFA /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Sender;
+			productName = Sender;
+			productReference = B23A096C1AE0A77000533FFA /* Sender */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -76,6 +695,12 @@
 				ORGANIZATIONNAME = "Michael Jones";
 				TargetAttributes = {
 					B23A09501AE0A1F800533FFA = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					B23A095B1AE0A22F00533FFA = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					B23A096B1AE0A77000533FFA = {
 						CreatedOnToolsVersion = 6.3;
 					};
 				};
@@ -93,6 +718,8 @@
 			projectRoot = "";
 			targets = (
 				B23A09501AE0A1F800533FFA /* AMQP */,
+				B23A095B1AE0A22F00533FFA /* AMQPSTL */,
+				B23A096B1AE0A77000533FFA /* Sender */,
 			);
 		};
 /* End PBXProject section */
@@ -102,6 +729,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B23A09581AE0A22F00533FFA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B23A09631AE0A22F00533FFA /* AMQPSTL.cp in Sources */,
+				B23A0A721AE0AFA500533FFA /* watchable.cpp in Sources */,
+				B23A0A391AE0AFA500533FFA /* connectionimpl.cpp in Sources */,
+				B23A0A671AE0AFA500533FFA /* receivedframe.cpp in Sources */,
+				B23A0A431AE0AFA500533FFA /* deferredcancel.cpp in Sources */,
+				B23A0A521AE0AFA500533FFA /* flags.cpp in Sources */,
+				B23A0A6A1AE0AFA500533FFA /* table.cpp in Sources */,
+				B23A0A181AE0AFA500533FFA /* array.cpp in Sources */,
+				B23A0A441AE0AFA500533FFA /* deferredconsumer.cpp in Sources */,
+				B23A0A451AE0AFA500533FFA /* deferredget.cpp in Sources */,
+				B23A0A511AE0AFA500533FFA /* field.cpp in Sources */,
+				B23A0A331AE0AFA500533FFA /* channelimpl.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B23A09681AE0A77000533FFA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B23A096F1AE0A77000533FFA /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,6 +859,62 @@
 			};
 			name = Release;
 		};
+		B23A09651AE0A22F00533FFA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
+			};
+			name = Debug;
+		};
+		B23A09661AE0A22F00533FFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
+			};
+			name = Release;
+		};
+		B23A09711AE0A77000533FFA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
+			};
+			name = Debug;
+		};
+		B23A09721AE0A77000533FFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -222,6 +932,22 @@
 			buildConfigurations = (
 				B23A09561AE0A1F800533FFA /* Debug */,
 				B23A09571AE0A1F800533FFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		B23A09641AE0A22F00533FFA /* Build configuration list for PBXNativeTarget "AMQPSTL" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B23A09651AE0A22F00533FFA /* Debug */,
+				B23A09661AE0A22F00533FFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		B23A09701AE0A77000533FFA /* Build configuration list for PBXNativeTarget "Sender" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B23A09711AE0A77000533FFA /* Debug */,
+				B23A09721AE0A77000533FFA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 		};

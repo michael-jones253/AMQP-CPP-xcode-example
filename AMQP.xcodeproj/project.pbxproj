@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B2344B4B1AE0CB7A00B47CB2 /* MyAMQP.h in Headers */ = {isa = PBXBuildFile; fileRef = B2344B4A1AE0CB7A00B47CB2 /* MyAMQP.h */; };
+		B2344B4D1AE0CB7A00B47CB2 /* MyAMQPPriv.h in Headers */ = {isa = PBXBuildFile; fileRef = B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */; };
+		B2344B4F1AE0CB7A00B47CB2 /* MyAMQP.cp in Sources */ = {isa = PBXBuildFile; fileRef = B2344B4E1AE0CB7A00B47CB2 /* MyAMQP.cp */; };
+		B2344B531AE0CB9C00B47CB2 /* libAMQPSTL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */; };
+		B2344B541AE0CCE100B47CB2 /* libMyAMQP.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */; };
 		B23A095F1AE0A22F00533FFA /* AMQPSTL.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A095E1AE0A22F00533FFA /* AMQPSTL.h */; };
 		B23A09611AE0A22F00533FFA /* AMQPSTLPriv.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09601AE0A22F00533FFA /* AMQPSTLPriv.h */; };
 		B23A09631AE0A22F00533FFA /* AMQPSTL.cp in Sources */ = {isa = PBXBuildFile; fileRef = B23A09621AE0A22F00533FFA /* AMQPSTL.cp */; };
@@ -154,7 +159,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		B23A09511AE0A1F800533FFA /* libAMQP.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libAMQP.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libMyAMQP.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2344B4A1AE0CB7A00B47CB2 /* MyAMQP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQP.h; sourceTree = "<group>"; };
+		B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQPPriv.h; sourceTree = "<group>"; };
+		B2344B4E1AE0CB7A00B47CB2 /* MyAMQP.cp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQP.cp; sourceTree = "<group>"; };
 		B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libAMQPSTL.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		B23A095E1AE0A22F00533FFA /* AMQPSTL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMQPSTL.h; sourceTree = "<group>"; };
 		B23A09601AE0A22F00533FFA /* AMQPSTLPriv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMQPSTLPriv.h; sourceTree = "<group>"; };
@@ -291,10 +299,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		B23A094E1AE0A1F800533FFA /* Frameworks */ = {
+		B2344B451AE0CB7A00B47CB2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2344B531AE0CB9C00B47CB2 /* libAMQPSTL.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -309,6 +318,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2344B541AE0CCE100B47CB2 /* libMyAMQP.dylib in Frameworks */,
 				B23A09731AE0A86500533FFA /* libAMQPSTL.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -316,11 +326,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B2344B491AE0CB7A00B47CB2 /* MyAMQP */ = {
+			isa = PBXGroup;
+			children = (
+				B2344B4A1AE0CB7A00B47CB2 /* MyAMQP.h */,
+				B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */,
+				B2344B4E1AE0CB7A00B47CB2 /* MyAMQP.cp */,
+			);
+			path = MyAMQP;
+			sourceTree = "<group>";
+		};
 		B23A09481AE0A1F800533FFA = {
 			isa = PBXGroup;
 			children = (
 				B23A095D1AE0A22F00533FFA /* AMQPSTL */,
 				B23A096D1AE0A77000533FFA /* Sender */,
+				B2344B491AE0CB7A00B47CB2 /* MyAMQP */,
 				B23A09521AE0A1F800533FFA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -328,9 +349,9 @@
 		B23A09521AE0A1F800533FFA /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B23A09511AE0A1F800533FFA /* libAMQP.dylib */,
 				B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */,
 				B23A096C1AE0A77000533FFA /* Sender */,
+				B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -499,10 +520,12 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		B23A094F1AE0A1F800533FFA /* Headers */ = {
+		B2344B461AE0CB7A00B47CB2 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2344B4D1AE0CB7A00B47CB2 /* MyAMQPPriv.h in Headers */,
+				B2344B4B1AE0CB7A00B47CB2 /* MyAMQP.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -634,21 +657,21 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		B23A09501AE0A1F800533FFA /* AMQP */ = {
+		B2344B471AE0CB7A00B47CB2 /* MyAMQP */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B23A09551AE0A1F800533FFA /* Build configuration list for PBXNativeTarget "AMQP" */;
+			buildConfigurationList = B2344B521AE0CB7A00B47CB2 /* Build configuration list for PBXNativeTarget "MyAMQP" */;
 			buildPhases = (
-				B23A094D1AE0A1F800533FFA /* Sources */,
-				B23A094E1AE0A1F800533FFA /* Frameworks */,
-				B23A094F1AE0A1F800533FFA /* Headers */,
+				B2344B441AE0CB7A00B47CB2 /* Sources */,
+				B2344B451AE0CB7A00B47CB2 /* Frameworks */,
+				B2344B461AE0CB7A00B47CB2 /* Headers */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = AMQP;
-			productName = AMQP;
-			productReference = B23A09511AE0A1F800533FFA /* libAMQP.dylib */;
+			name = MyAMQP;
+			productName = MyAMQP;
+			productReference = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
 		B23A095B1AE0A22F00533FFA /* AMQPSTL */ = {
@@ -694,7 +717,7 @@
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Michael Jones";
 				TargetAttributes = {
-					B23A09501AE0A1F800533FFA = {
+					B2344B471AE0CB7A00B47CB2 = {
 						CreatedOnToolsVersion = 6.3;
 					};
 					B23A095B1AE0A22F00533FFA = {
@@ -717,18 +740,19 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B23A09501AE0A1F800533FFA /* AMQP */,
 				B23A095B1AE0A22F00533FFA /* AMQPSTL */,
 				B23A096B1AE0A77000533FFA /* Sender */,
+				B2344B471AE0CB7A00B47CB2 /* MyAMQP */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		B23A094D1AE0A1F800533FFA /* Sources */ = {
+		B2344B441AE0CB7A00B47CB2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2344B4F1AE0CB7A00B47CB2 /* MyAMQP.cp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -762,6 +786,40 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		B2344B501AE0CB7A00B47CB2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
+			};
+			name = Debug;
+		};
+		B2344B511AE0CB7A00B47CB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
+			};
+			name = Release;
+		};
 		B23A09531AE0A1F800533FFA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -839,26 +897,6 @@
 			};
 			name = Release;
 		};
-		B23A09561AE0A1F800533FFA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		B23A09571AE0A1F800533FFA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				EXECUTABLE_PREFIX = lib;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		B23A09651AE0A22F00533FFA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -918,6 +956,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B2344B521AE0CB7A00B47CB2 /* Build configuration list for PBXNativeTarget "MyAMQP" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B2344B501AE0CB7A00B47CB2 /* Debug */,
+				B2344B511AE0CB7A00B47CB2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		B23A094C1AE0A1F800533FFA /* Build configuration list for PBXProject "AMQP" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -927,14 +973,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B23A09551AE0A1F800533FFA /* Build configuration list for PBXNativeTarget "AMQP" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B23A09561AE0A1F800533FFA /* Debug */,
-				B23A09571AE0A1F800533FFA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-		};
 		B23A09641AE0A22F00533FFA /* Build configuration list for PBXNativeTarget "AMQPSTL" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -942,6 +980,7 @@
 				B23A09661AE0A22F00533FFA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B23A09701AE0A77000533FFA /* Build configuration list for PBXNativeTarget "Sender" */ = {
 			isa = XCConfigurationList;
@@ -950,6 +989,7 @@
 				B23A09721AE0A77000533FFA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

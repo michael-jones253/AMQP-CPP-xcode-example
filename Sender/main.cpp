@@ -9,9 +9,15 @@
 #include <iostream>
 #include <memory>
 #include "AMQPSTL.h"
+#include "MyAMQP.h"
 #include <amqpcpp.h>
 
+#include <thread>
+#include <chrono>
+
 using namespace std;
+using namespace std::this_thread;
+using namespace std::chrono;
 
 int main(int argc, const char * argv[]) {
     // insert code here...
@@ -19,8 +25,14 @@ int main(int argc, const char * argv[]) {
     auto inst = unique_ptr<AMQPSTL>(new AMQPSTL());
     inst->HelloWorld("Hi");
     
-    AMQP::Connection msg{nullptr};
-    msg.~Connection();
+    MyAMQP myAmqp{};
+
+    myAmqp.HelloWorld("sawadee krup");
+    myAmqp.Connect();
+    
+    while (true) {
+        myAmqp.MainLoop();
+    }
     
     return 0;
 }

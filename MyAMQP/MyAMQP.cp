@@ -21,6 +21,12 @@ void MyAMQP::HelloWorld(const char *greeting) {
     cout << greeting << endl;    
 }
 
+MyAMQP::MyAMQP(std::unique_ptr<NetworkConnection> networkConnection) {
+    _networkConnection = move(networkConnection);
+    
+}
+
+
 void MyAMQP::onData(AMQP::Connection *connection, const char *buffer, size_t size) {
     // report what is going on
     cout << "onData: " << size << endl;
@@ -87,8 +93,8 @@ void MyAMQP::Connect() {
 
     
     // create amqp connection, and a new channel
-    _connection = unique_ptr<AMQP::Connection>(new AMQP::Connection(this, AMQP::Login("guest", "guest"), "/"));
-    _connection->login();
+    _amqpConnection = unique_ptr<AMQP::Connection>(new AMQP::Connection(this, AMQP::Login("guest", "guest"), "/"));
+    _amqpConnection->login();
 }
 
 void MyAMQP::MainLoop() {
@@ -99,7 +105,10 @@ void MyAMQP::MainLoop() {
             break;
         }
         
-        _connection->parse(buf, ret);
+        auto parsedBytes = _amqpConnection->parse(buf, ret);
+        if (parsedBytes < ret) {
+            // FIX ME - need to buffer.
+        }
     }
 }
 

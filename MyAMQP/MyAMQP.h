@@ -11,17 +11,25 @@
 #define MyAMQP_
 
 #include "amqpcpp.h"
+#include "NetworkConnection.h"
+
+#include <string>
 
 /* The classes below are exported */
 #pragma GCC visibility push(default)
 
 class MyAMQP : public AMQP::ConnectionHandler {
-    std::unique_ptr<AMQP::Connection> _connection;
+    std::unique_ptr<AMQP::Connection> _amqpConnection;
+    
+    std::unique_ptr<NetworkConnection> _networkConnection;
     
     int _socketFd;
     
-	public:
-		void HelloWorld(const char *);
+public:
+    void HelloWorld(const char *);
+    
+    MyAMQP(std::unique_ptr<NetworkConnection> networkConnection);
+    
     /**
      *  Method that is called when data needs to be sent over the network
      *

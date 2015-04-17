@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B23007D11AE1C8B1005BAB20 /* MyNetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23007CF1AE1C8B1005BAB20 /* MyNetworkConnection.cpp */; };
+		B23007D21AE1C8B1005BAB20 /* MyNetworkConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = B23007D01AE1C8B1005BAB20 /* MyNetworkConnection.h */; };
+		B23007D41AE1CDB9005BAB20 /* NetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23007D31AE1CDB9005BAB20 /* NetworkConnection.cpp */; };
 		B2344B4B1AE0CB7A00B47CB2 /* MyAMQP.h in Headers */ = {isa = PBXBuildFile; fileRef = B2344B4A1AE0CB7A00B47CB2 /* MyAMQP.h */; };
 		B2344B4D1AE0CB7A00B47CB2 /* MyAMQPPriv.h in Headers */ = {isa = PBXBuildFile; fileRef = B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */; };
 		B2344B4F1AE0CB7A00B47CB2 /* MyAMQP.cp in Sources */ = {isa = PBXBuildFile; fileRef = B2344B4E1AE0CB7A00B47CB2 /* MyAMQP.cp */; };
@@ -159,6 +162,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B23007CC1AE1BCF4005BAB20 /* NetworkConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkConnection.h; sourceTree = "<group>"; };
+		B23007CF1AE1C8B1005BAB20 /* MyNetworkConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MyNetworkConnection.cpp; path = ../MyAMQP/MyNetworkConnection.cpp; sourceTree = "<group>"; };
+		B23007D01AE1C8B1005BAB20 /* MyNetworkConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyNetworkConnection.h; path = ../MyAMQP/MyNetworkConnection.h; sourceTree = "<group>"; };
+		B23007D31AE1CDB9005BAB20 /* NetworkConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkConnection.cpp; sourceTree = "<group>"; };
 		B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libMyAMQP.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2344B4A1AE0CB7A00B47CB2 /* MyAMQP.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQP.h; sourceTree = "<group>"; };
 		B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQPPriv.h; sourceTree = "<group>"; };
@@ -332,6 +339,8 @@
 				B2344B4A1AE0CB7A00B47CB2 /* MyAMQP.h */,
 				B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */,
 				B2344B4E1AE0CB7A00B47CB2 /* MyAMQP.cp */,
+				B23007CC1AE1BCF4005BAB20 /* NetworkConnection.h */,
+				B23007D31AE1CDB9005BAB20 /* NetworkConnection.cpp */,
 			);
 			path = MyAMQP;
 			sourceTree = "<group>";
@@ -372,6 +381,8 @@
 		B23A096D1AE0A77000533FFA /* Sender */ = {
 			isa = PBXGroup;
 			children = (
+				B23007CF1AE1C8B1005BAB20 /* MyNetworkConnection.cpp */,
+				B23007D01AE1C8B1005BAB20 /* MyNetworkConnection.h */,
 				B23A096E1AE0A77000533FFA /* main.cpp */,
 			);
 			path = Sender;
@@ -525,6 +536,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2344B4D1AE0CB7A00B47CB2 /* MyAMQPPriv.h in Headers */,
+				B23007D21AE1C8B1005BAB20 /* MyNetworkConnection.h in Headers */,
 				B2344B4B1AE0CB7A00B47CB2 /* MyAMQP.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -752,6 +764,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B23007D41AE1CDB9005BAB20 /* NetworkConnection.cpp in Sources */,
+				B23007D11AE1C8B1005BAB20 /* MyNetworkConnection.cpp in Sources */,
 				B2344B4F1AE0CB7A00B47CB2 /* MyAMQP.cp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -963,6 +977,7 @@
 				B2344B511AE0CB7A00B47CB2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B23A094C1AE0A1F800533FFA /* Build configuration list for PBXProject "AMQP" */ = {
 			isa = XCConfigurationList;

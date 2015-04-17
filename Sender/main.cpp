@@ -10,6 +10,7 @@
 #include <memory>
 #include "AMQPSTL.h"
 #include "MyAMQP.h"
+#include "MyNetworkConnection.h"
 #include <amqpcpp.h>
 
 #include <thread>
@@ -25,7 +26,9 @@ int main(int argc, const char * argv[]) {
     auto inst = unique_ptr<AMQPSTL>(new AMQPSTL());
     inst->HelloWorld("Hi");
     
-    MyAMQP myAmqp{};
+    auto netConnection = unique_ptr<MyNetworkConnection>(new MyNetworkConnection(nullptr, nullptr));
+    
+    MyAMQP myAmqp{move(netConnection)};
 
     myAmqp.HelloWorld("sawadee krup");
     myAmqp.Connect();

@@ -63,15 +63,16 @@ void MyNetworkConnection::Disconnect() {
 ssize_t MyNetworkConnection::Read(char* buf, size_t len) {
     auto ret = recv(_socketFd, buf, len, 0);
     
-    cout << "MyNetworkConnection read:" << ret << endl;
-
-    // FIX ME long ret.
     return ret;
 }
 
 ssize_t MyNetworkConnection::Write(char const* buf, size_t len) {
     auto ret = send(_socketFd, buf, len, 0);
-    cout << "MyNetworkConnection wrote:" << ret << endl;
+    
+    if (ret < 0) {
+        throw runtime_error("MyNetworkConnection write failed");
+    }
+
     return ret;
 }
 

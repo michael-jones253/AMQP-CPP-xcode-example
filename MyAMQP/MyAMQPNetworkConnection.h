@@ -24,7 +24,7 @@ class MyAMQPNetworkConnection {
 public:
     MyAMQPNetworkConnection();
     
-    void Open(std::string const& ipAddress, std::function<int(char const* buf, int len)> onBytes, std::function<void(std::string const& errString)> onError);
+    void Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> onBytes, std::function<void(std::string const& errString)> onError);
     
     void Close();
     

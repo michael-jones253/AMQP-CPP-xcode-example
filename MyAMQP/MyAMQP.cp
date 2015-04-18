@@ -57,48 +57,6 @@ void MyAMQP::onConnected(AMQP::Connection *connection) {
 void MyAMQP::onClosed(AMQP::Connection *connection) {
 }
 
-void MyAMQP::Connect() {
-    cout << "connecting" << endl;
-    
-    Close();
-    
-    // Setup socket and connect it.
-    _socketFd = socket(AF_INET, SOCK_STREAM, 0);
-    if (_socketFd < 0)
-    {
-        string err = "sock you";
-        throw runtime_error(err);
-    }
-    
-    struct sockaddr_in sin_you;
-    bzero(&sin_you, sizeof(sin_you));
-
-    sin_you.sin_family = AF_INET;
-    sin_you.sin_port = htons(5672);
-    string yourInet = "127.0.0.1";
-    auto ret = inet_aton(yourInet.c_str(), &sin_you.sin_addr);
-    
-    if (ret < 0)
-    {
-        string err = "you aton";
-        throw runtime_error(err);
-    }
-    
-    // Connect to you on send socket.
-    int con_ret = connect(_socketFd, (sockaddr*)&sin_you, sizeof(sin_you));
-    if (con_ret < 0)
-    {
-        perror(nullptr);
-        string err = "connect you";
-        throw runtime_error(err);
-    }
-
-    
-    // create amqp connection, and a new channel
-    _amqpConnection = unique_ptr<AMQP::Connection>(new AMQP::Connection(this, AMQP::Login("guest", "guest"), "/"));
-    _amqpConnection->login();
-}
-
 void MyAMQP::Open(const string& ipAddress) {
     _networkConnection->Open(ipAddress,
                              bind(&MyAMQP::OnRead, this, placeholders::_1, placeholders::_2),

@@ -9,6 +9,7 @@
 #include "MyAMQPNetworkConnection.h"
 
 #include <stdio.h>
+#include <assert.h>
 
 using namespace std;
 
@@ -20,7 +21,7 @@ MyAMQPNetworkConnection::MyAMQPNetworkConnection() :
     
 }
 
-void MyAMQPNetworkConnection::Open(std::string const& ipAddress, std::function<int(char const* buf, int len)> onBytes, std::function<void(std::string const& errString)> onError) {
+void MyAMQPNetworkConnection::Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> onBytes, std::function<void(std::string const& errString)> onError) {
     _onBytes = onBytes;
     _onError = onError;
     
@@ -52,9 +53,8 @@ void MyAMQPNetworkConnection::ReadLoop() {
         
         // FIX ME let it throw.
         auto ret = Read(buf, sizeof(buf));
-        if (ret < 0) {
-            break;
-        }
+        
+        assert(ret >= 0);
         
         auto parsedBytes = _onBytes(buf, ret);
         if (parsedBytes < ret) {

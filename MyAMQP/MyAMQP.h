@@ -85,9 +85,6 @@ public:
      */
     void onClosed(AMQP::Connection *connection) override;
     
-    // FIX ME deprecated.
-    void Connect();
-    
     void Open(std::string const& ipAddress);
     
     void Close();

@@ -31,11 +31,9 @@ int main(int argc, const char * argv[]) {
     MyAMQP myAmqp{move(netConnection)};
 
     myAmqp.HelloWorld("sawadee krup");
-    // myAmqp.Connect();
     myAmqp.Open("127.0.0.1");
     
     while (true) {
-        myAmqp.MainLoop();
         sleep_for(seconds(1));
     }
     

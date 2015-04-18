@@ -17,7 +17,7 @@
 
 
 class MyAMQPNetworkConnection {
-    std::function<int(char* buf, int len)> _onBytes;
+    std::function<size_t(char* buf, ssize_t len)> _onBytes;
     std::function<void(std::string const& errString)> _onError;
     std::future<int> _readLoopHandle;
     

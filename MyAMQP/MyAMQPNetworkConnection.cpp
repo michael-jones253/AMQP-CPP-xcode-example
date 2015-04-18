@@ -51,9 +51,9 @@ void MyAMQPNetworkConnection::ReadLoop() {
     while (true) {
         char buf[1024];
         
-        // FIX ME let it throw.
         auto ret = Read(buf, sizeof(buf));
         
+        // Should throw on socket error.
         assert(ret >= 0);
         
         auto parsedBytes = _onBytes(buf, ret);

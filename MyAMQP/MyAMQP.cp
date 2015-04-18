@@ -67,34 +67,13 @@ void MyAMQP::Open(const string& ipAddress) {
 
 }
 
-void MyAMQP::MainLoop() {
-    while (true) {
-        char buf[1024];
-        auto ret = recv(_socketFd, buf, sizeof(buf), 0);
-        if (ret < 0) {
-            break;
-        }
-        
-        cout << "Deprecated main loop read:" << ret << endl;
-
-        
-        auto parsedBytes = _amqpConnection->parse(buf, ret);
-        if (parsedBytes < ret) {
-            // FIX ME - need to buffer.
-        }
-    }
-}
-
-
-
 void MyAMQP::Close() {
     
 }
 
-int MyAMQP::OnRead(char const* buf, int len) {
+size_t MyAMQP::OnRead(char const* buf, int len) {
     auto parsedBytes = _amqpConnection->parse(buf, len);
     
-    // FIX ME unsigned long.
     return parsedBytes;
 }
 

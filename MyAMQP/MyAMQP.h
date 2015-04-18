@@ -89,11 +89,8 @@ public:
     
     void Close();
     
-    // FIX ME deprecated.
-    void MainLoop();
-    
 private:
-    int OnRead(char const* buf, int len);
+    size_t OnRead(char const* buf, int len);
     
     void OnReadError(std::string const& errorStr);
 

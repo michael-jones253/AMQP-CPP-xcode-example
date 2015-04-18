@@ -11,7 +11,7 @@
 #define MyAMQP_
 
 #include "amqpcpp.h"
-#include "NetworkConnection.h"
+#include "MyAMQPNetworkConnection.h"
 
 #include <string>
 
@@ -21,14 +21,14 @@
 class MyAMQP : public AMQP::ConnectionHandler {
     std::unique_ptr<AMQP::Connection> _amqpConnection;
     
-    std::unique_ptr<NetworkConnection> _networkConnection;
+    std::unique_ptr<MyAMQPNetworkConnection> _networkConnection;
     
     int _socketFd;
     
 public:
     void HelloWorld(const char *);
     
-    MyAMQP(std::unique_ptr<NetworkConnection> networkConnection);
+    MyAMQP(std::unique_ptr<MyAMQPNetworkConnection> networkConnection);
     
     /**
      *  Method that is called when data needs to be sent over the network

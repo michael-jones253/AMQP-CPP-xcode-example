@@ -10,7 +10,7 @@
 
 using namespace std;
 
-MyNetworkConnection::MyNetworkConnection(function<int(char* buf, int len)> onBytes, function<void(string const& errString)> onError) : NetworkConnection(onBytes, onError) {
+MyNetworkConnection::MyNetworkConnection(function<int(char* buf, int len)> onBytes, function<void(string const& errString)> onError) : MyAMQPNetworkConnection(onBytes, onError) {
     
 }
 

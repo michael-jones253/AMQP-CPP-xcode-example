@@ -1,13 +1,13 @@
 //
-//  NetworkConnection.h
+//  MyAMQPNetworkConnection.h
 //  AMQP
 //
 //  Created by Michael Jones on 18/04/2015.
 //  Copyright (c) 2015 Michael Jones. All rights reserved.
 //
 
-#ifndef AMQP_NetworkConnection_h
-#define AMQP_NetworkConnection_h
+#ifndef AMQP_MyAMQPNetworkConnection_h
+#define AMQP_MyAMQPNetworkConnection_h
 #include <functional>
 #include <string>
 
@@ -15,9 +15,9 @@
 #pragma GCC visibility push(default)
 
 
-class NetworkConnection {
+class MyAMQPNetworkConnection {
 public:
-    NetworkConnection(std::function<int(char* buf, int len)> onBytes, std::function<void(std::string const& errString)> onError);
+    MyAMQPNetworkConnection(std::function<int(char* buf, int len)> onBytes, std::function<void(std::string const& errString)> onError);
     
     void Open();
     

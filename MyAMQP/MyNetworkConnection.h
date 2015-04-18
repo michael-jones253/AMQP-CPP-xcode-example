@@ -9,14 +9,14 @@
 #ifndef __AMQP__MyNetworkConnection__
 #define __AMQP__MyNetworkConnection__
 
-#include "NetworkConnection.h"
+#include "MyAMQPNetworkConnection.h"
 
 #include <stdio.h>
 
 /* The classes below are exported */
 #pragma GCC visibility push(default)
 
-class MyNetworkConnection : public NetworkConnection {
+class MyNetworkConnection : public MyAMQPNetworkConnection {
 public:
     
     MyNetworkConnection(std::function<int(char* buf, int len)> onBytes, std::function<void(std::string const & errString)> onError);

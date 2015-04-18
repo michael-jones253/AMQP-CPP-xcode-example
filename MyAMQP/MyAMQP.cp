@@ -21,7 +21,7 @@ void MyAMQP::HelloWorld(const char *greeting) {
     cout << greeting << endl;    
 }
 
-MyAMQP::MyAMQP(std::unique_ptr<NetworkConnection> networkConnection) {
+MyAMQP::MyAMQP(std::unique_ptr<MyAMQPNetworkConnection> networkConnection) {
     _networkConnection = move(networkConnection);
     
 }

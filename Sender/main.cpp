@@ -22,21 +22,25 @@ using namespace std::chrono;
 
 int main(int argc, const char * argv[]) {
     // insert code here...
-    std::cout << "Hello, World!\n";
-    auto inst = unique_ptr<AMQPSTL>(new AMQPSTL());
-    inst->HelloWorld("Hi");
-    
-    auto netConnection = unique_ptr<MyNetworkConnection>(new MyNetworkConnection());
-    
-    MyAMQP myAmqp{move(netConnection)};
+    try {
+        // Just a test.
+        auto inst = unique_ptr<AMQPSTL>(new AMQPSTL());
+        inst->HelloWorld("Hi");
+        
+        auto netConnection = unique_ptr<MyNetworkConnection>(new MyNetworkConnection());
+        
+        MyAMQP myAmqp{move(netConnection)};
 
-    myAmqp.Open("127.0.0.1");
-    
-    myAmqp.HelloChannel();
-    
-    while (true) {
-        myAmqp.HelloWorld("sawadee krup");
-        sleep_for(seconds(1));
+        myAmqp.Open("127.0.0.1");
+        
+        myAmqp.HelloChannel();
+        
+        while (true) {
+            myAmqp.HelloWorld("sawadee krup");
+            sleep_for(seconds(1));
+        }
+    } catch (exception& ex) {
+        cerr << ex.what() << endl;
     }
     
     return 0;

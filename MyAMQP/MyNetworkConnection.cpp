@@ -62,6 +62,9 @@ void MyNetworkConnection::Disconnect() {
 
 ssize_t MyNetworkConnection::Read(char* buf, size_t len) {
     auto ret = recv(_socketFd, buf, len, 0);
+    if (ret < 0) {
+        throw runtime_error("MyNetworkConnection write failed");
+    }
     
     return ret;
 }

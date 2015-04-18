@@ -26,15 +26,17 @@ int main(int argc, const char * argv[]) {
     auto inst = unique_ptr<AMQPSTL>(new AMQPSTL());
     inst->HelloWorld("Hi");
     
-    auto netConnection = unique_ptr<MyNetworkConnection>(new MyNetworkConnection(nullptr, nullptr));
+    auto netConnection = unique_ptr<MyNetworkConnection>(new MyNetworkConnection());
     
     MyAMQP myAmqp{move(netConnection)};
 
     myAmqp.HelloWorld("sawadee krup");
-    myAmqp.Connect();
+    // myAmqp.Connect();
+    myAmqp.Open("127.0.0.1");
     
     while (true) {
         myAmqp.MainLoop();
+        sleep_for(seconds(1));
     }
     
     return 0;

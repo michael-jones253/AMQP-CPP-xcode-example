@@ -85,11 +85,20 @@ public:
      */
     void onClosed(AMQP::Connection *connection) override;
     
+    // FIX ME deprecated.
     void Connect();
+    
+    void Open(std::string const& ipAddress);
     
     void Close();
     
+    // FIX ME deprecated.
     void MainLoop();
+    
+private:
+    int OnRead(char const* buf, int len);
+    
+    void OnReadError(std::string const& errorStr);
 
 };
 

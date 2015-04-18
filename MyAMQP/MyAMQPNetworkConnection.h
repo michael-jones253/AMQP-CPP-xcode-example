@@ -10,25 +10,36 @@
 #define AMQP_MyAMQPNetworkConnection_h
 #include <functional>
 #include <string>
+#include <future>
 
 /* The classes below are exported */
 #pragma GCC visibility push(default)
 
 
 class MyAMQPNetworkConnection {
-public:
-    MyAMQPNetworkConnection(std::function<int(char* buf, int len)> onBytes, std::function<void(std::string const& errString)> onError);
+    std::function<int(char* buf, int len)> _onBytes;
+    std::function<void(std::string const& errString)> _onError;
+    std::future<int> _readLoopHandle;
     
-    void Open();
+public:
+    MyAMQPNetworkConnection();
+    
+    void Open(std::string const& ipAddress, std::function<int(char const* buf, int len)> onBytes, std::function<void(std::string const& errString)> onError);
     
     void Close();
     
-    virtual void Connect(std::string const& ipAddress, int port) = 0;
+    ssize_t SendToServer(char const* buf, size_t len) { return Write(buf, len); }
     
+private:
+    virtual void Connect(std::string const& ipAddress, int port) = 0;
+
     virtual void Disconnect() = 0;
     
-//private:
-    virtual int Read(char* buf, int len) = 0;
+    virtual ssize_t Read(char* buf, size_t len) = 0;
+    
+    virtual ssize_t Write(char const* buf, size_t len) = 0;
+    
+    void ReadLoop();
 };
 
 #pragma GCC visibility pop

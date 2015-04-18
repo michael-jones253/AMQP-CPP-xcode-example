@@ -17,15 +17,19 @@
 #pragma GCC visibility push(default)
 
 class MyNetworkConnection : public MyAMQPNetworkConnection {
+    int _socketFd;
+    
 public:
     
-    MyNetworkConnection(std::function<int(char* buf, int len)> onBytes, std::function<void(std::string const & errString)> onError);
+    MyNetworkConnection();
     
     void Connect(std::string const& ipAddress, int port) override;
     
     void Disconnect() override;
     
-    int Read(char* buf, int len) override;
+    ssize_t Read(char* buf, size_t len) override;
+    
+    ssize_t Write(char const* buf, size_t len) override;
     
 };
 

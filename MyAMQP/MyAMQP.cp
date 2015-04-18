@@ -35,13 +35,15 @@ void MyAMQP::onData(AMQP::Connection *connection, const char *buffer, size_t siz
     cout << endl;
     
     
-    // send to the socket
-    auto bytesWritten = send(_socketFd, buffer, size, 0);
+    // send to the socket DEPRECATED
+    // auto bytesWritten = send(_socketFd, buffer, size, 0);
+    auto bytesWritten = _networkConnection->SendToServer(buffer, size);
     
     cout << " FIX ME loop needed, written: " << bytesWritten << endl;
 }
 
 void MyAMQP::onError(AMQP::Connection *connection, const char *message) {
+    cout << "AMQP error:" << message << endl;
 }
 
 void MyAMQP::onConnected(AMQP::Connection *connection) {
@@ -97,6 +99,16 @@ void MyAMQP::Connect() {
     _amqpConnection->login();
 }
 
+void MyAMQP::Open(const string& ipAddress) {
+    _networkConnection->Open(ipAddress,
+                             bind(&MyAMQP::OnRead, this, placeholders::_1, placeholders::_2),
+                             bind(&MyAMQP::OnReadError, this, placeholders::_1));
+    
+    _amqpConnection = unique_ptr<AMQP::Connection>(new AMQP::Connection(this, AMQP::Login("guest", "guest"), "/"));
+    _amqpConnection->login();
+
+}
+
 void MyAMQP::MainLoop() {
     while (true) {
         char buf[1024];
@@ -105,6 +117,9 @@ void MyAMQP::MainLoop() {
             break;
         }
         
+        cout << "Deprecated main loop read:" << ret << endl;
+
+        
         auto parsedBytes = _amqpConnection->parse(buf, ret);
         if (parsedBytes < ret) {
             // FIX ME - need to buffer.
@@ -112,6 +127,19 @@ void MyAMQP::MainLoop() {
     }
 }
 
+
+
 void MyAMQP::Close() {
+    
+}
+
+int MyAMQP::OnRead(char const* buf, int len) {
+    auto parsedBytes = _amqpConnection->parse(buf, len);
+    
+    // FIX ME unsigned long.
+    return parsedBytes;
+}
+
+void MyAMQP::OnReadError(std::string const& errorStr){
     
 }

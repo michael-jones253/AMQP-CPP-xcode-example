@@ -40,6 +40,7 @@ class Table;
 // MJ added because of missing vftable.
 class ChannelImpl;
 class Watchable;
+class Field;
 
 #pragma GCC visibility pop
 

@@ -30,10 +30,12 @@ int main(int argc, const char * argv[]) {
     
     MyAMQP myAmqp{move(netConnection)};
 
-    myAmqp.HelloWorld("sawadee krup");
     myAmqp.Open("127.0.0.1");
     
+    myAmqp.HelloChannel();
+    
     while (true) {
+        myAmqp.HelloWorld("sawadee krup");
         sleep_for(seconds(1));
     }
     

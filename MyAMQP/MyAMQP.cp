@@ -17,14 +17,54 @@
 
 using namespace std;
 
+void MyAMQP::HelloChannel() {
+    unique_lock<mutex> lock(_mutex);
+    _conditional.wait(lock, [this]() {
+        return _channelOpen;
+    });
+    
+    if (!_channel) {
+        throw runtime_error("Hello Channel not created");
+    }
+    
+    // we declare a queue, an exchange and we publish a message
+    _channel->declareQueue("my_queue").onSuccess([this]() {
+        std::cout << "queue declared" << std::endl;
+    });
+        
+    // declare an exchange
+    _channel->declareExchange("my_exchange", AMQP::direct).onSuccess([]() {
+        std::cout << "exchange declared" << std::endl;
+    });
+    
+    // bind queue and exchange
+    _channel->bindQueue("my_exchange", "my_queue", "key").onSuccess([this]() {
+        std::cout << "queue bound to exchange" << std::endl;
+        _queueReady = true;
+        _conditional.notify_one();
+    });
+    
+    cout << "waiting for queue" << endl;
+    _conditional.wait(lock, [this]() { return _queueReady; });
+}
+
 void MyAMQP::HelloWorld(const char *greeting) {
-    cout << greeting << endl;    
+    cout << greeting << endl;
+    auto ret = _channel->publish("my_exchange", "key", greeting);
+    
+    if (!ret) {
+        throw runtime_error("message publish failed");
+    }
 }
 
 MyAMQP::MyAMQP(std::unique_ptr<MyAMQPNetworkConnection> networkConnection) :
     _amqpConnection{},
     _networkConnection{},
-    _channel{} {
+    _channel{},
+    _mutex{},
+    _conditional{},
+    _channelOpen{},
+    _queueReady{} {
     _networkConnection = move(networkConnection);
     
 }
@@ -48,10 +88,24 @@ void MyAMQP::onError(AMQP::Connection *connection, const char *message) {
 
 void MyAMQP::onConnected(AMQP::Connection *connection) {
     cout << "AMQP login success" << endl;
+    
+    auto onChannelOpen = [this]() {
+        cout << "Channel open" << endl;
+        _channelOpen = true;
+        _conditional.notify_one();
+    };
+    
+    auto onChannelError = [this](char const* errMsg) {
+        cout << "Channel error: " << errMsg << endl;
+        _channelOpen = false;
+        _channel->close();
+    };
 
     // create channel if it does not yet exist
     if (!_channel) {
         _channel = unique_ptr<AMQP::Channel>(new AMQP::Channel(connection));
+        _channel->onReady(onChannelOpen);
+        _channel->onError(onChannelError);
     }
 }
 

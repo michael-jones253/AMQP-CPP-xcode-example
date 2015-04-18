@@ -14,6 +14,8 @@
 #include "MyAMQPNetworkConnection.h"
 
 #include <string>
+#include <mutex>
+#include <condition_variable>
 
 /* The classes below are exported */
 #pragma GCC visibility push(default)
@@ -28,7 +30,17 @@ class MyAMQP : public AMQP::ConnectionHandler {
     // Open source stuff.
     std::unique_ptr<AMQP::Channel> _channel;
     
+    std::mutex _mutex;
+    
+    std::condition_variable _conditional;
+    
+    bool _channelOpen;
+    
+    bool _queueReady;
+    
 public:
+    void HelloChannel();
+
     void HelloWorld(const char *);
     
     MyAMQP(std::unique_ptr<MyAMQPNetworkConnection> networkConnection);

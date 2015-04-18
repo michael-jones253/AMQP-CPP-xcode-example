@@ -36,8 +36,11 @@ class Monitor;
 class OutBuffer;
 class ReceivedFrame;
 class Table;
-    
-    
+
+// MJ added because of missing vftable.
+class ChannelImpl;
+class Watchable;
+
 #pragma GCC visibility pop
 
 

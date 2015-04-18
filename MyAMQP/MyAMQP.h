@@ -19,11 +19,14 @@
 #pragma GCC visibility push(default)
 
 class MyAMQP : public AMQP::ConnectionHandler {
+    // Open source stuff.
     std::unique_ptr<AMQP::Connection> _amqpConnection;
     
+    // My stuff.
     std::unique_ptr<MyAMQPNetworkConnection> _networkConnection;
     
-    int _socketFd;
+    // Open source stuff.
+    std::unique_ptr<AMQP::Channel> _channel;
     
 public:
     void HelloWorld(const char *);

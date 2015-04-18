@@ -21,22 +21,21 @@ void MyAMQP::HelloWorld(const char *greeting) {
     cout << greeting << endl;    
 }
 
-MyAMQP::MyAMQP(std::unique_ptr<MyAMQPNetworkConnection> networkConnection) {
+MyAMQP::MyAMQP(std::unique_ptr<MyAMQPNetworkConnection> networkConnection) :
+    _amqpConnection{},
+    _networkConnection{},
+    _channel{} {
     _networkConnection = move(networkConnection);
     
 }
 
 
 void MyAMQP::onData(AMQP::Connection *connection, const char *buffer, size_t size) {
-    // report what is going on
     cout << "onData: " << size << endl;
     
     for (unsigned i=0; i<size; i++) cout << (int)buffer[i] << " ";
     cout << endl;
     
-    
-    // send to the socket DEPRECATED
-    // auto bytesWritten = send(_socketFd, buffer, size, 0);
     auto bytesWritten = _networkConnection->SendToServer(buffer, size);
     
     cout << " FIX ME loop needed, written: " << bytesWritten << endl;
@@ -44,14 +43,16 @@ void MyAMQP::onData(AMQP::Connection *connection, const char *buffer, size_t siz
 
 void MyAMQP::onError(AMQP::Connection *connection, const char *message) {
     cout << "AMQP error:" << message << endl;
+    _networkConnection->Close();
 }
 
 void MyAMQP::onConnected(AMQP::Connection *connection) {
-    // show
     cout << "AMQP login success" << endl;
 
     // create channel if it does not yet exist
-    // if (!_channel) _channel = make_shared<AMQP::Channel>(connection);
+    if (!_channel) {
+        _channel = unique_ptr<AMQP::Channel>(new AMQP::Channel(connection));
+    }
 }
 
 void MyAMQP::onClosed(AMQP::Connection *connection) {
@@ -78,5 +79,6 @@ size_t MyAMQP::OnRead(char const* buf, int len) {
 }
 
 void MyAMQP::OnReadError(std::string const& errorStr){
-    
+    cout << "MyAMQP read error: " << errorStr << endl;
+    _networkConnection->Close();
 }

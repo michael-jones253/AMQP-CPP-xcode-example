@@ -19,11 +19,12 @@ using namespace std;
 
 void MyAMQP::HelloChannel() {
     unique_lock<mutex> lock(_mutex);
+    
     _conditional.wait(lock, [this]() {
-        return _channelOpen;
+        return _channelOpen || _channelInError;
     });
     
-    if (!_channel) {
+    if (_channelInError) {
         throw runtime_error("Hello Channel not created");
     }
     
@@ -45,6 +46,7 @@ void MyAMQP::HelloChannel() {
     });
     
     cout << "waiting for queue" << endl;
+    // FIX ME - add timeout.
     _conditional.wait(lock, [this]() { return _queueReady; });
 }
 
@@ -64,6 +66,7 @@ MyAMQP::MyAMQP(std::unique_ptr<MyAMQPNetworkConnection> networkConnection) :
     _mutex{},
     _conditional{},
     _channelOpen{},
+    _channelInError{},
     _queueReady{} {
     _networkConnection = move(networkConnection);
     
@@ -98,6 +101,7 @@ void MyAMQP::onConnected(AMQP::Connection *connection) {
     auto onChannelError = [this](char const* errMsg) {
         cout << "Channel error: " << errMsg << endl;
         _channelOpen = false;
+        _channelInError = true;
         _channel->close();
     };
 

@@ -36,6 +36,8 @@ class MyAMQP : public AMQP::ConnectionHandler {
     
     bool _channelOpen;
     
+    bool _channelInError;
+    
     bool _queueReady;
     
 public:

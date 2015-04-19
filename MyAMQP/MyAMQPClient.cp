@@ -15,13 +15,13 @@
 #include <sys/socket.h>
 #include <chrono>
 
-
+using namespace AMQP;
 using namespace std;
 using namespace std::chrono;
 
 namespace MyAMQP {
     
-    void MyAMQPClient::CreateHelloQueue() {
+    void MyAMQPClient::CreateHelloQueue(ExchangeType exchangeType) {
         unique_lock<mutex> lock(_mutex);
         
         // Prevent a race with queue creation before underlying channel is created.
@@ -44,7 +44,7 @@ namespace MyAMQP {
         });
         
         // declare an exchange
-        _channel->declareExchange("my_exchange", AMQP::direct).onSuccess([]() {
+        _channel->declareExchange("my_exchange", exchangeType).onSuccess([]() {
             std::cout << "exchange declared" << std::endl;
         });
         

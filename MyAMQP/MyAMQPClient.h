@@ -43,7 +43,7 @@ namespace MyAMQP {
         bool _queueReady;
         
     public:
-        void CreateHelloQueue();
+        void CreateHelloQueue(AMQP::ExchangeType exchangeType);
         
         void SendHelloWorld(const char *);
         

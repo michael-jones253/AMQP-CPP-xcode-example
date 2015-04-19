@@ -26,23 +26,32 @@ int main(int argc, const char * argv[]) {
     try {
         /* options descriptor */
         static struct option longopts[] = {
-            { "fanout", no_argument, nullptr, 'f'},
+            { "fanout",  no_argument,            nullptr,           'f'},
+            { "topic",   no_argument,            nullptr,           't'},
             { "count",   required_argument,      nullptr,           'c' },
             { "sleep",   required_argument,      nullptr,           's' },
             { NULL,    0,                 nullptr,           0 }
         };
         
-        bool fanOut{};
+        // Default exchange type.
+        AMQP::ExchangeType exchangeType{AMQP::ExchangeType::direct};
+        
         int messageCount{100};
         int sleepSeconds{};
         
+        auto const usageStr = string("Usage: [--fanout | --topic {default direct}] [--count <integer>] [--sleep <seconds>]");
+        
         do {
-            auto ch = getopt_long(argc, (char* const *)(argv), "fc:s:", longopts, nullptr);
+            auto ch = getopt_long(argc, (char* const *)(argv), "ftc:s:", longopts, nullptr);
             
             switch (ch) {
                 case 'f':
-                    fanOut = true;
+                    exchangeType = AMQP::ExchangeType::fanout;
                     break;
+                    
+                case 't':
+                    // FIX ME - exchange type topic will need a routing key argument.
+                    throw runtime_error("Exchange type topic not implemented yet");
 
                 case 'c':
                     messageCount = stoi(optarg);
@@ -55,7 +64,7 @@ int main(int argc, const char * argv[]) {
                     break;
                     
                 default:
-                    throw runtime_error("Command line error");
+                    throw runtime_error(usageStr);
                     break;
             }
             
@@ -72,7 +81,7 @@ int main(int argc, const char * argv[]) {
 
         myAmqp.Open("127.0.0.1");
         
-        myAmqp.CreateHelloQueue();
+        myAmqp.CreateHelloQueue(exchangeType);
         
         for (int count = 0; count < messageCount; count++) {
             myAmqp.SendHelloWorld("sawadee krup");

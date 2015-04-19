@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <sstream>
 #include <memory>
 #include "MyAMQPClient.h"
 #include "MyNetworkConnection.h"
@@ -52,7 +53,7 @@ int main(int argc, const char * argv[]) {
                 case 't':
                     // FIX ME - exchange type topic will need a routing key argument.
                     throw runtime_error("Exchange type topic not implemented yet");
-
+                    
                 case 'c':
                     messageCount = stoi(optarg);
                     break;
@@ -73,21 +74,34 @@ int main(int argc, const char * argv[]) {
             }
             
         } while (true);
-
-
+        
+        
         auto netConnection = unique_ptr<MyNetworkConnection>(new MyNetworkConnection());
         
         MyAMQPClient myAmqp{move(netConnection)};
-
+        
         myAmqp.Open("127.0.0.1");
         
         myAmqp.CreateHelloQueue(exchangeType);
+        
+        auto startTime = system_clock::now();
         
         for (int count = 0; count < messageCount; count++) {
             myAmqp.SendHelloWorld("sawasdee krup");
             
             sleep_for(seconds(sleepSeconds));
         }
+        
+        // Benchmark if sending out one after another.
+        if (sleepSeconds == 0) {
+            auto elapsed = system_clock::now() - startTime;
+            auto elapsedMs = duration_cast<milliseconds>(elapsed);
+            stringstream messageStr;
+            messageStr << messageCount << " messages sent in: " << elapsedMs.count() << " ms";
+            
+            cout << messageStr.str() << endl;
+        }
+        
         
         myAmqp.Close();
         

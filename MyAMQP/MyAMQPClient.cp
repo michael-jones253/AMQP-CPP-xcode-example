@@ -7,7 +7,7 @@
  *
  */
 
-#include "MyAMQP.h"
+#include "MyAMQPClient.h"
 
 #include <arpa/inet.h>
 #include <netinet/in.h>

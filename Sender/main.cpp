@@ -8,8 +8,7 @@
 
 #include <iostream>
 #include <memory>
-#include "AMQPSTL.h"
-#include "MyAMQP.h"
+#include "MyAMQPClient.h"
 #include "MyNetworkConnection.h"
 #include <amqpcpp.h>
 

@@ -102,10 +102,9 @@ namespace MyAMQP {
     
     
     void MyAMQPClient::onData(AMQP::Connection *connection, const char *buffer, size_t size) {
-        cout << "onData: " << size << endl;
-        
-        for (unsigned i=0; i<size; i++) cout << (int)buffer[i] << " ";
-        cout << endl;
+        // cout << "onData: " << size << endl;
+        // for (unsigned i=0; i<size; i++) cout << (int)buffer[i] << " ";
+        // cout << endl;
         
         auto amountWritten = size;
         
@@ -151,6 +150,8 @@ namespace MyAMQP {
     }
     
     void MyAMQPClient::onClosed(AMQP::Connection *connection) {
+        // FIX ME. Anything to do, when is this called?
+        cout << "MyAMQPClient onClosed" << endl;
     }
     
     void MyAMQPClient::Open(const string& ipAddress) {

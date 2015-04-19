@@ -30,9 +30,10 @@ namespace MyAMQP {
         
         void AppendBack(std::function<ssize_t(char*, ssize_t)> readFn, ssize_t maxLen);
         
-        // NB count from the start index.
+        // The amount of un-consumed data that has been appended.
         ssize_t Count() const;
         
+        // The amount available for further data.
         ssize_t Available() const;
         
         // Consume from the front of the data.

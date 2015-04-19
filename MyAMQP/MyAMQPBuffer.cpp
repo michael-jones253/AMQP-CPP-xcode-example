@@ -12,6 +12,7 @@
 using namespace std;
 
 namespace MyAMQP {
+    
     MyAMQPBuffer::MyAMQPBuffer() :
     _startIndex{},
     _buffer{},
@@ -24,12 +25,17 @@ namespace MyAMQP {
     }
     
     void MyAMQPBuffer::AppendBack(std::function<ssize_t(char*, ssize_t)> readFn, ssize_t maxLen) {
+        auto projectedSize = _startIndex + _count + maxLen;
         
-        if (maxLen > Available()) {
-            throw runtime_error("MyAMQPBuffer: exceeded available");
+        if (projectedSize > _buffer.max_size()) {
+            throw runtime_error("MyAMQPBuffer: exceeded absolute maximum limit");
+        }
+
+        if (projectedSize > Available()) {
+            _buffer.resize(projectedSize, 0);
         }
         
-        auto bytes = readFn(const_cast<char*>(_buffer.data()), maxLen);
+        auto bytes = readFn(const_cast<char*>(_buffer.data() + _startIndex + _count), maxLen);
         
         _count += bytes;
     }
@@ -43,7 +49,7 @@ namespace MyAMQP {
     }
     
     void MyAMQPBuffer::ConsumeFront(ssize_t bytes) {
-        if (bytes > Available()) {
+        if (bytes > _count) {
             throw runtime_error("MyAMQPBuffer: Consume exceeds available");
         }
         
@@ -55,4 +61,5 @@ namespace MyAMQP {
             _startIndex = 0;
         }
     }
+    
 }

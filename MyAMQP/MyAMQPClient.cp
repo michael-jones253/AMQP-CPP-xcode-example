@@ -60,7 +60,7 @@ namespace MyAMQP {
         auto timeout = seconds(5);
 
         // Don't wait forever if queue not declared.
-        auto status = _conditional.wait_for(lock, timeout, [this]() { return _queueReady; });
+        auto status = _conditional.wait_for(lock, timeout, [this]()->bool { return _queueReady; });
         
         if (!status) {
             throw runtime_error("Queue bind timed out");
@@ -122,6 +122,8 @@ namespace MyAMQP {
         auto onChannelOpen = [this]() {
             cout << "Channel open" << endl;
             _channelOpen = true;
+            
+            // No need to notify under lock.
             _conditional.notify_one();
         };
         
@@ -129,7 +131,9 @@ namespace MyAMQP {
             cout << "Channel error: " << errMsg << endl;
             _channelOpen = false;
             _channelInError = true;
-            _channel->close();
+
+            // No need to notify under lock.
+            _conditional.notify_one();
         };
         
         // create channel if it does not yet exist

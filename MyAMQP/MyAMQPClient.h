@@ -16,6 +16,7 @@
 #include <string>
 #include <mutex>
 #include <condition_variable>
+#include <atomic>
 
 /* The classes below are exported */
 #pragma GCC visibility push(default)
@@ -36,11 +37,11 @@ namespace MyAMQP {
         
         std::condition_variable _conditional;
         
-        bool _channelOpen;
+        std::atomic<bool> _channelOpen;
         
-        bool _channelInError;
+        std::atomic<bool> _channelInError;
         
-        bool _queueReady;
+        std::atomic<bool> _queueReady;
         
     public:
         void CreateHelloQueue(AMQP::ExchangeType exchangeType);

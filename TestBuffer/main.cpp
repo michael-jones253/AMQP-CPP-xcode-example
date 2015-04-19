@@ -10,6 +10,7 @@
 
 #include "MyAMQPBuffer.h"
 #include "string.h"
+#include <assert.h>
 #include <string>
 
 using namespace MyAMQP;
@@ -20,7 +21,7 @@ int main(int argc, const char * argv[]) {
     cout << "Hello, World!\n";
     
     
-    MyAMQPBuffer buf;
+    MyAMQPBuffer myAmqBuffer;
     
     int const ParsableFrameSize = 99;
     
@@ -29,6 +30,7 @@ int main(int argc, const char * argv[]) {
             return ParsableFrameSize;
         }
         
+        // Parse a complete frame or nothing.
         return 0;
     };
     
@@ -37,56 +39,86 @@ int main(int argc, const char * argv[]) {
             return ParsableFrameSize;
         }
         
+        // Parse a complete frame or partial parse.
         return 11;
     };
     
-    auto readFn = [&](char* buffer, ssize_t maxLen)->ssize_t {
-        memset(const_cast<char*>(buf.Get()), 0xFF, maxLen);
+    auto readFn = [=](char* buffer, ssize_t maxLen)->ssize_t {
+        memset(buffer, 0xFF, maxLen);
         return maxLen;
     };
     
+    auto completeParseOk = bool{};
+    
     for (int x = 0; x < 20; x++) {
-        buf.AppendBack(readFn, 11);
+        myAmqBuffer.AppendBack(readFn, 11);
         
-        auto ret = testParseFn(buf.Get(), buf.Count());
+        auto ret = testParseFn(myAmqBuffer.Get(), myAmqBuffer.Count());
         cout << "parsed: " << ret << endl;
         
-        buf.ConsumeFront(ret);
+        myAmqBuffer.ConsumeFront(ret);
         
-        if (buf.Count() == 0) {
+        if (myAmqBuffer.Count() == 0) {
+            completeParseOk = true;
             cout << "Success buffer emptied" << endl;
             break;
         }
     }
     
+    assert(completeParseOk);
+    
+    auto readWithExtraData = bool{};
+    
     for (int x = 0; x < 20; x++) {
-        buf.AppendBack(readFn, 8);
+        myAmqBuffer.AppendBack(readFn, 8);
         
-        auto ret = testParseFn(buf.Get(), buf.Count());
+        auto ret = testParseFn(myAmqBuffer.Get(), myAmqBuffer.Count());
         cout << "parsed: " << ret << endl;
         
-        buf.ConsumeFront(ret);
+        myAmqBuffer.ConsumeFront(ret);
         
-        if (buf.Count() < 8) {
-            cout << "Consume success, Remainder: " << buf.Count() << endl;
+        if (myAmqBuffer.Count() < 8) {
+            readWithExtraData = true;
+            cout << "Consume success, Remainder: " << myAmqBuffer.Count() << endl;
             break;
         }
     }
     
+    assert(readWithExtraData);
+    
+    auto partialParseOK = bool{};
+    
     for (int x = 0; x < 20; x++) {
-        buf.AppendBack(readFn, 22);
+        myAmqBuffer.AppendBack(readFn, 22);
         
-        auto ret = testParsePartialFn(buf.Get(), buf.Count());
+        auto ret = testParsePartialFn(myAmqBuffer.Get(), myAmqBuffer.Count());
         cout << "parsed: " << ret;
-        cout << ", count:" << buf.Count() << endl;
+        cout << ", count:" << myAmqBuffer.Count() << endl;
         
-        buf.ConsumeFront(ret);
+        myAmqBuffer.ConsumeFront(ret);
 
-        if (buf.Count() < 11) {
-            cout << "Consume partial parse success, Remainder: " << buf.Count() << endl;
+        if (myAmqBuffer.Count() < 11) {
+            partialParseOK = true;
+            cout << "Consume partial parse success, Remainder: " << myAmqBuffer.Count() << endl;
             break;
-        }        
+        }
     }
+    
+    assert(partialParseOK);
+    
+    auto amountBuffered = myAmqBuffer.Buffered();
+    
+    cout << "Amount buffered: " << myAmqBuffer.Buffered() << endl;
+    
+    auto compareBuf = unique_ptr<char[]>(new char[amountBuffered]);
+    memset(compareBuf.get(), 0xFF, amountBuffered);
+    
+    // Force a reset of the start of data back to start of underlying storage.
+    myAmqBuffer.ConsumeFront(myAmqBuffer.Count());
+    
+    auto cmp = memcmp(myAmqBuffer.Get(), compareBuf.get(), amountBuffered);
+    
+    assert(cmp == 0);
     
     return 0;
 }

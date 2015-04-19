@@ -33,11 +33,15 @@ namespace MyAMQP {
         // The amount of un-consumed data that has been appended.
         ssize_t Count() const;
         
-        // The amount available for further data.
-        ssize_t Available() const;
-        
         // Consume from the front of the data.
         void ConsumeFront(ssize_t bytes);
+        
+        // Debug method.
+        ssize_t Buffered() const { return _buffer.size(); }
+
+    private:
+        // The amount available for further data.
+        ssize_t AvailableForAppend() const;
     };
 }
 #pragma GCC visibility pop

@@ -8,6 +8,7 @@
 
 #include "MyAMQPBuffer.h"
 #include <exception>
+#include <assert.h>
 
 using namespace std;
 
@@ -31,16 +32,19 @@ namespace MyAMQP {
             throw runtime_error("MyAMQPBuffer: exceeded absolute maximum limit");
         }
 
-        if (projectedSize > Available()) {
+        if (maxLen > AvailableForAppend()) {
             _buffer.resize(projectedSize, 0);
         }
         
+        assert(maxLen <= AvailableForAppend());
+        
+        // Dangerous const cast.
         auto bytes = readFn(const_cast<char*>(_buffer.data() + _startIndex + _count), maxLen);
         
         _count += bytes;
     }
 
-    ssize_t MyAMQPBuffer::Available() const {
+    ssize_t MyAMQPBuffer::AvailableForAppend() const {
         return _buffer.size() - (_startIndex + _count);
     }
     

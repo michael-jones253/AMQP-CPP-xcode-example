@@ -16,6 +16,7 @@
 #include <thread>
 #include <chrono>
 
+using namespace MyAMQP;
 using namespace std;
 using namespace std::this_thread;
 using namespace std::chrono;
@@ -29,7 +30,7 @@ int main(int argc, const char * argv[]) {
         
         auto netConnection = unique_ptr<MyNetworkConnection>(new MyNetworkConnection());
         
-        MyAMQP myAmqp{move(netConnection)};
+        MyAMQPClient myAmqp{move(netConnection)};
 
         myAmqp.Open("127.0.0.1");
         

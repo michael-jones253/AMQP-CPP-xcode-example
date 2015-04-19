@@ -16,7 +16,7 @@
 /* The classes below are exported */
 #pragma GCC visibility push(default)
 
-class MyNetworkConnection : public MyAMQPNetworkConnection {
+class MyNetworkConnection : public MyAMQP::MyAMQPNetworkConnection {
     int _socketFd;
     
 public:

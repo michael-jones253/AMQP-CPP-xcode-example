@@ -10,10 +10,13 @@
 /* The classes below are not exported */
 #pragma GCC visibility push(hidden)
 
-class MyAMQPPriv
-{
-	public:
-		void HelloWorldPriv(const char *);
-};
+namespace MyAMQP {
+    
+    class MyAMQPPriv
+    {
+    public:
+        void HelloWorldPriv(const char *);
+    };
+}
 
 #pragma GCC visibility pop

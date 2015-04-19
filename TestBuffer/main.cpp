@@ -8,6 +8,7 @@
 
 #include <iostream>
 
+#include "AMQPSTL.h"
 #include "MyAMQPBuffer.h"
 #include "string.h"
 #include <assert.h>
@@ -19,6 +20,10 @@ using namespace std;
 int main(int argc, const char * argv[]) {
     // insert code here...
     cout << "Hello, World!\n";
+    
+    // Just a test of library symbol export.
+    auto inst = unique_ptr<AMQPSTL>(new AMQPSTL());
+    inst->HelloWorld("Hi");
     
     
     MyAMQPBuffer myAmqBuffer;

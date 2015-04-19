@@ -147,6 +147,7 @@
 		B23A0A711AE0AFA500533FFA /* transactionselectokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A161AE0AFA500533FFA /* transactionselectokframe.h */; };
 		B23A0A721AE0AFA500533FFA /* watchable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A0A171AE0AFA500533FFA /* watchable.cpp */; };
 		B23A0A741AE0AFF200533FFA /* amqpcpp.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A731AE0AFF200533FFA /* amqpcpp.h */; };
+		B2BE4F401AE358D5009B8194 /* libAMQPSTL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */; };
 		B2FDFDFE1AE30BEB00542DA0 /* MyAMQPBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FDFDFC1AE30BEB00542DA0 /* MyAMQPBuffer.cpp */; };
 		B2FDFDFF1AE30BEB00542DA0 /* MyAMQPBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = B2FDFDFD1AE30BEB00542DA0 /* MyAMQPBuffer.h */; };
 		B2FDFE071AE3213A00542DA0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FDFE061AE3213A00542DA0 /* main.cpp */; };
@@ -351,6 +352,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2BE4F401AE358D5009B8194 /* libAMQPSTL.dylib in Frameworks */,
 				B2FDFE0B1AE3216300542DA0 /* libMyAMQP.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1099,6 +1101,7 @@
 				B2FDFE0A1AE3213A00542DA0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

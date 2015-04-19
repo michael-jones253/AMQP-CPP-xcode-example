@@ -24,10 +24,6 @@ using namespace std::chrono;
 int main(int argc, const char * argv[]) {
     // insert code here...
     try {
-        // Just a test.
-        auto inst = unique_ptr<AMQPSTL>(new AMQPSTL());
-        inst->HelloWorld("Hi");
-        
         auto netConnection = unique_ptr<MyNetworkConnection>(new MyNetworkConnection());
         
         MyAMQPClient myAmqp{move(netConnection)};

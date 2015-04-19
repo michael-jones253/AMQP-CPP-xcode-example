@@ -84,7 +84,7 @@ int main(int argc, const char * argv[]) {
         myAmqp.CreateHelloQueue(exchangeType);
         
         for (int count = 0; count < messageCount; count++) {
-            myAmqp.SendHelloWorld("sawadee krup");
+            myAmqp.SendHelloWorld("sawasdee krup");
             
             sleep_for(seconds(sleepSeconds));
         }

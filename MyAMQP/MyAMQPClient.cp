@@ -90,7 +90,13 @@ namespace MyAMQP {
     }
     
     MyAMQPClient::~MyAMQPClient() {
-        Close();
+        try {
+            Close();
+        }
+        catch(exception& ex)
+        {
+            cerr << "Exception in MyAMQPClient destruction: " << ex.what() << endl;
+        }
     }
     
     
@@ -150,6 +156,7 @@ namespace MyAMQP {
     }
     
     void MyAMQPClient::Close() {
+        _amqpConnection->close();
         _networkConnection->Close();
     }
     

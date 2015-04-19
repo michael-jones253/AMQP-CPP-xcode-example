@@ -27,7 +27,13 @@ namespace MyAMQP {
     }
     
     MyAMQPNetworkConnection::~MyAMQPNetworkConnection() {
-        Close();
+        try {
+            Close();
+        }
+        catch(exception& ex)
+        {
+            cerr << "Exception in MyAMQPNetworkConnection destruction: " << ex.what() << endl;
+        }
     }
     
     void MyAMQPNetworkConnection::Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> onBytes, std::function<void(std::string const& errString)> onError) {
@@ -65,14 +71,14 @@ namespace MyAMQP {
         }
         
         _readShouldRun = false;
-        
+        Disconnect();
+
         // Wait for async task to exit. (Equivalent of thread join).
         auto exitCode = _readLoopHandle.get();
         if (exitCode < 0) {
             cerr << "Read loop exited with error code" << endl;
         }
         
-        Disconnect();
     }
     
     void MyAMQPNetworkConnection::ReadLoop() {

@@ -16,7 +16,9 @@
 
 using namespace std;
 
-MyNetworkConnection::MyNetworkConnection() : _socketFd{} {
+MyNetworkConnection::MyNetworkConnection() :
+    _socketFd{-1},
+    _canRead{} {
 }
 
 void MyNetworkConnection::Connect(string const& ipAddress, int port) {
@@ -53,16 +55,24 @@ void MyNetworkConnection::Connect(string const& ipAddress, int port) {
         throw runtime_error(err);
     }
 
+    _canRead = true;
 }
 
 void MyNetworkConnection::Disconnect() {
+    _canRead = false;
     close(_socketFd);
+    _socketFd = -1;
 }
 
 ssize_t MyNetworkConnection::Read(char* buf, size_t len) {
     auto ret = recv(_socketFd, buf, len, 0);
     if (ret < 0) {
-        throw runtime_error("MyNetworkConnection read failed");
+        if (_canRead) {
+            throw runtime_error("MyNetworkConnection read failed");
+        }
+
+        // Allow for clean exit if disconnected during read.
+        ret = 0;
     }
     
     return ret;

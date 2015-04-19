@@ -12,12 +12,14 @@
 #include "MyAMQPNetworkConnection.h"
 
 #include <stdio.h>
+#include <atomic>
 
 /* The classes below are exported */
 #pragma GCC visibility push(default)
 
 class MyNetworkConnection final : public MyAMQP::MyAMQPNetworkConnection {
     int _socketFd;
+    std::atomic<bool> _canRead;
     
 public:
     

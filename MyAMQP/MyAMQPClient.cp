@@ -57,7 +57,7 @@ namespace MyAMQP {
         
         // Prevent a race with sending messages before the queue is ready for use.
         cout << "waiting for queue" << endl;
-        auto timeout = seconds(5);
+        auto const timeout = seconds(5);
 
         // Don't wait forever if queue not declared.
         auto status = _conditional.wait_for(lock, timeout, [this]()->bool { return _queueReady; });
@@ -77,6 +77,7 @@ namespace MyAMQP {
     }
     
     MyAMQPClient::MyAMQPClient(std::unique_ptr<MyAMQPNetworkConnection> networkConnection) :
+    ConnectionHandler{},
     _amqpConnection{},
     _networkConnection{},
     _channel{},
@@ -106,9 +107,12 @@ namespace MyAMQP {
         for (unsigned i=0; i<size; i++) cout << (int)buffer[i] << " ";
         cout << endl;
         
-        auto bytesWritten = _networkConnection->SendToServer(buffer, size);
+        auto amountWritten = size;
         
-        cout << " FIX ME loop needed, written: " << bytesWritten << endl;
+        while (amountWritten > 0) {
+            auto bytesWritten = _networkConnection->SendToServer(buffer, size);
+            amountWritten -= bytesWritten;
+        }        
     }
     
     void MyAMQPClient::onError(AMQP::Connection *connection, const char *message) {

@@ -92,8 +92,10 @@ namespace MyAMQP {
             return ret;
         };
         
+        ssize_t const amountToAppendFromRead = 1024;
+        
         while (_readShouldRun) {
-            _amqpBuffer.AppendBack(networkReadFn, 1024);
+            _amqpBuffer.AppendBack(networkReadFn, amountToAppendFromRead);
             auto parsedBytes = _onBytes(_amqpBuffer.Get(), _amqpBuffer.Count());
             _amqpBuffer.ConsumeFront(parsedBytes);
             

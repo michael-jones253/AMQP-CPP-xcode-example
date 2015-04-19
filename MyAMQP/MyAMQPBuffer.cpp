@@ -27,7 +27,7 @@ namespace MyAMQP {
     
     // The Copernica interface is a little strange with its buffer requirements. It is a sort of circular
     // buffer where the amount appended to the end may not be the amount removed from the front.
-    void MyAMQPBuffer::AppendBack(std::function<ssize_t(char*, ssize_t)> readFn, ssize_t maxLen) {
+    void MyAMQPBuffer::AppendBack(std::function<ssize_t(char*, ssize_t)>const & readFn, ssize_t maxLen) {
         auto storageRequired = _startIndex + _count + maxLen;
         
         if (storageRequired > _buffer.max_size()) {

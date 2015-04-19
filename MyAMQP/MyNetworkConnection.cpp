@@ -14,9 +14,11 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+using namespace MyAMQP;
 using namespace std;
 
 MyNetworkConnection::MyNetworkConnection() :
+    MyAMQPNetworkConnection{},
     _socketFd{-1},
     _canRead{} {
 }

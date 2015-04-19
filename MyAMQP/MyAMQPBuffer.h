@@ -34,7 +34,7 @@ namespace MyAMQP {
         // underlying storage.
         char const* Get() const;
         
-        void AppendBack(std::function<ssize_t(char*, ssize_t)> readFn, ssize_t maxLen);
+        void AppendBack(std::function<ssize_t(char*, ssize_t)>const& readFn, ssize_t maxLen);
         
         // The amount of un-consumed data that has been appended.
         ssize_t Count() const;

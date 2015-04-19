@@ -13,21 +13,30 @@
 #include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <chrono>
 
 
 using namespace std;
+using namespace std::chrono;
+
 namespace MyAMQP {
     
-    void MyAMQPClient::HelloChannel() {
+    void MyAMQPClient::CreateHelloQueue() {
         unique_lock<mutex> lock(_mutex);
         
+        // Prevent a race with queue creation before underlying channel is created.
         _conditional.wait(lock, [this]() {
+            
+            // Review: check assumption that copernica will either callback on success or fail of channel open.
             return _channelOpen || _channelInError;
         });
         
         if (_channelInError) {
             throw runtime_error("Hello Channel not created");
         }
+        
+        // According to Copernica messages are cached, so for this example we assume queue declaration,
+        // exchange declaration and bind can be sent one after another.
         
         // we declare a queue, an exchange and we publish a message
         _channel->declareQueue("my_queue").onSuccess([this]() {
@@ -46,12 +55,19 @@ namespace MyAMQP {
             _conditional.notify_one();
         });
         
+        // Prevent a race with sending messages before the queue is ready for use.
         cout << "waiting for queue" << endl;
-        // FIX ME - add timeout.
-        _conditional.wait(lock, [this]() { return _queueReady; });
+        auto timeout = seconds(5);
+
+        // Don't wait forever if queue not declared.
+        auto status = _conditional.wait_for(lock, timeout, [this]() { return _queueReady; });
+        
+        if (!status) {
+            throw runtime_error("Queue bind timed out");
+        }
     }
     
-    void MyAMQPClient::HelloWorld(const char *greeting) {
+    void MyAMQPClient::SendHelloWorld(const char *greeting) {
         cout << greeting << endl;
         auto ret = _channel->publish("my_exchange", "key", greeting);
         
@@ -71,6 +87,10 @@ namespace MyAMQP {
     _queueReady{} {
         _networkConnection = move(networkConnection);
         
+    }
+    
+    MyAMQPClient::~MyAMQPClient() {
+        Close();
     }
     
     
@@ -109,6 +129,8 @@ namespace MyAMQP {
         // create channel if it does not yet exist
         if (!_channel) {
             _channel = unique_ptr<AMQP::Channel>(new AMQP::Channel(connection));
+            
+            // Set callbacks.
             _channel->onReady(onChannelOpen);
             _channel->onError(onChannelError);
         }
@@ -128,7 +150,7 @@ namespace MyAMQP {
     }
     
     void MyAMQPClient::Close() {
-        
+        _networkConnection->Close();
     }
     
     size_t MyAMQPClient::OnNetworkRead(char const* buf, int len) {

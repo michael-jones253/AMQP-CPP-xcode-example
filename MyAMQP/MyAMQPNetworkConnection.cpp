@@ -26,6 +26,10 @@ namespace MyAMQP {
         
     }
     
+    MyAMQPNetworkConnection::~MyAMQPNetworkConnection() {
+        Close();
+    }
+    
     void MyAMQPNetworkConnection::Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> onBytes, std::function<void(std::string const& errString)> onError) {
         
         // Make robust to multiple opens.

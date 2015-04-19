@@ -20,6 +20,7 @@
 
 namespace MyAMQP {
     
+    // Abstraction to keep OS dependent socket system out of this library.
     class MyAMQPNetworkConnection {
         // Callback for when bytes are available from the network.
         std::function<size_t(char const* buf, ssize_t len)> _onBytes;
@@ -38,6 +39,8 @@ namespace MyAMQP {
         
     public:
         MyAMQPNetworkConnection();
+        
+        virtual ~MyAMQPNetworkConnection();
         
         void Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> onBytes, std::function<void(std::string const& errString)> onError);
         

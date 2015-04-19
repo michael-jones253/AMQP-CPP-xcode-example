@@ -20,12 +20,18 @@
 namespace MyAMQP {
     class MyAMQPBuffer {
         std::vector<char> _buffer;
+        
+        // Consuming from the front moves the start index forward.
         int _startIndex;
+        
+        // The count of data from the start index i.e. not the same thing as vector size.
         ssize_t _count;
         
     public:
         MyAMQPBuffer();
         
+        // Get the start of the un-consumed storage i.e. not the same thing as the start of the
+        // underlying storage.
         char const* Get() const;
         
         void AppendBack(std::function<ssize_t(char*, ssize_t)> readFn, ssize_t maxLen);

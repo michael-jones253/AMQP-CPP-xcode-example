@@ -22,8 +22,8 @@
 
 namespace MyAMQP {
     
-    class MyAMQPClient : public AMQP::ConnectionHandler {
-        // Open source stuff.
+    class MyAMQPClient final : public AMQP::ConnectionHandler {
+        // Copernica open source stuff.
         std::unique_ptr<AMQP::Connection> _amqpConnection;
         
         // My stuff.
@@ -43,11 +43,14 @@ namespace MyAMQP {
         bool _queueReady;
         
     public:
-        void HelloChannel();
+        void CreateHelloQueue();
         
-        void HelloWorld(const char *);
+        void SendHelloWorld(const char *);
         
         MyAMQPClient(std::unique_ptr<MyAMQPNetworkConnection> networkConnection);
+
+        // Class is final, virtual not needed.
+        ~MyAMQPClient();
         
         /**
          *  Method that is called when data needs to be sent over the network

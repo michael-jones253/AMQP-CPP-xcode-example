@@ -16,12 +16,15 @@
 /* The classes below are exported */
 #pragma GCC visibility push(default)
 
-class MyNetworkConnection : public MyAMQP::MyAMQPNetworkConnection {
+class MyNetworkConnection final : public MyAMQP::MyAMQPNetworkConnection {
     int _socketFd;
     
 public:
     
     MyNetworkConnection();
+    
+private:
+    // For use by super class only.
     
     void Connect(std::string const& ipAddress, int port) override;
     

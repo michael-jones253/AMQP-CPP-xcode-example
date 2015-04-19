@@ -25,15 +25,18 @@ namespace MyAMQP {
         return _buffer.data() + _startIndex;
     }
     
+    // The Copernica interface is a little strange with its buffer requirements. It is a sort of circular
+    // buffer where the amount appended to the end may not be the amount removed from the front.
     void MyAMQPBuffer::AppendBack(std::function<ssize_t(char*, ssize_t)> readFn, ssize_t maxLen) {
-        auto projectedSize = _startIndex + _count + maxLen;
+        auto storageRequired = _startIndex + _count + maxLen;
         
-        if (projectedSize > _buffer.max_size()) {
+        if (storageRequired > _buffer.max_size()) {
+            // REVIEW: might want to provide a smaller limit.
             throw runtime_error("MyAMQPBuffer: exceeded absolute maximum limit");
         }
 
         if (maxLen > AvailableForAppend()) {
-            _buffer.resize(projectedSize, 0);
+            _buffer.resize(storageRequired, 0);
         }
         
         assert(maxLen <= AvailableForAppend());
@@ -41,6 +44,7 @@ namespace MyAMQP {
         // Dangerous const cast.
         auto bytes = readFn(const_cast<char*>(_buffer.data() + _startIndex + _count), maxLen);
         
+         // Update what was actually read into the storage.
         _count += bytes;
     }
 

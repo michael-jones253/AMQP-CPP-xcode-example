@@ -12,6 +12,7 @@
 #include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <unistd.h>
 
 using namespace std;
 
@@ -55,7 +56,7 @@ void MyNetworkConnection::Connect(string const& ipAddress, int port) {
 }
 
 void MyNetworkConnection::Disconnect() {
-    
+    close(_socketFd);
 }
 
 ssize_t MyNetworkConnection::Read(char* buf, size_t len) {

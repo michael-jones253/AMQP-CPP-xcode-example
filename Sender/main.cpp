@@ -29,10 +29,10 @@ int main(int argc, const char * argv[]) {
 
         myAmqp.Open("127.0.0.1");
         
-        myAmqp.HelloChannel();
+        myAmqp.CreateHelloQueue();
         
         while (true) {
-            myAmqp.HelloWorld("sawadee krup");
+            myAmqp.SendHelloWorld("sawadee krup");
             sleep_for(seconds(1));
         }
     } catch (exception& ex) {

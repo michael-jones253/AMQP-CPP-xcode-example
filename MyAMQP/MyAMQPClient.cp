@@ -119,8 +119,8 @@ namespace MyAMQP {
     
     void MyAMQPClient::Open(const string& ipAddress) {
         _networkConnection->Open(ipAddress,
-                                 bind(&MyAMQPClient::OnRead, this, placeholders::_1, placeholders::_2),
-                                 bind(&MyAMQPClient::OnReadError, this, placeholders::_1));
+                                 bind(&MyAMQPClient::OnNetworkRead, this, placeholders::_1, placeholders::_2),
+                                 bind(&MyAMQPClient::OnNetworkReadError, this, placeholders::_1));
         
         _amqpConnection = unique_ptr<AMQP::Connection>(new AMQP::Connection(this, AMQP::Login("guest", "guest"), "/"));
         _amqpConnection->login();
@@ -131,13 +131,13 @@ namespace MyAMQP {
         
     }
     
-    size_t MyAMQPClient::OnRead(char const* buf, int len) {
+    size_t MyAMQPClient::OnNetworkRead(char const* buf, int len) {
         auto parsedBytes = _amqpConnection->parse(buf, len);
         
         return parsedBytes;
     }
     
-    void MyAMQPClient::OnReadError(std::string const& errorStr){
+    void MyAMQPClient::OnNetworkReadError(std::string const& errorStr){
         cout << "MyAMQPClient read error: " << errorStr << endl;
         _networkConnection->Close();
     }

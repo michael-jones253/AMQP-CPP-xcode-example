@@ -21,8 +21,6 @@ MyNetworkConnection::MyNetworkConnection() : _socketFd{} {
 void MyNetworkConnection::Connect(string const& ipAddress, int port) {
     cout << "connecting" << endl;
     
-    Close();
-    
     // Setup socket and connect it.
     _socketFd = socket(AF_INET, SOCK_STREAM, 0);
     if (_socketFd < 0)
@@ -63,7 +61,7 @@ void MyNetworkConnection::Disconnect() {
 ssize_t MyNetworkConnection::Read(char* buf, size_t len) {
     auto ret = recv(_socketFd, buf, len, 0);
     if (ret < 0) {
-        throw runtime_error("MyNetworkConnection write failed");
+        throw runtime_error("MyNetworkConnection read failed");
     }
     
     return ret;

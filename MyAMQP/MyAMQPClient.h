@@ -109,9 +109,9 @@ namespace MyAMQP {
         void Close();
         
     private:
-        size_t OnRead(char const* buf, int len);
+        size_t OnNetworkRead(char const* buf, int len);
         
-        void OnReadError(std::string const& errorStr);
+        void OnNetworkReadError(std::string const& errorStr);
         
     };
 }

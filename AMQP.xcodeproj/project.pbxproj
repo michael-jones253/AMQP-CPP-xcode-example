@@ -154,6 +154,16 @@
 		B2FDFE0B1AE3216300542DA0 /* libMyAMQP.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B236E3021AE5E6E900B30017 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B23A09491AE0A1F800533FFA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B2344B471AE0CB7A00B47CB2;
+			remoteInfo = MyAMQP;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		B23A096A1AE0A77000533FFA /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -183,6 +193,8 @@
 		B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libMyAMQP.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQPPriv.h; sourceTree = "<group>"; };
 		B2344B4E1AE0CB7A00B47CB2 /* MyAMQPClient.cp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPClient.cp; sourceTree = "<group>"; };
+		B236E3011AE5E5CB00B30017 /* MyLoginCredentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLoginCredentials.h; sourceTree = "<group>"; };
+		B236E3041AE5EB8900B30017 /* MyAMQPRoutingInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQPRoutingInfo.h; sourceTree = "<group>"; };
 		B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libAMQPSTL.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		B23A095E1AE0A22F00533FFA /* AMQPSTL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMQPSTL.h; sourceTree = "<group>"; };
 		B23A09601AE0A22F00533FFA /* AMQPSTLPriv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMQPSTLPriv.h; sourceTree = "<group>"; };
@@ -364,6 +376,8 @@
 			isa = PBXGroup;
 			children = (
 				B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */,
+				B236E3011AE5E5CB00B30017 /* MyLoginCredentials.h */,
+				B236E3041AE5EB8900B30017 /* MyAMQPRoutingInfo.h */,
 				B2FDFDFC1AE30BEB00542DA0 /* MyAMQPBuffer.cpp */,
 				B2FDFDFD1AE30BEB00542DA0 /* MyAMQPBuffer.h */,
 				B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */,
@@ -754,6 +768,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				B236E3031AE5E6E900B30017 /* PBXTargetDependency */,
 			);
 			name = Sender;
 			productName = Sender;
@@ -868,6 +883,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B236E3031AE5E6E900B30017 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B2344B471AE0CB7A00B47CB2 /* MyAMQP */;
+			targetProxy = B236E3021AE5E6E900B30017 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B2344B501AE0CB7A00B47CB2 /* Debug */ = {

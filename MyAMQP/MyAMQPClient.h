@@ -12,6 +12,8 @@
 
 #include "amqpcpp.h"
 #include "MyAMQPNetworkConnection.h"
+#include "MyLoginCredentials.h"
+#include "MyAMQPRoutingInfo.h"
 
 #include <string>
 #include <mutex>
@@ -44,9 +46,9 @@ namespace MyAMQP {
         std::atomic<bool> _queueReady;
         
     public:
-        void CreateHelloQueue(AMQP::ExchangeType exchangeType);
+        void CreateHelloQueue(AMQP::ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo);
         
-        void SendHelloWorld(const char *);
+        void SendHelloWorld(std::string const& exchange, std::string const& key, std::string const& greeting);
         
         MyAMQPClient(std::unique_ptr<MyAMQPNetworkConnection> networkConnection);
 
@@ -108,7 +110,7 @@ namespace MyAMQP {
          */
         void onClosed(AMQP::Connection *connection) override;
         
-        void Open(std::string const& ipAddress);
+        void Open(MyLoginCredentials const& loginInfo);
         
         void Close();
         

@@ -29,13 +29,20 @@ int main(int argc, const char * argv[]) {
         static struct option longopts[] = {
             { "fanout",  no_argument,            nullptr,           'f'},
             { "topic",   no_argument,            nullptr,           't'},
+            { "exchange",     required_argument,            nullptr,'e'},
+            { "key",     required_argument,            nullptr,     'k'},
+            { "queue",     required_argument,            nullptr,   'q'},
             { "count",   required_argument,      nullptr,           'c' },
             { "sleep",   required_argument,      nullptr,           's' },
             { NULL,    0,                 nullptr,           0 }
         };
         
+        MyLoginCredentials loginInfo{"127.0.0.1", "guest", "guest"};
+        
         // Default exchange type.
         AMQP::ExchangeType exchangeType{AMQP::ExchangeType::direct};
+        
+        MyAMQPRoutingInfo routingInfo{"my_exchange", "key", "my_queue"};
         
         int messageCount{100};
         int sleepSeconds{};
@@ -43,7 +50,7 @@ int main(int argc, const char * argv[]) {
         auto const usageStr = string("Usage: [--fanout | --topic {default direct}] [--count <integer>] [--sleep <seconds>]");
         
         do {
-            auto ch = getopt_long(argc, (char* const *)(argv), "ftc:s:", longopts, nullptr);
+            auto ch = getopt_long(argc, (char* const *)(argv), "fte:k:q:c:s:", longopts, nullptr);
             
             switch (ch) {
                 case 'f':
@@ -53,6 +60,18 @@ int main(int argc, const char * argv[]) {
                 case 't':
                     // FIX ME - exchange type topic will need a routing key argument.
                     throw runtime_error("Exchange type topic not implemented yet");
+                    
+                case 'e':
+                    routingInfo.ExchangeName = optarg;
+                    break;
+                    
+                case 'k':
+                    routingInfo.Key = optarg;
+                    break;
+                    
+                case 'q':
+                    routingInfo.QueueName = optarg;
+                    break;
                     
                 case 'c':
                     messageCount = stoi(optarg);
@@ -80,14 +99,15 @@ int main(int argc, const char * argv[]) {
         
         MyAMQPClient myAmqp{move(netConnection)};
         
-        myAmqp.Open("127.0.0.1");
+        // To Do: args for server host, username and password.
+        myAmqp.Open(loginInfo);
         
-        myAmqp.CreateHelloQueue(exchangeType);
+        myAmqp.CreateHelloQueue(exchangeType, routingInfo);
         
         auto startTime = system_clock::now();
         
         for (int count = 0; count < messageCount; count++) {
-            myAmqp.SendHelloWorld("sawasdee krup");
+            myAmqp.SendHelloWorld(routingInfo.ExchangeName, routingInfo.Key, "sawasdee krup");
             
             sleep_for(seconds(sleepSeconds));
         }

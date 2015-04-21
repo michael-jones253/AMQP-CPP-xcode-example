@@ -21,7 +21,7 @@ using namespace std::chrono;
 
 namespace MyAMQP {
     
-    void MyAMQPClient::CreateHelloQueue(ExchangeType exchangeType) {
+    void MyAMQPClient::CreateHelloQueue(ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo) {
         unique_lock<mutex> lock(_mutex);
         
         // Prevent a race with queue creation before underlying channel is created.
@@ -39,17 +39,17 @@ namespace MyAMQP {
         // exchange declaration and bind can be sent one after another.
         
         // we declare a queue, an exchange and we publish a message
-        _channel->declareQueue("my_queue").onSuccess([this]() {
+        _channel->declareQueue(routingInfo.QueueName).onSuccess([this]() {
             std::cout << "queue declared" << std::endl;
         });
         
         // declare an exchange
-        _channel->declareExchange("my_exchange", exchangeType).onSuccess([]() {
+        _channel->declareExchange(routingInfo.ExchangeName, exchangeType).onSuccess([]() {
             std::cout << "exchange declared" << std::endl;
         });
         
         // bind queue and exchange
-        _channel->bindQueue("my_exchange", "my_queue", "key").onSuccess([this]() {
+        _channel->bindQueue(routingInfo.ExchangeName, routingInfo.QueueName, routingInfo.Key).onSuccess([this]() {
             std::cout << "queue bound to exchange" << std::endl;
             _queueReady = true;
             _conditional.notify_one();
@@ -67,9 +67,9 @@ namespace MyAMQP {
         }
     }
     
-    void MyAMQPClient::SendHelloWorld(const char *greeting) {
+    void MyAMQPClient::SendHelloWorld(string const& exchange, string const& key, string const& greeting) {
         cout << greeting << endl;
-        auto ret = _channel->publish("my_exchange", "key", greeting);
+        auto ret = _channel->publish(exchange.c_str(), key.c_str(), greeting.c_str());
         
         if (!ret) {
             throw runtime_error("message publish failed");
@@ -85,7 +85,8 @@ namespace MyAMQP {
     _conditional{},
     _channelOpen{},
     _channelInError{},
-    _queueReady{} {
+    _queueReady{}
+    {
         _networkConnection = move(networkConnection);
         
     }
@@ -154,12 +155,14 @@ namespace MyAMQP {
         cout << "MyAMQPClient onClosed" << endl;
     }
     
-    void MyAMQPClient::Open(const string& ipAddress) {
-        _networkConnection->Open(ipAddress,
+    void MyAMQPClient::Open(MyLoginCredentials const& loginInfo) {
+        _networkConnection->Open(loginInfo.HostIpAddress,
                                  bind(&MyAMQPClient::OnNetworkRead, this, placeholders::_1, placeholders::_2),
                                  bind(&MyAMQPClient::OnNetworkReadError, this, placeholders::_1));
         
-        _amqpConnection = unique_ptr<AMQP::Connection>(new AMQP::Connection(this, AMQP::Login("guest", "guest"), "/"));
+        _amqpConnection = unique_ptr<AMQP::Connection>(new AMQP::Connection(this,
+                                                                            AMQP::Login(loginInfo.UserName,
+                                                                            loginInfo.Password), "/"));
         _amqpConnection->login();
         
     }

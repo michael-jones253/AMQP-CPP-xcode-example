@@ -46,7 +46,7 @@ namespace MyAMQP {
         
         void Close();
         
-        ssize_t SendToServer(char const* buf, size_t len) { return Write(buf, len); }
+        void SendToServer(char const* buf, size_t len) { WriteAll(buf, len); }
         
     private:
         virtual void Connect(std::string const& ipAddress, int port) = 0;
@@ -55,7 +55,7 @@ namespace MyAMQP {
         
         virtual ssize_t Read(char* buf, size_t len) = 0;
         
-        virtual ssize_t Write(char const* buf, size_t len) = 0;
+        virtual void WriteAll(char const* buf, size_t len) = 0;
         
         void ReadLoop();
     };

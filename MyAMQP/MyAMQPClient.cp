@@ -77,10 +77,12 @@ namespace MyAMQP {
     }
     
     void MyAMQPClient::SubscribeToReceive(string const& queue) {
-        _channel->consume(queue).onReceived([](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
+        auto receiveHandler = [this](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
             std::cout << "received: " << message.message() << std::endl;
-        });
+            _channel->ack(deliveryTag);
+        };
 
+        _channel->consume(queue).onReceived(receiveHandler);
     }
     
     MyAMQPClient::MyAMQPClient(std::unique_ptr<MyAMQPNetworkConnection> networkConnection) :
@@ -114,12 +116,7 @@ namespace MyAMQP {
         // for (unsigned i=0; i<size; i++) cout << (int)buffer[i] << " ";
         // cout << endl;
         
-        auto amountWritten = size;
-        
-        while (amountWritten > 0) {
-            auto bytesWritten = _networkConnection->SendToServer(buffer, size);
-            amountWritten -= bytesWritten;
-        }        
+        _networkConnection->SendToServer(buffer, size);
     }
     
     void MyAMQPClient::onError(AMQP::Connection *connection, const char *message) {

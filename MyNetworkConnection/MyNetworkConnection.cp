@@ -80,13 +80,20 @@ ssize_t MyNetworkConnection::Read(char* buf, size_t len) {
     return ret;
 }
 
-ssize_t MyNetworkConnection::Write(char const* buf, size_t len) {
-    auto ret = send(_socketFd, buf, len, 0);
+void MyNetworkConnection::WriteAll(char const* buf, size_t len) {
+    auto amountWritten = len;
     
-    if (ret < 0) {
-        throw runtime_error("MyNetworkConnection write failed");
+    while (amountWritten > 0) {
+        
+        auto ret = send(_socketFd, buf, len, 0);
+        
+        // FIX ME there are errno codes such as EINTR which need handling.
+        if (ret < 0) {
+            throw runtime_error("MyNetworkConnection write failed");
+        }
+        
+        amountWritten -= ret;
     }
     
-    return ret;
 }
 

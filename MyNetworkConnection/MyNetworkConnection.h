@@ -35,7 +35,7 @@ private:
     
     ssize_t Read(char* buf, size_t len) override;
     
-    ssize_t Write(char const* buf, size_t len) override;
+    void WriteAll(char const* buf, size_t len) override;
     
 };
 

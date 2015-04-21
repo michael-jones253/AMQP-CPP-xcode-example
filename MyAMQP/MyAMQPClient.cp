@@ -78,6 +78,8 @@ namespace MyAMQP {
     
     void MyAMQPClient::SubscribeToReceive(string const& queue,
                                           function<void(AMQP::Message const &, bool)> const &handler) {
+        
+        // Take a copy of handler.
         auto receiveHandler = [this,handler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
             try {
                 handler(message, redelivered);
@@ -181,8 +183,13 @@ namespace MyAMQP {
     }
     
     void MyAMQPClient::Close() {
-        _amqpConnection->close();
-        _networkConnection->Close();
+        if (_amqpConnection) {
+            _amqpConnection->close();
+        }
+        
+        if (_networkConnection) {
+            _networkConnection->Close();
+        }
     }
     
     size_t MyAMQPClient::OnNetworkRead(char const* buf, int len) {

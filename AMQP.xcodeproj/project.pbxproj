@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B23007D11AE1C8B1005BAB20 /* MyNetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23007CF1AE1C8B1005BAB20 /* MyNetworkConnection.cpp */; };
-		B23007D21AE1C8B1005BAB20 /* MyNetworkConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = B23007D01AE1C8B1005BAB20 /* MyNetworkConnection.h */; };
 		B23007D41AE1CDB9005BAB20 /* MyAMQPNetworkConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23007D31AE1CDB9005BAB20 /* MyAMQPNetworkConnection.cpp */; };
 		B2344B4D1AE0CB7A00B47CB2 /* MyAMQPPriv.h in Headers */ = {isa = PBXBuildFile; fileRef = B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */; };
 		B2344B4F1AE0CB7A00B47CB2 /* MyAMQPClient.cp in Sources */ = {isa = PBXBuildFile; fileRef = B2344B4E1AE0CB7A00B47CB2 /* MyAMQPClient.cp */; };
@@ -153,6 +151,7 @@
 		B25CA1351AE617DE00BDD034 /* libAMQPSTL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */; };
 		B25CA1361AE617DE00BDD034 /* libMyAMQP.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */; };
 		B25CA1371AE617DE00BDD034 /* libMyNetworkConnection.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B25CA12A1AE614D200BDD034 /* libMyNetworkConnection.a */; };
+		B25CA1381AE61AF700BDD034 /* libMyNetworkConnection.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B25CA12A1AE614D200BDD034 /* libMyNetworkConnection.a */; };
 		B2BE4F401AE358D5009B8194 /* libAMQPSTL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */; };
 		B2BE4F421AE35ABB009B8194 /* MyAMQPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */; };
 		B2FDFDFE1AE30BEB00542DA0 /* MyAMQPBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FDFDFC1AE30BEB00542DA0 /* MyAMQPBuffer.cpp */; };
@@ -203,8 +202,6 @@
 
 /* Begin PBXFileReference section */
 		B23007CC1AE1BCF4005BAB20 /* MyAMQPNetworkConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQPNetworkConnection.h; sourceTree = "<group>"; };
-		B23007CF1AE1C8B1005BAB20 /* MyNetworkConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = MyNetworkConnection.cpp; path = ../MyAMQP/MyNetworkConnection.cpp; sourceTree = "<group>"; };
-		B23007D01AE1C8B1005BAB20 /* MyNetworkConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyNetworkConnection.h; path = ../MyAMQP/MyNetworkConnection.h; sourceTree = "<group>"; };
 		B23007D31AE1CDB9005BAB20 /* MyAMQPNetworkConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPNetworkConnection.cpp; sourceTree = "<group>"; };
 		B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libMyAMQP.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQPPriv.h; sourceTree = "<group>"; };
@@ -377,6 +374,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B25CA1381AE61AF700BDD034 /* libMyNetworkConnection.a in Frameworks */,
 				B2344B541AE0CCE100B47CB2 /* libMyAMQP.dylib in Frameworks */,
 				B23A09731AE0A86500533FFA /* libAMQPSTL.dylib in Frameworks */,
 			);
@@ -469,8 +467,6 @@
 		B23A096D1AE0A77000533FFA /* Sender */ = {
 			isa = PBXGroup;
 			children = (
-				B23007CF1AE1C8B1005BAB20 /* MyNetworkConnection.cpp */,
-				B23007D01AE1C8B1005BAB20 /* MyNetworkConnection.h */,
 				B23A096E1AE0A77000533FFA /* main.cpp */,
 			);
 			path = Sender;
@@ -651,7 +647,6 @@
 			files = (
 				B2BE4F421AE35ABB009B8194 /* MyAMQPClient.h in Headers */,
 				B2344B4D1AE0CB7A00B47CB2 /* MyAMQPPriv.h in Headers */,
-				B23007D21AE1C8B1005BAB20 /* MyNetworkConnection.h in Headers */,
 				B2FDFDFF1AE30BEB00542DA0 /* MyAMQPBuffer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -954,7 +949,6 @@
 			files = (
 				B2FDFDFE1AE30BEB00542DA0 /* MyAMQPBuffer.cpp in Sources */,
 				B23007D41AE1CDB9005BAB20 /* MyAMQPNetworkConnection.cpp in Sources */,
-				B23007D11AE1C8B1005BAB20 /* MyNetworkConnection.cpp in Sources */,
 				B2344B4F1AE0CB7A00B47CB2 /* MyAMQPClient.cp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,7 +10,7 @@
 #include <sstream>
 #include <memory>
 #include "MyAMQPClient.h"
-#include "MyNetworkConnection.h"
+#include "../MyNetworkConnection/MyNetworkConnection.h"
 #include <amqpcpp.h>
 
 #include <thread>

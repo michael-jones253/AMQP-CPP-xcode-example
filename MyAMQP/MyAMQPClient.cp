@@ -76,10 +76,19 @@ namespace MyAMQP {
         }
     }
     
-    void MyAMQPClient::SubscribeToReceive(string const& queue) {
-        auto receiveHandler = [this](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
-            std::cout << "received: " << message.message() << std::endl;
-            _channel->ack(deliveryTag);
+    void MyAMQPClient::SubscribeToReceive(string const& queue,
+                                          function<void(AMQP::Message const &, bool)> const &handler) {
+        auto receiveHandler = [this,handler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
+            try {
+                handler(message, redelivered);
+
+                // Only ack if handler didn't throw.
+                _channel->ack(deliveryTag);
+            }
+            catch(exception const& ex) {
+                cerr << "Receive handler error: " << ex.what() << endl;
+            }
+            
         };
 
         _channel->consume(queue).onReceived(receiveHandler);

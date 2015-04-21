@@ -42,7 +42,7 @@ namespace MyAMQP {
         
         virtual ~MyAMQPNetworkConnection();
         
-        void Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> onBytes, std::function<void(std::string const& errString)> onError);
+        void Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> const& onBytes, std::function<void(std::string const& errString)> const & onError);
         
         void Close();
         

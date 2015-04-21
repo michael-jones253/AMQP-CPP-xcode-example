@@ -50,7 +50,8 @@ namespace MyAMQP {
         
         void SendHelloWorld(std::string const& exchange, std::string const& key, std::string const& greeting);
         
-        void SubscribeToReceive(std::string const& queue);
+        void SubscribeToReceive(std::string const& queue,
+                                std::function<void(AMQP::Message const &, bool redelivered)> const &handler);
         
         MyAMQPClient(std::unique_ptr<MyAMQPNetworkConnection> networkConnection);
 

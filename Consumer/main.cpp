@@ -98,11 +98,15 @@ int main(int argc, const char * argv[]) {
         
         MyAMQPClient myAmqp{move(netConnection)};
         
-        // To Do: args for server host, username and password.
         myAmqp.Open(loginInfo);
         
         myAmqp.CreateHelloQueue(exchangeType, routingInfo);
-        myAmqp.SubscribeToReceive(routingInfo.QueueName);
+        
+        auto handler = [](AMQP::Message const & message, bool redelivered) {
+            cout << message.message() << ", redelivered: " << redelivered << endl;
+        };
+        
+        myAmqp.SubscribeToReceive(routingInfo.QueueName, handler);
         
         while (true) {
             // FIX ME - just temporary.

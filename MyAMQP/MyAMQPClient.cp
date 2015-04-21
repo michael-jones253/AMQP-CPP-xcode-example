@@ -69,11 +69,18 @@ namespace MyAMQP {
     
     void MyAMQPClient::SendHelloWorld(string const& exchange, string const& key, string const& greeting) {
         cout << greeting << endl;
-        auto ret = _channel->publish(exchange.c_str(), key.c_str(), greeting.c_str());
+        auto ret = _channel->publish(exchange, key, greeting.c_str());
         
         if (!ret) {
             throw runtime_error("message publish failed");
         }
+    }
+    
+    void MyAMQPClient::SubscribeToReceive(string const& queue) {
+        _channel->consume(queue).onReceived([](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
+            std::cout << "received: " << message.message() << std::endl;
+        });
+
     }
     
     MyAMQPClient::MyAMQPClient(std::unique_ptr<MyAMQPNetworkConnection> networkConnection) :

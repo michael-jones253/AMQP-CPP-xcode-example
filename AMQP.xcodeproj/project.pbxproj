@@ -146,6 +146,13 @@
 		B23A0A711AE0AFA500533FFA /* transactionselectokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A161AE0AFA500533FFA /* transactionselectokframe.h */; };
 		B23A0A721AE0AFA500533FFA /* watchable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A0A171AE0AFA500533FFA /* watchable.cpp */; };
 		B23A0A741AE0AFF200533FFA /* amqpcpp.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A731AE0AFF200533FFA /* amqpcpp.h */; };
+		B25CA1131AE6098300BDD034 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B25CA1121AE6098300BDD034 /* main.cpp */; };
+		B25CA12D1AE614D200BDD034 /* MyNetworkConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = B25CA12C1AE614D200BDD034 /* MyNetworkConnection.h */; };
+		B25CA12F1AE614D200BDD034 /* MyNetworkConnectionPriv.h in Headers */ = {isa = PBXBuildFile; fileRef = B25CA12E1AE614D200BDD034 /* MyNetworkConnectionPriv.h */; };
+		B25CA1311AE614D200BDD034 /* MyNetworkConnection.cp in Sources */ = {isa = PBXBuildFile; fileRef = B25CA1301AE614D200BDD034 /* MyNetworkConnection.cp */; };
+		B25CA1351AE617DE00BDD034 /* libAMQPSTL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */; };
+		B25CA1361AE617DE00BDD034 /* libMyAMQP.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */; };
+		B25CA1371AE617DE00BDD034 /* libMyNetworkConnection.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B25CA12A1AE614D200BDD034 /* libMyNetworkConnection.a */; };
 		B2BE4F401AE358D5009B8194 /* libAMQPSTL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */; };
 		B2BE4F421AE35ABB009B8194 /* MyAMQPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */; };
 		B2FDFDFE1AE30BEB00542DA0 /* MyAMQPBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FDFDFC1AE30BEB00542DA0 /* MyAMQPBuffer.cpp */; };
@@ -166,6 +173,15 @@
 
 /* Begin PBXCopyFilesBuildPhase section */
 		B23A096A1AE0A77000533FFA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		B25CA10E1AE6098300BDD034 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -328,6 +344,12 @@
 		B23A0A161AE0AFA500533FFA /* transactionselectokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = transactionselectokframe.h; path = src/transactionselectokframe.h; sourceTree = "<group>"; };
 		B23A0A171AE0AFA500533FFA /* watchable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = watchable.cpp; path = src/watchable.cpp; sourceTree = "<group>"; };
 		B23A0A731AE0AFF200533FFA /* amqpcpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = amqpcpp.h; sourceTree = "<group>"; };
+		B25CA1101AE6098300BDD034 /* Consumer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Consumer; sourceTree = BUILT_PRODUCTS_DIR; };
+		B25CA1121AE6098300BDD034 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		B25CA12A1AE614D200BDD034 /* libMyNetworkConnection.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMyNetworkConnection.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B25CA12C1AE614D200BDD034 /* MyNetworkConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyNetworkConnection.h; sourceTree = "<group>"; };
+		B25CA12E1AE614D200BDD034 /* MyNetworkConnectionPriv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyNetworkConnectionPriv.h; sourceTree = "<group>"; };
+		B25CA1301AE614D200BDD034 /* MyNetworkConnection.cp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MyNetworkConnection.cp; sourceTree = "<group>"; };
 		B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPClient.h; sourceTree = "<group>"; };
 		B2FDFDFC1AE30BEB00542DA0 /* MyAMQPBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPBuffer.cpp; sourceTree = "<group>"; };
 		B2FDFDFD1AE30BEB00542DA0 /* MyAMQPBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPBuffer.h; sourceTree = "<group>"; };
@@ -357,6 +379,23 @@
 			files = (
 				B2344B541AE0CCE100B47CB2 /* libMyAMQP.dylib in Frameworks */,
 				B23A09731AE0A86500533FFA /* libAMQPSTL.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B25CA10D1AE6098300BDD034 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B25CA1351AE617DE00BDD034 /* libAMQPSTL.dylib in Frameworks */,
+				B25CA1361AE617DE00BDD034 /* libMyAMQP.dylib in Frameworks */,
+				B25CA1371AE617DE00BDD034 /* libMyNetworkConnection.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B25CA1271AE614D200BDD034 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,6 +434,8 @@
 				B23A096D1AE0A77000533FFA /* Sender */,
 				B2344B491AE0CB7A00B47CB2 /* MyAMQP */,
 				B2FDFE051AE3213A00542DA0 /* TestBuffer */,
+				B25CA1111AE6098300BDD034 /* Consumer */,
+				B25CA12B1AE614D200BDD034 /* MyNetworkConnection */,
 				B23A09521AE0A1F800533FFA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -406,6 +447,8 @@
 				B23A096C1AE0A77000533FFA /* Sender */,
 				B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */,
 				B2FDFE041AE3213A00542DA0 /* TestBuffer */,
+				B25CA1101AE6098300BDD034 /* Consumer */,
+				B25CA12A1AE614D200BDD034 /* libMyNetworkConnection.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -573,6 +616,24 @@
 			name = src;
 			sourceTree = "<group>";
 		};
+		B25CA1111AE6098300BDD034 /* Consumer */ = {
+			isa = PBXGroup;
+			children = (
+				B25CA1121AE6098300BDD034 /* main.cpp */,
+			);
+			path = Consumer;
+			sourceTree = "<group>";
+		};
+		B25CA12B1AE614D200BDD034 /* MyNetworkConnection */ = {
+			isa = PBXGroup;
+			children = (
+				B25CA12C1AE614D200BDD034 /* MyNetworkConnection.h */,
+				B25CA12E1AE614D200BDD034 /* MyNetworkConnectionPriv.h */,
+				B25CA1301AE614D200BDD034 /* MyNetworkConnection.cp */,
+			);
+			path = MyNetworkConnection;
+			sourceTree = "<group>";
+		};
 		B2FDFE051AE3213A00542DA0 /* TestBuffer */ = {
 			isa = PBXGroup;
 			children = (
@@ -720,6 +781,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B25CA1281AE614D200BDD034 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B25CA12F1AE614D200BDD034 /* MyNetworkConnectionPriv.h in Headers */,
+				B25CA12D1AE614D200BDD034 /* MyNetworkConnection.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -775,6 +845,40 @@
 			productReference = B23A096C1AE0A77000533FFA /* Sender */;
 			productType = "com.apple.product-type.tool";
 		};
+		B25CA10F1AE6098300BDD034 /* Consumer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B25CA1161AE6098300BDD034 /* Build configuration list for PBXNativeTarget "Consumer" */;
+			buildPhases = (
+				B25CA10C1AE6098300BDD034 /* Sources */,
+				B25CA10D1AE6098300BDD034 /* Frameworks */,
+				B25CA10E1AE6098300BDD034 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Consumer;
+			productName = Consumer;
+			productReference = B25CA1101AE6098300BDD034 /* Consumer */;
+			productType = "com.apple.product-type.tool";
+		};
+		B25CA1291AE614D200BDD034 /* MyNetworkConnection */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B25CA1321AE614D200BDD034 /* Build configuration list for PBXNativeTarget "MyNetworkConnection" */;
+			buildPhases = (
+				B25CA1261AE614D200BDD034 /* Sources */,
+				B25CA1271AE614D200BDD034 /* Frameworks */,
+				B25CA1281AE614D200BDD034 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MyNetworkConnection;
+			productName = MyNetworkConnection;
+			productReference = B25CA12A1AE614D200BDD034 /* libMyNetworkConnection.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		B2FDFE031AE3213A00542DA0 /* TestBuffer */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B2FDFE081AE3213A00542DA0 /* Build configuration list for PBXNativeTarget "TestBuffer" */;
@@ -810,6 +914,12 @@
 					B23A096B1AE0A77000533FFA = {
 						CreatedOnToolsVersion = 6.3;
 					};
+					B25CA10F1AE6098300BDD034 = {
+						CreatedOnToolsVersion = 6.3;
+					};
+					B25CA1291AE614D200BDD034 = {
+						CreatedOnToolsVersion = 6.3;
+					};
 					B2FDFE031AE3213A00542DA0 = {
 						CreatedOnToolsVersion = 6.3;
 					};
@@ -831,6 +941,8 @@
 				B23A096B1AE0A77000533FFA /* Sender */,
 				B2344B471AE0CB7A00B47CB2 /* MyAMQP */,
 				B2FDFE031AE3213A00542DA0 /* TestBuffer */,
+				B25CA10F1AE6098300BDD034 /* Consumer */,
+				B25CA1291AE614D200BDD034 /* MyNetworkConnection */,
 			);
 		};
 /* End PBXProject section */
@@ -871,6 +983,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				B23A096F1AE0A77000533FFA /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B25CA10C1AE6098300BDD034 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B25CA1131AE6098300BDD034 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B25CA1261AE614D200BDD034 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B25CA1311AE614D200BDD034 /* MyNetworkConnection.cp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1060,6 +1188,54 @@
 			};
 			name = Release;
 		};
+		B25CA1141AE6098300BDD034 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
+			};
+			name = Debug;
+		};
+		B25CA1151AE6098300BDD034 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
+			};
+			name = Release;
+		};
+		B25CA1331AE614D200BDD034 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B25CA1341AE614D200BDD034 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		B2FDFE091AE3213A00542DA0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1116,6 +1292,22 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		B25CA1161AE6098300BDD034 /* Build configuration list for PBXNativeTarget "Consumer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B25CA1141AE6098300BDD034 /* Debug */,
+				B25CA1151AE6098300BDD034 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		B25CA1321AE614D200BDD034 /* Build configuration list for PBXNativeTarget "MyNetworkConnection" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B25CA1331AE614D200BDD034 /* Debug */,
+				B25CA1341AE614D200BDD034 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		B2FDFE081AE3213A00542DA0 /* Build configuration list for PBXNativeTarget "TestBuffer" */ = {
 			isa = XCConfigurationList;

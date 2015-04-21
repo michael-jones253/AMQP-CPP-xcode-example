@@ -50,6 +50,8 @@ namespace MyAMQP {
         
         void SendHelloWorld(std::string const& exchange, std::string const& key, std::string const& greeting);
         
+        void SubscribeToReceive(std::string const& queue);
+        
         MyAMQPClient(std::unique_ptr<MyAMQPNetworkConnection> networkConnection);
 
         // Class is final, virtual not needed.

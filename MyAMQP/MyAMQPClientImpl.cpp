@@ -76,16 +76,41 @@ namespace MyAMQP {
         }
     }
     
+    // FIX ME taking a copy to the handler, try a ref.
+    uint64_t deliverMessage(function<void(string const &, bool)> const userHandler,
+                        string const& message,
+                        uint64_t tag,
+                        bool redelivered) {
+        
+        // User handler may throw, in which case we don't return tag for acknowledgment.
+        userHandler(message, redelivered);
+        
+        return tag;
+    }
+    
     void MyAMQPClientImpl::SubscribeToReceive(string const& queue,
-                                          function<void(string const &, bool)> const &handler) {
+                                          function<void(string const &, bool)> const &userHandler) {
         
         // Take a copy of handler.
-        auto receiveHandler = [this,handler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
+        auto receiveHandler = [this,userHandler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
             try {
-                handler(message.message(), redelivered);
+                // Because messages will be cached in the queue, we need to take a copy.
+                string messageCopy{message.message()};
                 
+                auto handleReceive = bind(deliverMessage, userHandler, move(messageCopy), deliveryTag, redelivered);
+                
+                auto deliveryTask = packaged_task<uint64_t(void)>{ move(handleReceive) };
+
+                auto tag = deliveryTask.get_future();
+                
+            
+                // TBD in another thread
+                deliveryTask();
+            
+                // TBD in another thread - the get might throw.
                 // Only ack if handler didn't throw.
-                _channel->ack(deliveryTag);
+                _channel->ack(tag.get());
+                
             }
             catch(exception const& ex) {
                 cerr << "Receive handler error: " << ex.what() << endl;

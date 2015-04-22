@@ -77,7 +77,7 @@ namespace MyAMQP {
     }
     
     // FIX ME taking a copy to the handler, try a ref.
-    uint64_t deliverMessage(function<void(string const &, bool)> const userHandler,
+    uint64_t deliverMessage(function<void(string const &, bool)> const& userHandler,
                         string const& message,
                         uint64_t tag,
                         bool redelivered) {
@@ -104,7 +104,7 @@ namespace MyAMQP {
                 auto tag = deliveryTask.get_future();
                 
             
-                // TBD in another thread
+                // TBD in another thread. Invoking the task doesn't throw.
                 deliveryTask();
             
                 // TBD in another thread - the get might throw.
@@ -130,7 +130,8 @@ namespace MyAMQP {
     _conditional{},
     _channelOpen{},
     _channelInError{},
-    _queueReady{}
+    _queueReady{},
+    _receiveTaskQueue{}
     {
         _networkConnection = move(networkConnection);
         

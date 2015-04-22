@@ -25,6 +25,9 @@
 namespace MyAMQP {
     
     class MyAMQPClientImpl final : public AMQP::ConnectionHandler {
+        // Private constructor for use with friend class only.
+        friend class MyAMQPClient;
+        
         // Copernica open source stuff.
         std::unique_ptr<AMQP::Connection> _amqpConnection;
         
@@ -51,8 +54,6 @@ namespace MyAMQP {
         
         void SubscribeToReceive(std::string const& queue,
                                 std::function<void(std::string const &, bool redelivered)> const &handler);
-        
-        MyAMQPClientImpl(std::unique_ptr<MyAMQPNetworkConnection> networkConnection);
         
         // Class is final, virtual not needed.
         ~MyAMQPClientImpl();
@@ -117,6 +118,8 @@ namespace MyAMQP {
         void Close();
         
     private:
+        MyAMQPClientImpl(std::unique_ptr<MyAMQPNetworkConnection> networkConnection);
+
         size_t OnNetworkRead(char const* buf, int len);
         
         void OnNetworkReadError(std::string const& errorStr);

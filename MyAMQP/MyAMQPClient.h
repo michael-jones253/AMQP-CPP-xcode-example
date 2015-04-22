@@ -17,9 +17,6 @@
 #include "MyAMQPRoutingInfo.h"
 
 #include <string>
-#include <mutex>
-#include <condition_variable>
-#include <atomic>
 
 /* The classes below are exported */
 #pragma GCC visibility push(default)
@@ -31,27 +28,6 @@ namespace MyAMQP {
     class MyAMQPClient final {
         
         std::unique_ptr<MyAMQPClientImpl> _impl;
-        /*
-        
-        // Copernica open source stuff.
-        std::unique_ptr<AMQP::Connection> _amqpConnection;
-        
-        // My stuff.
-        std::unique_ptr<MyAMQPNetworkConnection> _networkConnection;
-        
-        // Open source stuff.
-        std::unique_ptr<AMQP::Channel> _channel;
-        
-        std::mutex _mutex;
-        
-        std::condition_variable _conditional;
-        
-        std::atomic<bool> _channelOpen;
-        
-        std::atomic<bool> _channelInError;
-        
-        std::atomic<bool> _queueReady;
-         */
         
     public:
         void CreateHelloQueue(AMQP::ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo);

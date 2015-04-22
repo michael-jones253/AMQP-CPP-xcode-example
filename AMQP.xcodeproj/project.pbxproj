@@ -144,6 +144,8 @@
 		B23A0A711AE0AFA500533FFA /* transactionselectokframe.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A161AE0AFA500533FFA /* transactionselectokframe.h */; };
 		B23A0A721AE0AFA500533FFA /* watchable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23A0A171AE0AFA500533FFA /* watchable.cpp */; };
 		B23A0A741AE0AFF200533FFA /* amqpcpp.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A731AE0AFF200533FFA /* amqpcpp.h */; };
+		B24A9E7F1AE738B500B8879B /* MyAMQPClientImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B24A9E7D1AE738B500B8879B /* MyAMQPClientImpl.cpp */; };
+		B24A9E801AE738B500B8879B /* MyAMQPClientImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = B24A9E7E1AE738B500B8879B /* MyAMQPClientImpl.h */; };
 		B25CA1131AE6098300BDD034 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B25CA1121AE6098300BDD034 /* main.cpp */; };
 		B25CA12D1AE614D200BDD034 /* MyNetworkConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = B25CA12C1AE614D200BDD034 /* MyNetworkConnection.h */; };
 		B25CA12F1AE614D200BDD034 /* MyNetworkConnectionPriv.h in Headers */ = {isa = PBXBuildFile; fileRef = B25CA12E1AE614D200BDD034 /* MyNetworkConnectionPriv.h */; };
@@ -341,6 +343,8 @@
 		B23A0A161AE0AFA500533FFA /* transactionselectokframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = transactionselectokframe.h; path = src/transactionselectokframe.h; sourceTree = "<group>"; };
 		B23A0A171AE0AFA500533FFA /* watchable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = watchable.cpp; path = src/watchable.cpp; sourceTree = "<group>"; };
 		B23A0A731AE0AFF200533FFA /* amqpcpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = amqpcpp.h; sourceTree = "<group>"; };
+		B24A9E7D1AE738B500B8879B /* MyAMQPClientImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPClientImpl.cpp; sourceTree = "<group>"; };
+		B24A9E7E1AE738B500B8879B /* MyAMQPClientImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPClientImpl.h; sourceTree = "<group>"; };
 		B25CA1101AE6098300BDD034 /* Consumer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Consumer; sourceTree = BUILT_PRODUCTS_DIR; };
 		B25CA1121AE6098300BDD034 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B25CA12A1AE614D200BDD034 /* libMyNetworkConnection.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMyNetworkConnection.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -413,6 +417,8 @@
 			isa = PBXGroup;
 			children = (
 				B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */,
+				B24A9E7D1AE738B500B8879B /* MyAMQPClientImpl.cpp */,
+				B24A9E7E1AE738B500B8879B /* MyAMQPClientImpl.h */,
 				B236E3011AE5E5CB00B30017 /* MyLoginCredentials.h */,
 				B236E3041AE5EB8900B30017 /* MyAMQPRoutingInfo.h */,
 				B2FDFDFC1AE30BEB00542DA0 /* MyAMQPBuffer.cpp */,
@@ -647,6 +653,7 @@
 			files = (
 				B2BE4F421AE35ABB009B8194 /* MyAMQPClient.h in Headers */,
 				B2344B4D1AE0CB7A00B47CB2 /* MyAMQPPriv.h in Headers */,
+				B24A9E801AE738B500B8879B /* MyAMQPClientImpl.h in Headers */,
 				B2FDFDFF1AE30BEB00542DA0 /* MyAMQPBuffer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -950,6 +957,7 @@
 				B2FDFDFE1AE30BEB00542DA0 /* MyAMQPBuffer.cpp in Sources */,
 				B23007D41AE1CDB9005BAB20 /* MyAMQPNetworkConnection.cpp in Sources */,
 				B2344B4F1AE0CB7A00B47CB2 /* MyAMQPClient.cp in Sources */,
+				B24A9E7F1AE738B500B8879B /* MyAMQPClientImpl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1294,6 +1302,7 @@
 				B25CA1151AE6098300BDD034 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B25CA1321AE614D200BDD034 /* Build configuration list for PBXNativeTarget "MyNetworkConnection" */ = {
 			isa = XCConfigurationList;
@@ -1302,6 +1311,7 @@
 				B25CA1341AE614D200BDD034 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B2FDFE081AE3213A00542DA0 /* Build configuration list for PBXNativeTarget "TestBuffer" */ = {
 			isa = XCConfigurationList;

@@ -102,8 +102,8 @@ int main(int argc, const char * argv[]) {
         
         myAmqp.CreateHelloQueue(exchangeType, routingInfo);
         
-        auto handler = [](AMQP::Message const & message, bool redelivered) {
-            cout << message.message() << ", redelivered: " << redelivered << endl;
+        auto handler = [](string const & message, bool redelivered) {
+            cout << message << ", redelivered: " << redelivered << endl;
         };
         
         myAmqp.SubscribeToReceive(routingInfo.QueueName, handler);

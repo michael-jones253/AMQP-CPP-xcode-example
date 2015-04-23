@@ -8,6 +8,7 @@
 
 #include "MyTaskProcessor.h"
 #include <iostream>
+#include <assert.h>
 
 using namespace std;
 
@@ -30,6 +31,7 @@ namespace MyAMQP {
     
     void MyTaskProcessor::Start() {
         _shouldRun = true;
+        _taskQueue.Reset();
         _loopHandle = async(launch::async, [this]() { return ProcessLoop(); });
     }
     
@@ -66,6 +68,8 @@ namespace MyAMQP {
             if (!ok) {
                 break;
             }
+            
+            assert(task.valid());
             
             // Does not throw. The get of the future gets any task exceptions.
             task();

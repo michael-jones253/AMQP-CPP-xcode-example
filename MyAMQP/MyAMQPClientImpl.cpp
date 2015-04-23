@@ -19,6 +19,24 @@ using namespace AMQP;
 using namespace std;
 using namespace std::chrono;
 
+// Anonymous namespace.
+namespace  {
+    int64_t deliverMessage(function<void(string const &, bool)> const& userHandler,
+                           string const& message,
+                           uint64_t tag,
+                           bool redelivered) {
+        
+        // User handler may throw, in which case we don't return tag for acknowledgment.
+        userHandler(message, redelivered);
+        
+        return static_cast<int64_t>(tag);
+    }
+    
+    void ackMessage(AMQP::Channel* channel, int64_t deliveryTag) {
+        channel->ack(deliveryTag);
+    }
+}
+
 namespace MyAMQP {
     
     void MyAMQPClientImpl::CreateHelloQueue(ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo) {
@@ -76,20 +94,8 @@ namespace MyAMQP {
         }
     }
     
-    // FIX ME taking a copy to the handler, try a ref.
-    uint64_t deliverMessage(function<void(string const &, bool)> const& userHandler,
-                        string const& message,
-                        uint64_t tag,
-                        bool redelivered) {
-        
-        // User handler may throw, in which case we don't return tag for acknowledgment.
-        userHandler(message, redelivered);
-        
-        return tag;
-    }
-    
     void MyAMQPClientImpl::SubscribeToReceive(string const& queue,
-                                          function<void(string const &, bool)> const &userHandler) {
+                                              function<void(string const &, bool)> const &userHandler) {
         
         // Take a copy of handler.
         auto receiveHandler = [this,userHandler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
@@ -99,14 +105,17 @@ namespace MyAMQP {
                 
                 auto handleReceive = bind(deliverMessage, userHandler, move(messageCopy), deliveryTag, redelivered);
                 
-                auto deliveryTask = packaged_task<uint64_t(void)>{ move(handleReceive) };
-
-                auto tag = deliveryTask.get_future();                
+                auto deliveryTask = packaged_task<int64_t(void)>{ move(handleReceive) };
                 
-            
-                // TBD in another thread. Invoking the task doesn't throw.
-                deliveryTask();
-            
+                auto tag = deliveryTask.get_future();
+                
+                // The Copernica library invokes this callback in the context for the socket read thread.
+                // So rather than block this thread we package the handler to be invoked by another task.
+                // This model assumes that the invoking of the handler needs to be done serially.
+                _receiveTaskProcessor.Push(move(deliveryTask));
+                
+                auto ackChannel = bind(ackMessage, _channel.get(), deliveryTag);
+                
                 // TBD in another thread - the get might throw.
                 // Only ack if handler didn't throw.
                 _channel->ack(tag.get());
@@ -131,7 +140,7 @@ namespace MyAMQP {
     _channelOpen{},
     _channelInError{},
     _queueReady{},
-    _receiveTaskQueue{}
+    _receiveTaskProcessor{}
     {
         _networkConnection = move(networkConnection);
         
@@ -206,6 +215,7 @@ namespace MyAMQP {
                                                                                         loginInfo.Password), "/"));
         _amqpConnection->login();
         
+        _receiveTaskProcessor.Start();
     }
     
     void MyAMQPClientImpl::Close() {
@@ -216,6 +226,8 @@ namespace MyAMQP {
         if (_networkConnection) {
             _networkConnection->Close();
         }
+        
+        _receiveTaskProcessor.Stop();
     }
     
     size_t MyAMQPClientImpl::OnNetworkRead(char const* buf, int len) {

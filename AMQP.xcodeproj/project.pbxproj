@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B200A9631AE8904100ED0A27 /* MyAckProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B200A9611AE8904100ED0A27 /* MyAckProcessor.cpp */; };
+		B200A9641AE8904100ED0A27 /* MyAckProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = B200A9621AE8904100ED0A27 /* MyAckProcessor.h */; };
 		B22E60D41AE796D700CB0B2F /* MyReceiveTaskQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B22E60D21AE796D700CB0B2F /* MyReceiveTaskQueue.cpp */; };
 		B22E60D51AE796D700CB0B2F /* MyReceiveTaskQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = B22E60D31AE796D700CB0B2F /* MyReceiveTaskQueue.h */; };
 		B22E60DD1AE798A800CB0B2F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B22E60DC1AE798A800CB0B2F /* main.cpp */; };
@@ -219,6 +221,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B200A9611AE8904100ED0A27 /* MyAckProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAckProcessor.cpp; sourceTree = "<group>"; };
+		B200A9621AE8904100ED0A27 /* MyAckProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAckProcessor.h; sourceTree = "<group>"; };
 		B22E60D21AE796D700CB0B2F /* MyReceiveTaskQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyReceiveTaskQueue.cpp; sourceTree = "<group>"; };
 		B22E60D31AE796D700CB0B2F /* MyReceiveTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyReceiveTaskQueue.h; sourceTree = "<group>"; };
 		B22E60DA1AE798A800CB0B2F /* TestTaskQueue */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestTaskQueue; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -459,6 +463,8 @@
 				B24A9E7E1AE738B500B8879B /* MyAMQPClientImpl.h */,
 				B235801B1AE8692600DA1EC3 /* MyTaskProcessor.cpp */,
 				B235801C1AE8692600DA1EC3 /* MyTaskProcessor.h */,
+				B200A9611AE8904100ED0A27 /* MyAckProcessor.cpp */,
+				B200A9621AE8904100ED0A27 /* MyAckProcessor.h */,
 				B236E3011AE5E5CB00B30017 /* MyLoginCredentials.h */,
 				B236E3041AE5EB8900B30017 /* MyAMQPRoutingInfo.h */,
 				B2FDFDFC1AE30BEB00542DA0 /* MyAMQPBuffer.cpp */,
@@ -695,6 +701,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B200A9641AE8904100ED0A27 /* MyAckProcessor.h in Headers */,
 				B2BE4F421AE35ABB009B8194 /* MyAMQPClient.h in Headers */,
 				B2344B4D1AE0CB7A00B47CB2 /* MyAMQPPriv.h in Headers */,
 				B24A9E801AE738B500B8879B /* MyAMQPClientImpl.h in Headers */,
@@ -1034,6 +1041,7 @@
 				B23007D41AE1CDB9005BAB20 /* MyAMQPNetworkConnection.cpp in Sources */,
 				B22E60D41AE796D700CB0B2F /* MyReceiveTaskQueue.cpp in Sources */,
 				B2344B4F1AE0CB7A00B47CB2 /* MyAMQPClient.cp in Sources */,
+				B200A9631AE8904100ED0A27 /* MyAckProcessor.cpp in Sources */,
 				B235801D1AE8692600DA1EC3 /* MyTaskProcessor.cpp in Sources */,
 				B24A9E7F1AE738B500B8879B /* MyAMQPClientImpl.cpp in Sources */,
 			);

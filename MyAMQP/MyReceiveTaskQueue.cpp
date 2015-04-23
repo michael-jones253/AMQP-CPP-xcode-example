@@ -11,8 +11,6 @@
 
 using namespace std;
 
-template class std::packaged_task<int64_t(void)>;
-
 namespace MyAMQP {
     template <typename T>
     MyReceiveTaskQueue<T>::MyReceiveTaskQueue() : _itemQueue{} {
@@ -52,8 +50,13 @@ namespace MyAMQP {
         
         _conditional.notify_one();
     }
+
+    template <typename T>
+    void MyReceiveTaskQueue<T>::Reset() {
+        _breakWait = false;
+    }
+
     
-    
-    template class MyReceiveTaskQueue<int>;
     template class MyReceiveTaskQueue<packaged_task<int64_t(void)>>;
+    template class MyReceiveTaskQueue<std::future<int64_t>>;
 }

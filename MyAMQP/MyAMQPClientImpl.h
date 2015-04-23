@@ -15,7 +15,7 @@
 #include "MyLoginCredentials.h"
 #include "MyAMQPRoutingInfo.h"
 
-#include "MyReceiveTaskQueue.h"
+#include "MyTaskProcessor.h"
 
 #include <string>
 #include <mutex>
@@ -49,9 +49,7 @@ namespace MyAMQP {
         
         std::atomic<bool> _queueReady;
         
-        MyReceiveTaskQueue<std::packaged_task<int64_t(void)>> _receiveTaskQueue;
-        
-        MyReceiveTaskQueue<int> _xxx;
+        MyTaskProcessor _receiveTaskProcessor;
         
     public:
         void CreateHelloQueue(AMQP::ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo);

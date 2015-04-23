@@ -33,6 +33,8 @@ namespace MyAMQP {
         
         void BreakWait();
         
+        void Reset();
+        
         void Push(T&& item);
         
         bool Wait(T& item);

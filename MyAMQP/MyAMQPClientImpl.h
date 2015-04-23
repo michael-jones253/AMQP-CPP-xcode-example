@@ -22,7 +22,7 @@
 #include <condition_variable>
 #include <atomic>
 
-/* The classes below are exported */
+/* The class below is not exported */
 
 namespace MyAMQP {
     

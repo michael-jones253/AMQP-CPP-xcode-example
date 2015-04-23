@@ -101,7 +101,7 @@ namespace MyAMQP {
                 
                 auto deliveryTask = packaged_task<uint64_t(void)>{ move(handleReceive) };
 
-                auto tag = deliveryTask.get_future();
+                auto tag = deliveryTask.get_future();                
                 
             
                 // TBD in another thread. Invoking the task doesn't throw.

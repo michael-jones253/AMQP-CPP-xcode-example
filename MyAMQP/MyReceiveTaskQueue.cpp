@@ -23,7 +23,7 @@ namespace MyAMQP {
     void MyReceiveTaskQueue<T>::Push(T&& item) {
         {
             lock_guard<mutex> guard(_mutex);
-        _itemQueue.push(move(item));
+            _itemQueue.push(move(item));
         }
         
         _conditional.notify_one();

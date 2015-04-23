@@ -19,18 +19,20 @@
 #pragma GCC visibility push(default)
 
 namespace MyAMQP {
-    class MyAckProcessor final {
-        std::atomic<bool> _shouldRun;
+    class MyAckProcessor final {        
         MyReceiveTaskQueue<std::future<int64_t>> _taskQueue;
         
         std::future<int> _loopHandle;
         
+        std::function<void(int64_t)> _ackHandler;
+
+        std::atomic<bool> _shouldRun;
     public:
         MyAckProcessor();
         
         ~MyAckProcessor();
         
-        void Start();
+        void Start(std::function<void(int64_t)> const& ackHandler);
         void Stop();
         
         void Push(std::future<int64_t>&& deliveryTagFuture);

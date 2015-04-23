@@ -20,6 +20,7 @@ namespace MyAMQP {
     MyAckProcessor::MyAckProcessor() :
     _taskQueue{},
     _loopHandle{},
+    _ackHandler{},
     _shouldRun{}
     {
         
@@ -33,9 +34,10 @@ namespace MyAMQP {
         }
     }
     
-    void MyAckProcessor::Start() {
+    void MyAckProcessor::Start(function<void(int64_t)> const& ackHandler) {
         _shouldRun = true;
         _taskQueue.Reset();
+        _ackHandler = ackHandler;
         _loopHandle = async(launch::async, [this]() { return ProcessLoop(); });
     }
     
@@ -75,9 +77,6 @@ namespace MyAMQP {
             
             assert(task.valid());
             
-            // FIX ME
-            // continue;
-            
             // The get might throw, if the user handler threw. In this case we do not ack.
             try {
                 while (_shouldRun) {
@@ -87,6 +86,10 @@ namespace MyAMQP {
                     
                     if (ret == future_status::ready) {
                         auto tag = task.get();
+                        _ackHandler(tag);
+                        
+                        // Move on to next future.
+                        break;
                     }
                 }
             } catch (exception const& ex) {

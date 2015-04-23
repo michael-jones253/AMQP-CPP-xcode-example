@@ -32,9 +32,6 @@ namespace  {
         return static_cast<int64_t>(tag);
     }
     
-    void ackMessage(AMQP::Channel* channel, int64_t deliveryTag) {
-        channel->ack(deliveryTag);
-    }
 }
 
 namespace MyAMQP {
@@ -114,11 +111,10 @@ namespace MyAMQP {
                 // This model assumes that the invoking of the handler needs to be done serially.
                 _receiveTaskProcessor.Push(move(deliveryTask));
                 
-                auto ackChannel = bind(ackMessage, _channel.get(), deliveryTag);
+                // Acks are done in another thread.
+                _ackProcessor.Push(move(tag));
                 
-                // TBD in another thread - the get might throw.
-                // Only ack if handler didn't throw.
-                _channel->ack(tag.get());
+                // _channel->ack(tag.get());
                 
             }
             catch(exception const& ex) {
@@ -126,6 +122,10 @@ namespace MyAMQP {
             }
             
         };
+
+        auto ackChannel = bind(&MyAMQPClientImpl::AckMessage, this, placeholders::_1);
+        
+        _ackProcessor.Start(ackChannel);
         
         _channel->consume(queue).onReceived(receiveHandler);
     }
@@ -228,6 +228,7 @@ namespace MyAMQP {
         }
         
         _receiveTaskProcessor.Stop();
+        _ackProcessor.Stop();
     }
     
     size_t MyAMQPClientImpl::OnNetworkRead(char const* buf, int len) {
@@ -240,4 +241,10 @@ namespace MyAMQP {
         cout << "MyAMQPClient read error: " << errorStr << endl;
         _networkConnection->Close();
     }
+    
+    void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {
+        _channel->ack(deliveryTag);
+        cout << "Acked tag: " << deliveryTag << endl;
+    }
+
 }

@@ -24,7 +24,6 @@ int main(int argc, const char * argv[]) {
     try {
         // insert code here...
         MyReceiveTaskQueue<packaged_task<int64_t(void)>> taskQueue{};
-        MyReceiveTaskQueue<int> xtaskQueue{};
         
         auto task = packaged_task<int64_t(void)>{ []() { return 99; }};
         
@@ -87,13 +86,33 @@ int main(int argc, const char * argv[]) {
         // processor.Start();
         
         MyAckProcessor ackProcessor{};
-        MyTaskProcessor anotherProcessor;
         
-        ackProcessor.Start();
-        anotherProcessor.Start();
+        auto ackHandler = [](int64_t tag) { cout << "TAG: " << tag << endl; };
+        
+        ackProcessor.Start(ackHandler);
+
+        vector<packaged_task<int64_t(void)>> tasks{};
         
         for (int x = 0; x < 100; x++) {
-            auto task = packaged_task<int64_t(void)>{ [=]() { sleep_for(seconds(1));  return x; }};
+            auto task = packaged_task<int64_t(void)>{ [=]() { sleep_for(milliseconds(250));  return x; }};
+            
+            auto ackFuture = task.get_future();
+            tasks.push_back(move(task));
+            
+            ackProcessor.Push(move(ackFuture));
+            
+        }
+        
+        for (auto& task : tasks) {
+            task();
+        }
+        
+        // ackProcessor.Stop();
+        
+        MyTaskProcessor anotherProcessor;
+        anotherProcessor.Start();
+        for (int x = 0; x < 100; x++) {
+            auto task = packaged_task<int64_t(void)>{ [=]() { return x; }};
             
             auto ackFuture = task.get_future();
             
@@ -117,9 +136,7 @@ int main(int argc, const char * argv[]) {
         }
 
         
-        while (true) {
-            sleep_for(seconds(2));
-        }
+        sleep_for(seconds(2));
         cout << "Goodbye world: " << endl;
     }
     catch (exception const& ex) {

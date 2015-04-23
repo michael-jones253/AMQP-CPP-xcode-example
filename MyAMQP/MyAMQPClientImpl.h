@@ -16,6 +16,7 @@
 #include "MyAMQPRoutingInfo.h"
 
 #include "MyTaskProcessor.h"
+#include "MyAckProcessor.h"
 
 #include <string>
 #include <mutex>
@@ -50,6 +51,8 @@ namespace MyAMQP {
         std::atomic<bool> _queueReady;
         
         MyTaskProcessor _receiveTaskProcessor;
+        
+        MyAckProcessor _ackProcessor;
         
     public:
         void CreateHelloQueue(AMQP::ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo);
@@ -128,6 +131,7 @@ namespace MyAMQP {
         
         void OnNetworkReadError(std::string const& errorStr);
         
+        void AckMessage(int64_t deliveryTag);
     };
 }
 

@@ -112,6 +112,8 @@ int main(int argc, const char * argv[]) {
             sleep_for(seconds(sleepSeconds));
         }
         
+        myAmqp.SendHelloWorld(routingInfo.ExchangeName, routingInfo.Key, "end");
+        
         // Benchmark if sending out one after another.
         if (sleepSeconds == 0) {
             auto elapsed = system_clock::now() - startTime;
@@ -122,6 +124,8 @@ int main(int argc, const char * argv[]) {
             cout << messageStr.str() << endl;
         }
         
+        // FIX ME - need to wait for channel to flush. Try implementing a callback for close operation completion.
+        sleep_for(seconds(9));
         
         myAmqp.Close();
         

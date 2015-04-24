@@ -32,7 +32,6 @@ int main(int argc, const char * argv[]) {
             { "exchange",     required_argument,            nullptr,'e'},
             { "key",     required_argument,            nullptr,     'k'},
             { "queue",     required_argument,            nullptr,   'q'},
-            { "count",   required_argument,      nullptr,           'c' },
             { "sleep",   required_argument,      nullptr,           's' },
             { NULL,    0,                 nullptr,           0 }
         };
@@ -44,7 +43,6 @@ int main(int argc, const char * argv[]) {
         
         MyAMQPRoutingInfo routingInfo{"my_exchange", "key", "my_queue"};
         
-        int messageCount{100};
         int sleepSeconds{};
         bool threaded{true};
         
@@ -63,6 +61,7 @@ int main(int argc, const char * argv[]) {
                     throw runtime_error("Exchange type topic not implemented yet");
                     
                 case 'i':
+                    cout << "inline handler" << endl;
                     threaded = false;
                     break;
                     
@@ -76,10 +75,6 @@ int main(int argc, const char * argv[]) {
                     
                 case 'q':
                     routingInfo.QueueName = optarg;
-                    break;
-                    
-                case 'c':
-                    messageCount = stoi(optarg);
                     break;
                     
                 case 's':
@@ -110,8 +105,26 @@ int main(int argc, const char * argv[]) {
         
         bool shouldRun = true;
         
-        auto handler = [&shouldRun](string const & message, int64_t tag, bool redelivered) {
+        time_point<system_clock> startTime{};
+        time_point<system_clock> endTime{};
+        bool benchmarkingStarted = false;
+        bool benchmarkingEnded = false;
+        
+        int messageCount{};
+        auto handler = [&](string const & message, int64_t tag, bool redelivered) {
+            if (!benchmarkingStarted) {
+                startTime = system_clock::now();
+                benchmarkingStarted = true;
+            }
+            
             cout << message << ", tag: " << tag << ", redelivered: " << redelivered << endl;
+            ++messageCount;
+            
+            if (strcasecmp(message.c_str(), "end") == 0) {
+                benchmarkingEnded = true;
+                endTime = system_clock::now();
+            }
+            
             if (strcasecmp(message.c_str(), "goodbye") == 0) {
                 shouldRun = false;
             }
@@ -122,6 +135,19 @@ int main(int argc, const char * argv[]) {
         while (shouldRun) {
             // FIX ME - anything better to do?
             sleep_for(seconds(3));
+            
+            if (benchmarkingEnded) {
+                auto elapsed = endTime - startTime;
+                auto elapsedMs = duration_cast<milliseconds>(elapsed);
+                stringstream messageStr;
+                messageStr << messageCount << " messages received in: " << elapsedMs.count() << " ms";
+                
+                cout << messageStr.str() << endl;
+                
+                benchmarkingEnded = false;
+                benchmarkingStarted = false;
+                messageCount = 0;
+            }
         }
         
         myAmqp.Close();

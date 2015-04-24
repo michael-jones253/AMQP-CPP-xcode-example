@@ -222,7 +222,7 @@ namespace MyAMQP {
     
     void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {
         _channel->ack(deliveryTag);
-        cout << "Acked tag: " << deliveryTag << endl;
+        // cout << "Acked tag: " << deliveryTag << endl;
     }
     
     MessageCallback MyAMQPClientImpl::CreateInlineMessageCallback(MyMessageCallback const& userHandler) {

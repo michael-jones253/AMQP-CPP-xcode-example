@@ -30,11 +30,12 @@ int main(int argc, const char * argv[]) {
         auto ret = task.get_future();
         taskQueue.Push(move(task));
         
-        packaged_task<int64_t(void)> poppedTask;
+        packaged_task<int64_t(void)> poppedTask{};
         
         auto ok = taskQueue.Wait(poppedTask);
         
         if (ok) {
+            // Execute the packaged task.
             poppedTask();
         }
         
@@ -53,6 +54,7 @@ int main(int argc, const char * argv[]) {
             poppedTask();
         }
         
+        // Test the processors abiliy to execute the queue of tasks.
         MyTaskProcessor processor;
         
         processor.Start();
@@ -83,8 +85,6 @@ int main(int argc, const char * argv[]) {
         
         processor.Stop();
         
-        // processor.Start();
-        
         MyAckProcessor ackProcessor{};
         
         auto ackHandler = [](int64_t tag) { cout << "TAG: " << tag << endl; };
@@ -107,8 +107,6 @@ int main(int argc, const char * argv[]) {
             task();
         }
         
-        // ackProcessor.Stop();
-        
         MyTaskProcessor anotherProcessor;
         anotherProcessor.Start();
         for (int x = 0; x < 100; x++) {
@@ -117,25 +115,11 @@ int main(int argc, const char * argv[]) {
             auto ackFuture = task.get_future();
             
             ackProcessor.Push(move(ackFuture));
-            // results.push_back(move(ackFuture));
-
             
             anotherProcessor.Push(move(task));
         }
-        
-        sleep_for(seconds(2));
-        for (auto& result : results) {
-            try {
-                auto res = result.get();
-                
-                cout << res << endl;
-            }
-            catch(exception const& ex) {
-                cout << "result get: " << ex.what() << endl;
-            }
-        }
 
-        
+        // Let the processor get some, but not all of the way through its task queue.
         sleep_for(seconds(2));
         
         // This tests a stoppping the processor while there are still messages in its queue.

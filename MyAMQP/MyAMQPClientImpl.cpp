@@ -185,6 +185,10 @@ namespace MyAMQP {
     }
     
     void MyAMQPClientImpl::Open(MyLoginCredentials const& loginInfo) {
+        // A common problem with components that need to be opened/closed or stopped/started is not being
+        // robust to multiple opens/closes. The pattern where we always close before opening overcomes this.
+        Close();
+        
         _networkConnection->Open(loginInfo.HostIpAddress,
                                  bind(&MyAMQPClientImpl::OnNetworkRead, this, placeholders::_1, placeholders::_2),
                                  bind(&MyAMQPClientImpl::OnNetworkReadError, this, placeholders::_1));
@@ -198,7 +202,12 @@ namespace MyAMQP {
     }
     
     void MyAMQPClientImpl::Close() {
+        // Close must be robust to multiple calls or called before open.
         
+        if (!_channel) {
+            return;
+        }
+
         auto finalize = [&](){
             cout << "channel finalized" << endl;
             _channelFinalized = true;

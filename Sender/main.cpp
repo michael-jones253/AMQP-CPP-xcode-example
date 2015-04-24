@@ -33,6 +33,7 @@ int main(int argc, const char * argv[]) {
             { "key",     required_argument,            nullptr,     'k'},
             { "queue",     required_argument,            nullptr,   'q'},
             { "count",   required_argument,      nullptr,           'c' },
+            { "receivers", required_argument,      nullptr,           'r' },
             { "sleep",   required_argument,      nullptr,           's' },
             { NULL,    0,                 nullptr,           0 }
         };
@@ -47,6 +48,10 @@ int main(int argc, const char * argv[]) {
         int messageCount{100};
         int sleepSeconds{};
         
+        // We send multiple end messages, because each end message is only processed by one consumer
+        // sending of multiple end messages means that multiple consumers can receive an end message.
+        int receiverCount = 4;
+
         auto const usageStr = string("Usage: [--fanout | --topic {default direct}] [--count <integer>] [--sleep <seconds>]");
         
         do {
@@ -75,6 +80,10 @@ int main(int argc, const char * argv[]) {
                     
                 case 'c':
                     messageCount = stoi(optarg);
+                    break;
+
+                case 'r':
+                    receiverCount = stoi(optarg);
                     break;
                     
                 case 's':
@@ -112,7 +121,9 @@ int main(int argc, const char * argv[]) {
             sleep_for(seconds(sleepSeconds));
         }
         
-        myAmqp.SendHelloWorld(routingInfo.ExchangeName, routingInfo.Key, "end");
+        for (int x = 0; x < receiverCount; ++x) {
+            myAmqp.SendHelloWorld(routingInfo.ExchangeName, routingInfo.Key, "end");
+        }
         
         // Benchmark if sending out one after another.
         if (sleepSeconds == 0) {
@@ -123,9 +134,6 @@ int main(int argc, const char * argv[]) {
             
             cout << messageStr.str() << endl;
         }
-        
-        // FIX ME - need to wait for channel to flush. Try implementing a callback for close operation completion.
-        // sleep_for(seconds(9));
         
         myAmqp.Close();
         

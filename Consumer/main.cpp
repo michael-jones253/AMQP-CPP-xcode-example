@@ -112,7 +112,9 @@ int main(int argc, const char * argv[]) {
         
         int messageCount{};
         auto handler = [&](string const & message, int64_t tag, bool redelivered) {
-            if (!benchmarkingStarted) {
+            auto isEndMessage = strcasecmp(message.c_str(), "end") == 0;
+            
+            if (!isEndMessage && !benchmarkingStarted) {
                 startTime = system_clock::now();
                 benchmarkingStarted = true;
             }
@@ -120,7 +122,7 @@ int main(int argc, const char * argv[]) {
             cout << message << ", tag: " << tag << ", redelivered: " << redelivered << endl;
             ++messageCount;
             
-            if (strcasecmp(message.c_str(), "end") == 0) {
+            if (isEndMessage && benchmarkingStarted) {
                 benchmarkingEnded = true;
                 endTime = system_clock::now();
             }

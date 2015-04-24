@@ -95,7 +95,8 @@ namespace MyAMQP {
                                               MyMessageCallback const &userHandler,
                                               bool threaded) {
         
-        auto messageHandler = threaded ? CreateThreadedMessageCallback(userHandler) : CreateThreadedMessageCallback(userHandler);
+        auto messageHandler = threaded ? CreateThreadedMessageCallback(userHandler)
+                                        : CreateInlineMessageCallback(userHandler);
         
         if (threaded) {
             auto ackChannel = bind(&MyAMQPClientImpl::AckMessage, this, placeholders::_1);
@@ -224,6 +225,29 @@ namespace MyAMQP {
         cout << "Acked tag: " << deliveryTag << endl;
     }
     
+    MessageCallback MyAMQPClientImpl::CreateInlineMessageCallback(MyMessageCallback const& userHandler) {
+        // Take a copy of handler.
+        auto receiveHandler = [this,userHandler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
+            try {
+                // The Copernica library invokes this callback in the context for the socket read thread.
+                // So rather than block this thread we package the handler to be invoked by another task.
+                // This model assumes that the invoking of the handler needs to be done serially.
+                userHandler(message.message(), deliveryTag, redelivered);
+                
+                // Acks are done from the context of this callback, which means they could potentially block on a
+                // network send.
+                _channel->ack(deliveryTag);
+                
+            }
+            catch(exception const& ex) {
+                cerr << "Receive handler error: " << ex.what() << endl;
+            }
+            
+        };
+
+        return receiveHandler;
+    }
+    
     MessageCallback MyAMQPClientImpl::CreateThreadedMessageCallback(MyMessageCallback const& userHandler) {
         // Take a copy of handler.
         auto receiveHandler = [this,userHandler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
@@ -253,7 +277,7 @@ namespace MyAMQP {
             }
             
         };
-
+        
         return receiveHandler;
     }
 

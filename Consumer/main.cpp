@@ -28,6 +28,7 @@ int main(int argc, const char * argv[]) {
         static struct option longopts[] = {
             { "fanout",  no_argument,            nullptr,           'f'},
             { "topic",   no_argument,            nullptr,           't'},
+            { "inline",   no_argument,            nullptr,          'i'},
             { "exchange",     required_argument,            nullptr,'e'},
             { "key",     required_argument,            nullptr,     'k'},
             { "queue",     required_argument,            nullptr,   'q'},
@@ -50,7 +51,7 @@ int main(int argc, const char * argv[]) {
         auto const usageStr = string("Usage: [--fanout | --topic {default direct}] [--count <integer>] [--sleep <seconds>]");
         
         do {
-            auto ch = getopt_long(argc, (char* const *)(argv), "fte:k:q:c:s:", longopts, nullptr);
+            auto ch = getopt_long(argc, (char* const *)(argv), "ftie:k:q:c:s:", longopts, nullptr);
             
             switch (ch) {
                 case 'f':
@@ -60,6 +61,10 @@ int main(int argc, const char * argv[]) {
                 case 't':
                     // FIX ME.
                     throw runtime_error("Exchange type topic not implemented yet");
+                    
+                case 'i':
+                    threaded = false;
+                    break;
                     
                 case 'e':
                     routingInfo.ExchangeName = optarg;

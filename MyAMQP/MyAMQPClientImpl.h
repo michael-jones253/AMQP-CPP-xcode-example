@@ -134,6 +134,8 @@ namespace MyAMQP {
         void OnNetworkReadError(std::string const& errorStr);
         
         void AckMessage(int64_t deliveryTag);
+
+        AMQP::MessageCallback CreateInlineMessageCallback(MyMessageCallback const& userHandler);
         
         AMQP::MessageCallback CreateThreadedMessageCallback(MyMessageCallback const& userHandler);
     };

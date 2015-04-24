@@ -21,13 +21,13 @@ using namespace std::chrono;
 
 // Anonymous namespace.
 namespace  {
-    int64_t deliverMessage(function<void(string const &, bool)> const& userHandler,
+    int64_t deliverMessage(MyAMQP::MyMessageCallback const &userHandler,
                            string const& message,
                            uint64_t tag,
                            bool redelivered) {
         
         // User handler may throw, in which case we don't return tag for acknowledgment.
-        userHandler(message, redelivered);
+        userHandler(message, tag, redelivered);
         
         return static_cast<int64_t>(tag);
     }
@@ -92,42 +92,19 @@ namespace MyAMQP {
     }
     
     void MyAMQPClientImpl::SubscribeToReceive(string const& queue,
-                                              function<void(string const &, bool)> const &userHandler) {
+                                              MyMessageCallback const &userHandler,
+                                              bool threaded) {
         
-        // Take a copy of handler.
-        auto receiveHandler = [this,userHandler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
-            try {
-                // Because messages will be cached in the queue, we need to take a copy.
-                string messageCopy{message.message()};
-                
-                auto handleReceive = bind(deliverMessage, userHandler, move(messageCopy), deliveryTag, redelivered);
-                
-                auto deliveryTask = packaged_task<int64_t(void)>{ move(handleReceive) };
-                
-                auto tag = deliveryTask.get_future();
-                
-                // The Copernica library invokes this callback in the context for the socket read thread.
-                // So rather than block this thread we package the handler to be invoked by another task.
-                // This model assumes that the invoking of the handler needs to be done serially.
-                _receiveTaskProcessor.Push(move(deliveryTask));
-                
-                // Acks are done in another thread.
-                _ackProcessor.Push(move(tag));
-                
-                // _channel->ack(tag.get());
-                
-            }
-            catch(exception const& ex) {
-                cerr << "Receive handler error: " << ex.what() << endl;
-            }
+        auto messageHandler = threaded ? CreateThreadedMessageCallback(userHandler) : CreateThreadedMessageCallback(userHandler);
+        
+        if (threaded) {
+            auto ackChannel = bind(&MyAMQPClientImpl::AckMessage, this, placeholders::_1);
             
-        };
-
-        auto ackChannel = bind(&MyAMQPClientImpl::AckMessage, this, placeholders::_1);
+            _ackProcessor.Start(ackChannel);
+        }
         
-        _ackProcessor.Start(ackChannel);
-        
-        _channel->consume(queue).onReceived(receiveHandler);
+        // Register callback with Copernica library.
+        _channel->consume(queue).onReceived(messageHandler);
     }
     
     MyAMQPClientImpl::MyAMQPClientImpl(std::unique_ptr<MyAMQPNetworkConnection> networkConnection) :
@@ -246,5 +223,39 @@ namespace MyAMQP {
         _channel->ack(deliveryTag);
         cout << "Acked tag: " << deliveryTag << endl;
     }
+    
+    MessageCallback MyAMQPClientImpl::CreateThreadedMessageCallback(MyMessageCallback const& userHandler) {
+        // Take a copy of handler.
+        auto receiveHandler = [this,userHandler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
+            try {
+                // Because messages will be cached in the queue, we need to take a copy.
+                string messageCopy{message.message()};
+                
+                auto handleReceive = bind(deliverMessage, userHandler, move(messageCopy), deliveryTag, redelivered);
+                
+                auto deliveryTask = packaged_task<int64_t(void)>{ move(handleReceive) };
+                
+                auto tag = deliveryTask.get_future();
+                
+                // The Copernica library invokes this callback in the context for the socket read thread.
+                // So rather than block this thread we package the handler to be invoked by another task.
+                // This model assumes that the invoking of the handler needs to be done serially.
+                _receiveTaskProcessor.Push(move(deliveryTask));
+                
+                // Acks are done in another thread.
+                _ackProcessor.Push(move(tag));
+                
+                // _channel->ack(tag.get());
+                
+            }
+            catch(exception const& ex) {
+                cerr << "Receive handler error: " << ex.what() << endl;
+            }
+            
+        };
+
+        return receiveHandler;
+    }
+
 
 }

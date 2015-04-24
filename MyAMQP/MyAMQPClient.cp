@@ -31,8 +31,9 @@ namespace MyAMQP {
     }
     
     void MyAMQPClient::SubscribeToReceive(string const& queueName,
-                                          function<void(string const &, bool)> const &handler) {
-        _impl->SubscribeToReceive(queueName, handler);
+                                          std::function<void(std::string const &, int64_t, bool)> const &handler,
+                                          bool threaded) {
+        _impl->SubscribeToReceive(queueName, handler, threaded);
     }
     
     MyAMQPClient::MyAMQPClient(std::unique_ptr<MyAMQPNetworkConnection> networkConnection) :

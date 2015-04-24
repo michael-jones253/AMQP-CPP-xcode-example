@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "amqpcpp.h"
+#include "MyAMQPTypes.h"
 #include "MyAMQPNetworkConnection.h"
 #include "MyLoginCredentials.h"
 #include "MyAMQPRoutingInfo.h"
@@ -60,7 +61,8 @@ namespace MyAMQP {
         void SendHelloWorld(std::string const& exchange, std::string const& key, std::string const& greeting);
         
         void SubscribeToReceive(std::string const& queue,
-                                std::function<void(std::string const &, bool redelivered)> const &handler);
+                                std::function<void(std::string const &, int64_t, bool)> const &handler,
+                                bool threaded);
         
         // Class is final, virtual not needed.
         ~MyAMQPClientImpl();
@@ -132,6 +134,8 @@ namespace MyAMQP {
         void OnNetworkReadError(std::string const& errorStr);
         
         void AckMessage(int64_t deliveryTag);
+        
+        AMQP::MessageCallback CreateThreadedMessageCallback(MyMessageCallback const& userHandler);
     };
 }
 

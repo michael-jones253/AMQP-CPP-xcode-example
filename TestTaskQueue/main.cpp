@@ -94,7 +94,7 @@ int main(int argc, const char * argv[]) {
         vector<packaged_task<int64_t(void)>> tasks{};
         
         for (int x = 0; x < 100; x++) {
-            auto task = packaged_task<int64_t(void)>{ [=]() { sleep_for(milliseconds(250));  return x; }};
+            auto task = packaged_task<int64_t(void)>{ [=]() { sleep_for(milliseconds(100));  return x; }};
             
             auto ackFuture = task.get_future();
             tasks.push_back(move(task));
@@ -112,7 +112,7 @@ int main(int argc, const char * argv[]) {
         MyTaskProcessor anotherProcessor;
         anotherProcessor.Start();
         for (int x = 0; x < 100; x++) {
-            auto task = packaged_task<int64_t(void)>{ [=]() { return x; }};
+            auto task = packaged_task<int64_t(void)>{ [=]() { sleep_for(milliseconds(100)); return x; }};
             
             auto ackFuture = task.get_future();
             
@@ -137,10 +137,14 @@ int main(int argc, const char * argv[]) {
 
         
         sleep_for(seconds(2));
+        
+        // This tests a stoppping the processor while there are still messages in its queue.
+        ackProcessor.Stop();
         cout << "Goodbye world: " << endl;
     }
     catch (exception const& ex) {
-        cerr << ex.what() << endl;
+        cerr << "Test error: " << ex.what() << endl;
     }
+
     return 0;
 }

@@ -234,6 +234,7 @@
 		B2344B4E1AE0CB7A00B47CB2 /* MyAMQPClient.cp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPClient.cp; sourceTree = "<group>"; };
 		B235801B1AE8692600DA1EC3 /* MyTaskProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyTaskProcessor.cpp; sourceTree = "<group>"; };
 		B235801C1AE8692600DA1EC3 /* MyTaskProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyTaskProcessor.h; sourceTree = "<group>"; };
+		B235F8361AE9D78200B9D7A8 /* MyAMQPTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQPTypes.h; sourceTree = "<group>"; };
 		B236E3011AE5E5CB00B30017 /* MyLoginCredentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLoginCredentials.h; sourceTree = "<group>"; };
 		B236E3041AE5EB8900B30017 /* MyAMQPRoutingInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQPRoutingInfo.h; sourceTree = "<group>"; };
 		B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libAMQPSTL.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -461,6 +462,7 @@
 				B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */,
 				B24A9E7D1AE738B500B8879B /* MyAMQPClientImpl.cpp */,
 				B24A9E7E1AE738B500B8879B /* MyAMQPClientImpl.h */,
+				B235F8361AE9D78200B9D7A8 /* MyAMQPTypes.h */,
 				B235801B1AE8692600DA1EC3 /* MyTaskProcessor.cpp */,
 				B235801C1AE8692600DA1EC3 /* MyTaskProcessor.h */,
 				B200A9611AE8904100ED0A27 /* MyAckProcessor.cpp */,

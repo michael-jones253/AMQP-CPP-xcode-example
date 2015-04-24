@@ -45,6 +45,7 @@ int main(int argc, const char * argv[]) {
         
         int messageCount{100};
         int sleepSeconds{};
+        bool threaded{true};
         
         auto const usageStr = string("Usage: [--fanout | --topic {default direct}] [--count <integer>] [--sleep <seconds>]");
         
@@ -57,7 +58,7 @@ int main(int argc, const char * argv[]) {
                     break;
                     
                 case 't':
-                    // FIX ME - exchange type topic will need a routing key argument.
+                    // FIX ME.
                     throw runtime_error("Exchange type topic not implemented yet");
                     
                 case 'e':
@@ -102,18 +103,22 @@ int main(int argc, const char * argv[]) {
         
         myAmqp.CreateHelloQueue(exchangeType, routingInfo);
         
-        auto handler = [](string const & message, bool redelivered) {
-            cout << message << ", redelivered: " << redelivered << endl;
+        bool shouldRun = true;
+        
+        auto handler = [&shouldRun](string const & message, int64_t tag, bool redelivered) {
+            cout << message << ", tag: " << tag << ", redelivered: " << redelivered << endl;
+            if (strcasecmp(message.c_str(), "goodbye") == 0) {
+                shouldRun = false;
+            }
         };
         
-        myAmqp.SubscribeToReceive(routingInfo.QueueName, handler);
+        myAmqp.SubscribeToReceive(routingInfo.QueueName, handler, threaded);
         
-        while (true) {
-            // FIX ME - just temporary.
+        while (shouldRun) {
+            // FIX ME - anything better to do?
             sleep_for(seconds(3));
         }
         
-        // FIX ME code never executed.
         myAmqp.Close();
         
     } catch (exception& ex) {

@@ -11,7 +11,7 @@
 #define MyAMQP_
 // POD and the only Copernica external library header we expose.
 #include "exchangeType.h"
-
+#include "MyAMQPTypes.h"
 #include "MyAMQPNetworkConnection.h"
 #include "MyLoginCredentials.h"
 #include "MyAMQPRoutingInfo.h"
@@ -35,7 +35,8 @@ namespace MyAMQP {
         void SendHelloWorld(std::string const& exchange, std::string const& key, std::string const& greeting);
         
         void SubscribeToReceive(std::string const& queue,
-                                std::function<void(std::string const &, bool redelivered)> const &handler);
+                                MyMessageCallback const &userHandler,
+                                bool threaded);
         
         MyAMQPClient(std::unique_ptr<MyAMQPNetworkConnection> networkConnection);
 

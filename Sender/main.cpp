@@ -125,7 +125,7 @@ int main(int argc, const char * argv[]) {
         }
         
         // FIX ME - need to wait for channel to flush. Try implementing a callback for close operation completion.
-        sleep_for(seconds(9));
+        // sleep_for(seconds(9));
         
         myAmqp.Close();
         

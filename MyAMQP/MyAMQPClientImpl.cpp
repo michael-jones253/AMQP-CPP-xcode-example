@@ -118,7 +118,8 @@ namespace MyAMQP {
     _channelOpen{},
     _channelInError{},
     _queueReady{},
-    _receiveTaskProcessor{}
+    _receiveTaskProcessor{},
+    _channelFinalized{}
     {
         _networkConnection = move(networkConnection);
         
@@ -197,6 +198,21 @@ namespace MyAMQP {
     }
     
     void MyAMQPClientImpl::Close() {
+        
+        auto finalize = [&](){
+            cout << "channel finalized" << endl;
+            _channelFinalized = true;
+            _conditional.notify_all();
+        };
+        
+        _channel->close().onFinalize(finalize);
+        
+        unique_lock<mutex> lock(_mutex);
+        
+        _conditional.wait(lock, [&]() { return _channelFinalized; });
+        
+        cout << "Client closing" << endl;
+        
         if (_amqpConnection) {
             _amqpConnection->close();
         }

@@ -55,6 +55,8 @@ namespace MyAMQP {
         
         MyAckProcessor _ackProcessor;
         
+        bool _channelFinalized;
+        
     public:
         void CreateHelloQueue(AMQP::ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo);
         

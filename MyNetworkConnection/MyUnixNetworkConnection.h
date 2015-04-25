@@ -1,14 +1,14 @@
 /*
- *  MyNetworkConnection.h
- *  MyNetworkConnection
+ *  MyUnixNetworkConnection.h
+ *  MyUnixNetworkConnection
  *
  *  Created by Michael Jones on 21/04/2015.
  *  Copyright (c) 2015 Michael Jones. All rights reserved.
  *
  */
 
-#ifndef MyNetworkConnection_
-#define MyNetworkConnection_
+#ifndef MyUnixNetworkConnection_
+#define MyUnixNetworkConnection_
 
 #include "MyAMQPBufferedConnection.h"
 
@@ -18,13 +18,13 @@
 /* The classes below are exported */
 #pragma GCC visibility push(default)
 
-class MyNetworkConnection final : public MyAMQP::MyAMQPBufferedConnection {
+class MyUnixNetworkConnection final : public MyAMQP::MyAMQPBufferedConnection {
     int _socketFd;
     std::atomic<bool> _canRead;
     
 public:
     
-    MyNetworkConnection();
+    MyUnixNetworkConnection();
     
 private:
     // For use by super class only.

@@ -1,12 +1,12 @@
 //
-//  MyNetworkConnection.cp
+//  MyUnixNetworkConnection.cp
 //  AMQP
 //
 //  Created by Michael Jones on 18/04/2015.
 //  Copyright (c) 2015 Michael Jones. All rights reserved.
 //
 
-#include "MyNetworkConnection.h"
+#include "MyUnixNetworkConnection.h"
 #include <iostream>
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -17,13 +17,13 @@
 using namespace MyAMQP;
 using namespace std;
 
-MyNetworkConnection::MyNetworkConnection() :
+MyUnixNetworkConnection::MyUnixNetworkConnection() :
 MyAMQPBufferedConnection{},
 _socketFd{-1},
 _canRead{} {
 }
 
-void MyNetworkConnection::Connect(string const& ipAddress, int port) {
+void MyUnixNetworkConnection::Connect(string const& ipAddress, int port) {
     cout << "connecting" << endl;
     
     // Setup socket and connect it.
@@ -60,17 +60,17 @@ void MyNetworkConnection::Connect(string const& ipAddress, int port) {
     _canRead = true;
 }
 
-void MyNetworkConnection::Disconnect() {
+void MyUnixNetworkConnection::Disconnect() {
     _canRead = false;
     close(_socketFd);
     _socketFd = -1;
 }
 
-ssize_t MyNetworkConnection::Read(char* buf, size_t len) {
+ssize_t MyUnixNetworkConnection::Read(char* buf, size_t len) {
     auto ret = recv(_socketFd, buf, len, 0);
     if (ret < 0) {
         if (_canRead) {
-            throw runtime_error("MyNetworkConnection read failed");
+            throw runtime_error("MyUnixNetworkConnection read failed");
         }
         
         // Allow for clean exit if disconnected during read.
@@ -80,7 +80,7 @@ ssize_t MyNetworkConnection::Read(char* buf, size_t len) {
     return ret;
 }
 
-void MyNetworkConnection::WriteAll(char const* buf, size_t len) {
+void MyUnixNetworkConnection::WriteAll(char const* buf, size_t len) {
     auto amountWritten = len;
     
     while (amountWritten > 0) {
@@ -89,7 +89,7 @@ void MyNetworkConnection::WriteAll(char const* buf, size_t len) {
         
         // FIX ME there are errno codes such as EINTR which need handling.
         if (ret < 0) {
-            throw runtime_error("MyNetworkConnection write failed");
+            throw runtime_error("MyUnixNetworkConnection write failed");
         }
         
         amountWritten -= ret;

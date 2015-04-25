@@ -9,7 +9,7 @@
 #include <sstream>
 #include <memory>
 #include "MyAMQPClient.h"
-#include "../MyNetworkConnection/MyNetworkConnection.h"
+#include "../MyNetworkConnection/MyUnixNetworkConnection.h"
 #include <amqpcpp.h>
 
 #include <thread>
@@ -95,7 +95,7 @@ int main(int argc, const char * argv[]) {
         } while (true);
         
         
-        auto netConnection = unique_ptr<MyNetworkConnection>(new MyNetworkConnection());
+        auto netConnection = unique_ptr<MyUnixNetworkConnection>(new MyUnixNetworkConnection());
         
         MyAMQPClient myAmqp{move(netConnection)};
         

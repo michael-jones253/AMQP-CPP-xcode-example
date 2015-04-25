@@ -156,9 +156,9 @@
 		B24A9E7F1AE738B500B8879B /* MyAMQPClientImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B24A9E7D1AE738B500B8879B /* MyAMQPClientImpl.cpp */; };
 		B24A9E801AE738B500B8879B /* MyAMQPClientImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = B24A9E7E1AE738B500B8879B /* MyAMQPClientImpl.h */; };
 		B25CA1131AE6098300BDD034 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B25CA1121AE6098300BDD034 /* main.cpp */; };
-		B25CA12D1AE614D200BDD034 /* MyNetworkConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = B25CA12C1AE614D200BDD034 /* MyNetworkConnection.h */; };
+		B25CA12D1AE614D200BDD034 /* MyUnixNetworkConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = B25CA12C1AE614D200BDD034 /* MyUnixNetworkConnection.h */; };
 		B25CA12F1AE614D200BDD034 /* MyNetworkConnectionPriv.h in Headers */ = {isa = PBXBuildFile; fileRef = B25CA12E1AE614D200BDD034 /* MyNetworkConnectionPriv.h */; };
-		B25CA1311AE614D200BDD034 /* MyNetworkConnection.cp in Sources */ = {isa = PBXBuildFile; fileRef = B25CA1301AE614D200BDD034 /* MyNetworkConnection.cp */; };
+		B25CA1311AE614D200BDD034 /* MyUnixNetworkConnection.cp in Sources */ = {isa = PBXBuildFile; fileRef = B25CA1301AE614D200BDD034 /* MyUnixNetworkConnection.cp */; };
 		B25CA1351AE617DE00BDD034 /* libAMQPSTL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */; };
 		B25CA1361AE617DE00BDD034 /* libMyAMQP.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */; };
 		B25CA1371AE617DE00BDD034 /* libMyNetworkConnection.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B25CA12A1AE614D200BDD034 /* libMyNetworkConnection.a */; };
@@ -375,9 +375,9 @@
 		B25CA1101AE6098300BDD034 /* Consumer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Consumer; sourceTree = BUILT_PRODUCTS_DIR; };
 		B25CA1121AE6098300BDD034 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B25CA12A1AE614D200BDD034 /* libMyNetworkConnection.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMyNetworkConnection.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B25CA12C1AE614D200BDD034 /* MyNetworkConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyNetworkConnection.h; sourceTree = "<group>"; };
+		B25CA12C1AE614D200BDD034 /* MyUnixNetworkConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyUnixNetworkConnection.h; sourceTree = "<group>"; };
 		B25CA12E1AE614D200BDD034 /* MyNetworkConnectionPriv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyNetworkConnectionPriv.h; sourceTree = "<group>"; };
-		B25CA1301AE614D200BDD034 /* MyNetworkConnection.cp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MyNetworkConnection.cp; sourceTree = "<group>"; };
+		B25CA1301AE614D200BDD034 /* MyUnixNetworkConnection.cp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MyUnixNetworkConnection.cp; sourceTree = "<group>"; };
 		B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPClient.h; sourceTree = "<group>"; };
 		B2FDFDFC1AE30BEB00542DA0 /* MyAMQPBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPBuffer.cpp; sourceTree = "<group>"; };
 		B2FDFDFD1AE30BEB00542DA0 /* MyAMQPBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPBuffer.h; sourceTree = "<group>"; };
@@ -681,9 +681,9 @@
 		B25CA12B1AE614D200BDD034 /* MyNetworkConnection */ = {
 			isa = PBXGroup;
 			children = (
-				B25CA12C1AE614D200BDD034 /* MyNetworkConnection.h */,
+				B25CA12C1AE614D200BDD034 /* MyUnixNetworkConnection.h */,
 				B25CA12E1AE614D200BDD034 /* MyNetworkConnectionPriv.h */,
-				B25CA1301AE614D200BDD034 /* MyNetworkConnection.cp */,
+				B25CA1301AE614D200BDD034 /* MyUnixNetworkConnection.cp */,
 			);
 			path = MyNetworkConnection;
 			sourceTree = "<group>";
@@ -843,7 +843,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B25CA12F1AE614D200BDD034 /* MyNetworkConnectionPriv.h in Headers */,
-				B25CA12D1AE614D200BDD034 /* MyNetworkConnection.h in Headers */,
+				B25CA12D1AE614D200BDD034 /* MyUnixNetworkConnection.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1088,7 +1088,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B25CA1311AE614D200BDD034 /* MyNetworkConnection.cp in Sources */,
+				B25CA1311AE614D200BDD034 /* MyUnixNetworkConnection.cp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

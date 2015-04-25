@@ -9,13 +9,17 @@
 #include <sstream>
 #include <memory>
 #include "MyAMQPClient.h"
+#include "MyStopwatch.h"
 #include "../MyNetworkConnection/MyUnixNetworkConnection.h"
 
 #include <thread>
+#include <condition_variable>
+#include <mutex>
 #include <chrono>
 #include <getopt.h>
 
 using namespace MyAMQP;
+using namespace MyUtilities;
 using namespace std;
 using namespace std::this_thread;
 using namespace std::chrono;
@@ -102,53 +106,47 @@ int main(int argc, const char * argv[]) {
         
         myAmqp.CreateHelloQueue(exchangeType, routingInfo);
         
-        bool shouldRun = true;
-        
-        time_point<system_clock> startTime{};
-        time_point<system_clock> endTime{};
-        bool benchmarkingStarted = false;
-        bool benchmarkingEnded = false;
+        condition_variable benchmarkCondition{};
+        mutex benchmarkMutex{};
+        MyStopwatch benchmarkStopwatch{};
         
         int messageCount{};
+        bool breakWait{};
+
         auto handler = [&](string const & message, int64_t tag, bool redelivered) {
+            // Atomic recording of message count and elapsed time.
+            lock_guard<mutex> guard(benchmarkMutex);
             auto isEndMessage = strcasecmp(message.c_str(), "end") == 0;
             
-            if (!isEndMessage && !benchmarkingStarted) {
-                startTime = system_clock::now();
-                benchmarkingStarted = true;
+            if (!isEndMessage && !benchmarkStopwatch.IsRunning()) {
+                benchmarkStopwatch.Start();
             }
             
             cout << message << ", tag: " << tag << ", redelivered: " << redelivered << endl;
             ++messageCount;
             
-            if (isEndMessage && benchmarkingStarted) {
-                benchmarkingEnded = true;
-                endTime = system_clock::now();
+            if (isEndMessage && benchmarkStopwatch.IsRunning()) {
+                benchmarkCondition.notify_one();
             }
             
             if (strcasecmp(message.c_str(), "goodbye") == 0) {
-                shouldRun = false;
+                breakWait = true;
             }
         };
         
         myAmqp.SubscribeToReceive(routingInfo.QueueName, handler, threaded);
         
-        while (shouldRun) {
-            // FIX ME - anything better to do?
-            sleep_for(seconds(3));
+        while (!breakWait) {
+            unique_lock<mutex> lock(benchmarkMutex);
+            benchmarkCondition.wait(lock, [&]{ return benchmarkStopwatch.IsRunning() || breakWait; });
+
+            auto elapsedMs = benchmarkStopwatch.GetElapsedMilliseconds();
+            stringstream messageStr;
+            messageStr << messageCount << " messages received in: " << elapsedMs.count() << " ms";
             
-            if (benchmarkingEnded) {
-                auto elapsed = endTime - startTime;
-                auto elapsedMs = duration_cast<milliseconds>(elapsed);
-                stringstream messageStr;
-                messageStr << messageCount << " messages received in: " << elapsedMs.count() << " ms";
-                
-                cout << messageStr.str() << endl;
-                
-                benchmarkingEnded = false;
-                benchmarkingStarted = false;
-                messageCount = 0;
-            }
+            cout << messageStr.str() << endl;
+            messageCount = 0;
+            benchmarkStopwatch.Stop();
         }
         
         myAmqp.Close();

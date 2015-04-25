@@ -122,6 +122,10 @@ int main(int argc, const char * argv[]) {
         for (int x = 0; x < receiverCount; ++x) {
             myAmqp.SendHelloWorld(routingInfo.ExchangeName, routingInfo.Key, "end");
         }
+
+        // Close before capturing elapsed time, because the close involves flushing of messages out
+        // of the Copernica library.
+        myAmqp.Close();
         
         // Benchmark if sending out one after another.
         if (sleepSeconds == 0) {
@@ -132,8 +136,6 @@ int main(int argc, const char * argv[]) {
             
             cout << messageStr.str() << endl;
         }
-        
-        myAmqp.Close();
         
     } catch (exception& ex) {
         cerr << ex.what() << endl;

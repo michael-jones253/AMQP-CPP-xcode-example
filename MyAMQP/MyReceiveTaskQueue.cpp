@@ -56,7 +56,8 @@ namespace MyAMQP {
         _breakWait = false;
     }
 
-    
+    // It is more usual to the method definitions inline in the header, but if we want them in the cpp like
+    // the above, then explicit template instantiations are needed for all template specialisations.
     template class MyReceiveTaskQueue<packaged_task<int64_t(void)>>;
     template class MyReceiveTaskQueue<std::future<int64_t>>;
 }

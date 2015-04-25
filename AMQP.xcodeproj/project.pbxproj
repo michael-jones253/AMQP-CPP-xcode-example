@@ -378,6 +378,7 @@
 		B25CA12C1AE614D200BDD034 /* MyUnixNetworkConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyUnixNetworkConnection.h; sourceTree = "<group>"; };
 		B25CA12E1AE614D200BDD034 /* MyNetworkConnectionPriv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyNetworkConnectionPriv.h; sourceTree = "<group>"; };
 		B25CA1301AE614D200BDD034 /* MyUnixNetworkConnection.cp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MyUnixNetworkConnection.cp; sourceTree = "<group>"; };
+		B29989711AEB1E1400435A5E /* MyNetworkConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyNetworkConnection.h; sourceTree = "<group>"; };
 		B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPClient.h; sourceTree = "<group>"; };
 		B2FDFDFC1AE30BEB00542DA0 /* MyAMQPBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPBuffer.cpp; sourceTree = "<group>"; };
 		B2FDFDFD1AE30BEB00542DA0 /* MyAMQPBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPBuffer.h; sourceTree = "<group>"; };
@@ -474,6 +475,7 @@
 				B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */,
 				B2344B4E1AE0CB7A00B47CB2 /* MyAMQPClient.cp */,
 				B23007CC1AE1BCF4005BAB20 /* MyAMQPBufferedConnection.h */,
+				B29989711AEB1E1400435A5E /* MyNetworkConnection.h */,
 				B23007D31AE1CDB9005BAB20 /* MyAMQPBufferedConnection.cpp */,
 				B22E60D21AE796D700CB0B2F /* MyReceiveTaskQueue.cpp */,
 				B22E60D31AE796D700CB0B2F /* MyReceiveTaskQueue.h */,

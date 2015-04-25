@@ -10,7 +10,7 @@
 #ifndef MyUnixNetworkConnection_
 #define MyUnixNetworkConnection_
 
-#include "MyAMQPBufferedConnection.h"
+#include "MyNetworkConnection.h"
 
 #include <stdio.h>
 #include <atomic>
@@ -18,7 +18,7 @@
 /* The classes below are exported */
 #pragma GCC visibility push(default)
 
-class MyUnixNetworkConnection final : public MyAMQP::MyAMQPBufferedConnection {
+class MyUnixNetworkConnection final : public MyAMQP::MyNetworkConnection {
     int _socketFd;
     std::atomic<bool> _canRead;
     

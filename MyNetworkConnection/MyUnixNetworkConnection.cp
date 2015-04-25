@@ -18,7 +18,7 @@ using namespace MyAMQP;
 using namespace std;
 
 MyUnixNetworkConnection::MyUnixNetworkConnection() :
-MyAMQPBufferedConnection{},
+MyNetworkConnection{},
 _socketFd{-1},
 _canRead{} {
 }

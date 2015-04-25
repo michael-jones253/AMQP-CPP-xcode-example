@@ -36,7 +36,7 @@ namespace MyAMQP {
         _impl->SubscribeToReceive(queueName, handler, threaded);
     }
     
-    MyAMQPClient::MyAMQPClient(std::unique_ptr<MyAMQPBufferedConnection> networkConnection) :
+    MyAMQPClient::MyAMQPClient(std::unique_ptr<MyNetworkConnection> networkConnection) :
     _impl{}
     {
         _impl = unique_ptr<MyAMQPClientImpl>(new MyAMQPClientImpl(move(networkConnection)));

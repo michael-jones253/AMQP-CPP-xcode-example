@@ -12,7 +12,7 @@
 // POD and the only Copernica external library header we expose.
 #include "exchangeType.h"
 #include "MyAMQPTypes.h"
-#include "MyAMQPBufferedConnection.h"
+#include "MyNetworkConnection.h"
 #include "MyLoginCredentials.h"
 #include "MyAMQPRoutingInfo.h"
 
@@ -38,7 +38,7 @@ namespace MyAMQP {
                                 MyMessageCallback const &userHandler,
                                 bool threaded);
         
-        MyAMQPClient(std::unique_ptr<MyAMQPBufferedConnection> networkConnection);
+        MyAMQPClient(std::unique_ptr<MyNetworkConnection> networkConnection);
 
         // Class is final, virtual not needed.
         ~MyAMQPClient();

@@ -16,7 +16,8 @@ using namespace std;
 namespace MyAMQP {
     
     
-    MyAMQPBufferedConnection::MyAMQPBufferedConnection() :
+    MyAMQPBufferedConnection::MyAMQPBufferedConnection(std::unique_ptr<MyNetworkConnection> networkConnection) :
+    _networkConnection(move(networkConnection)),
     _onBytes{},
     _onError{},
     _readLoopHandle{},
@@ -79,6 +80,22 @@ namespace MyAMQP {
             cerr << "Read loop exited with error code" << endl;
         }
         
+    }
+    
+    void MyAMQPBufferedConnection::Connect(std::string const& ipAddress, int port) {
+        _networkConnection->Connect(ipAddress, port);
+    }
+    
+    void MyAMQPBufferedConnection::Disconnect() {
+        _networkConnection->Disconnect();
+    }
+    
+    ssize_t MyAMQPBufferedConnection::Read(char *buf, size_t len) {
+        return _networkConnection->Read(buf, len);
+    }
+    
+    void MyAMQPBufferedConnection::WriteAll(char const* buf, size_t len) {
+        _networkConnection->WriteAll(buf, len);
     }
     
     void MyAMQPBufferedConnection::ReadLoop() {

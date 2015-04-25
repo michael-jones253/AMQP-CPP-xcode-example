@@ -129,7 +129,7 @@ namespace MyAMQP {
         void Close();
         
     private:
-        MyAMQPClientImpl(std::unique_ptr<MyAMQPBufferedConnection> networkConnection);
+        MyAMQPClientImpl(std::unique_ptr<MyNetworkConnection> networkConnection);
 
         size_t OnNetworkRead(char const* buf, int len);
         

@@ -9,6 +9,7 @@
 #ifndef AMQP_MyAMQPBufferedConnection_h
 #define AMQP_MyAMQPBufferedConnection_h
 
+#include "MyNetworkConnection.h"
 #include "MyAMQPBuffer.h"
 #include <functional>
 #include <string>
@@ -20,8 +21,10 @@
 
 namespace MyAMQP {
     
-    // Abstraction to keep OS dependent socket system out of this library.
-    class MyAMQPBufferedConnection {
+    // Connection to RabbitMQ server with AMQP circular buffer requirements.
+    class MyAMQPBufferedConnection final {
+        std::unique_ptr<MyNetworkConnection> _networkConnection;
+        
         // Callback for when bytes are available from the network.
         std::function<size_t(char const* buf, ssize_t len)> _onBytes;
         
@@ -38,9 +41,12 @@ namespace MyAMQP {
         MyAMQPBuffer _amqpBuffer;
         
     public:
-        MyAMQPBufferedConnection();
         
-        virtual ~MyAMQPBufferedConnection();
+        // C++ Guru Herb Sutter recommends transfer of smart pointer ownership this way.
+        MyAMQPBufferedConnection(std::unique_ptr<MyNetworkConnection> networkConnection);
+        
+        // Final class, virtual not needed.
+        ~MyAMQPBufferedConnection();
         
         void Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> const& onBytes, std::function<void(std::string const& errString)> const & onError);
         
@@ -49,13 +55,13 @@ namespace MyAMQP {
         void SendToServer(char const* buf, size_t len) { WriteAll(buf, len); }
         
     private:
-        virtual void Connect(std::string const& ipAddress, int port) = 0;
+        void Connect(std::string const& ipAddress, int port);
         
-        virtual void Disconnect() = 0;
+        void Disconnect();
         
-        virtual ssize_t Read(char* buf, size_t len) = 0;
+        ssize_t Read(char* buf, size_t len);
         
-        virtual void WriteAll(char const* buf, size_t len) = 0;
+        void WriteAll(char const* buf, size_t len);
         
         void ReadLoop();
     };

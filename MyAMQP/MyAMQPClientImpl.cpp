@@ -100,7 +100,7 @@ namespace MyAMQP {
         
         if (threaded) {
             auto ackChannel = bind(&MyAMQPClientImpl::AckMessage, this, placeholders::_1);
-            
+            _receiveTaskProcessor.Start();
             _ackProcessor.Start(ackChannel);
         }
         
@@ -111,8 +111,8 @@ namespace MyAMQP {
     MyAMQPClientImpl::MyAMQPClientImpl(std::unique_ptr<MyNetworkConnection> networkConnection) :
     ConnectionHandler{},
     _amqpConnection{},
-    _networkConnection{},
     _channel{},
+    _bufferedConnection{},
     _mutex{},
     _conditional{},
     _channelOpen{},
@@ -121,7 +121,13 @@ namespace MyAMQP {
     _receiveTaskProcessor{},
     _channelFinalized{}
     {
-        _networkConnection = unique_ptr<MyAMQPBufferedConnection>(new MyAMQPBufferedConnection(move(networkConnection)));
+        auto parseCallback = bind(&MyAMQPClientImpl::OnNetworkRead, this, placeholders::_1, placeholders::_2);
+        auto onErrorCallback = bind(&MyAMQPClientImpl::OnNetworkReadError, this, placeholders::_1);
+
+        _bufferedConnection = unique_ptr<MyAMQPBufferedConnection>(
+                                                      new MyAMQPBufferedConnection(move(networkConnection),
+                                                                                   parseCallback,
+                                                                                   onErrorCallback));
         
     }
     
@@ -141,12 +147,12 @@ namespace MyAMQP {
         // for (unsigned i=0; i<size; i++) cout << (int)buffer[i] << " ";
         // cout << endl;
         
-        _networkConnection->SendToServer(buffer, size);
+        _bufferedConnection->SendToServer(buffer, size);
     }
     
     void MyAMQPClientImpl::onError(AMQP::Connection *connection, const char *message) {
         cout << "AMQP error:" << message << endl;
-        _networkConnection->Close();
+        _bufferedConnection->Close();
     }
     
     void MyAMQPClientImpl::onConnected(AMQP::Connection *connection) {
@@ -189,16 +195,13 @@ namespace MyAMQP {
         // robust to multiple opens/closes. The pattern where we always close before opening overcomes this.
         Close();
         
-        _networkConnection->Open(loginInfo.HostIpAddress,
-                                 bind(&MyAMQPClientImpl::OnNetworkRead, this, placeholders::_1, placeholders::_2),
-                                 bind(&MyAMQPClientImpl::OnNetworkReadError, this, placeholders::_1));
+        _bufferedConnection->Open(loginInfo.HostIpAddress);
         
         _amqpConnection = unique_ptr<AMQP::Connection>(new AMQP::Connection(this,
                                                                             AMQP::Login(loginInfo.UserName,
                                                                                         loginInfo.Password), "/"));
         _amqpConnection->login();
         
-        _receiveTaskProcessor.Start();
     }
     
     void MyAMQPClientImpl::Close() {
@@ -226,8 +229,8 @@ namespace MyAMQP {
             _amqpConnection->close();
         }
         
-        if (_networkConnection) {
-            _networkConnection->Close();
+        if (_bufferedConnection) {
+            _bufferedConnection->Close();
         }
         
         _receiveTaskProcessor.Stop();
@@ -242,7 +245,7 @@ namespace MyAMQP {
     
     void MyAMQPClientImpl::OnNetworkReadError(std::string const& errorStr){
         cout << "MyAMQPClient read error: " << errorStr << endl;
-        _networkConnection->Close();
+        _bufferedConnection->Close();
     }
     
     void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {
@@ -288,14 +291,16 @@ namespace MyAMQP {
                 
                 // The Copernica library invokes this callback in the context for the socket read thread.
                 // So rather than block this thread we package the handler to be invoked by another task.
-                // This model assumes that the invoking of the handler needs to be done serially.
+                // This model assumes that the invoking of the handler needs to be serialised.
                 _receiveTaskProcessor.Push(move(deliveryTask));
                 
-                // Acks are done in another thread.
+                // Acks are done in another thread, to avoid the user handler blocking on a network send.
+                // This means that it is possible that handlers are invoked and their corresponding acks
+                // never sent if this client crashes in between invoking a series of handers before the queued
+                // ack tasks are sent. This will cause redelivery. However there is always a slight chance of
+                // redilivery for messages that have been processed, but ack not sent e.g. in the case of ack
+                // being lost on the network. Therefore user handlers do need to be resilient to duplicate messages.
                 _ackProcessor.Push(move(tag));
-                
-                // _channel->ack(tag.get());
-                
             }
             catch(exception const& ex) {
                 cerr << "Receive handler error: " << ex.what() << endl;

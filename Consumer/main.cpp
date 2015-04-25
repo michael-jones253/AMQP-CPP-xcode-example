@@ -10,7 +10,6 @@
 #include <memory>
 #include "MyAMQPClient.h"
 #include "../MyNetworkConnection/MyUnixNetworkConnection.h"
-#include <amqpcpp.h>
 
 #include <thread>
 #include <chrono>

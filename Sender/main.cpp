@@ -11,7 +11,6 @@
 #include <memory>
 #include "MyAMQPClient.h"
 #include "../MyNetworkConnection/MyUnixNetworkConnection.h"
-#include <amqpcpp.h>
 
 #include <thread>
 #include <chrono>
@@ -108,7 +107,6 @@ int main(int argc, const char * argv[]) {
         
         MyAMQPClient myAmqp{move(netConnection)};
         
-        // To Do: args for server host, username and password.
         myAmqp.Open(loginInfo);
         
         myAmqp.CreateHelloQueue(exchangeType, routingInfo);

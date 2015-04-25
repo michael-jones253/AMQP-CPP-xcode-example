@@ -9,8 +9,10 @@
 
 #ifndef MyAMQP_
 #define MyAMQP_
-// POD and the only Copernica external library header we expose.
+// This is the only Copernica library header we expose - enum only.
 #include "exchangeType.h"
+
+// POD and pure virtual abstractions only get exposed here.
 #include "MyAMQPTypes.h"
 #include "MyNetworkConnection.h"
 #include "MyLoginCredentials.h"
@@ -26,7 +28,7 @@ namespace MyAMQP {
     class MyAMQPClientImpl;
     
     class MyAMQPClient final {
-        
+        // Impl to hide implementation headers from application code - speeds up compiling.
         std::unique_ptr<MyAMQPClientImpl> _impl;
         
     public:

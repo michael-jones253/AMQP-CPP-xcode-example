@@ -20,16 +20,19 @@
 #pragma GCC visibility push(default)
 
 namespace MyAMQP {
+    using ParseBytesCallback = std::function<size_t(char const* buf, ssize_t len)>;
+    using NetworkErrorCallback = std::function<void(std::string const& errString)>;
+
     
     // Connection to RabbitMQ server with AMQP circular buffer requirements.
     class MyAMQPBufferedConnection final {
         std::unique_ptr<MyNetworkConnection> _networkConnection;
         
         // Callback for when bytes are available from the network.
-        std::function<size_t(char const* buf, ssize_t len)> _onBytes;
+        ParseBytesCallback _parseReceivedBytes;
         
         // Callback for when a network error is encountered.
-        std::function<void(std::string const& errString)> _onError;
+        NetworkErrorCallback _onError;
         
         // Thread handle.
         std::future<int> _readLoopHandle;
@@ -43,12 +46,15 @@ namespace MyAMQP {
     public:
         
         // C++ Guru Herb Sutter recommends transfer of smart pointer ownership this way.
-        MyAMQPBufferedConnection(std::unique_ptr<MyNetworkConnection> networkConnection);
+        MyAMQPBufferedConnection(
+            std::unique_ptr<MyNetworkConnection> networkConnection,
+            ParseBytesCallback const& parseBytesCallback,
+            NetworkErrorCallback const & onErrorCallback);
         
         // Final class, virtual not needed.
         ~MyAMQPBufferedConnection();
         
-        void Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> const& onBytes, std::function<void(std::string const& errString)> const & onError);
+        void Open(std::string const& ipAddress);
         
         void Close();
         

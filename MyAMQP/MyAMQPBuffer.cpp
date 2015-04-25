@@ -25,8 +25,13 @@ namespace MyAMQP {
         return _buffer.data() + _startIndex;
     }
     
-    // The Copernica interface is a little strange with its buffer requirements. It is a sort of circular
+    // The Copernica interface has circular buffering requirements. It is a sort of circular
     // buffer where the amount appended to the end may not be the amount removed from the front.
+    // When the amount consumed from the front catches up with what has been appended then the buffer can
+    // wrap back to the start again.
+    // Until that catch up happens this buffer will keep growing when data is appended on the end. However
+    // it is assumed that the Copernica connection handler will always consume from the front to prevent it
+    // growing indefinitely.
     void MyAMQPBuffer::AppendBack(std::function<ssize_t(char*, ssize_t)>const & readFn, ssize_t maxLen) {
         auto storageRequired = _startIndex + _count + maxLen;
         
@@ -66,6 +71,7 @@ namespace MyAMQP {
         
         if (_count == 0) {
             // All data consumed, no need to retain existing, can overwrite.
+            // Wrap data index back to start of buffer to prevent growing it forever.
             _startIndex = 0;
         }
     }

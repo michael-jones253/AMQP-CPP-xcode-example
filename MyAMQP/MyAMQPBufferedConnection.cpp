@@ -16,10 +16,13 @@ using namespace std;
 namespace MyAMQP {
     
     
-    MyAMQPBufferedConnection::MyAMQPBufferedConnection(std::unique_ptr<MyNetworkConnection> networkConnection) :
+    MyAMQPBufferedConnection::MyAMQPBufferedConnection(
+                                                       std::unique_ptr<MyNetworkConnection> networkConnection,
+                                                       ParseBytesCallback const& parseBytesCallback,
+                                                       NetworkErrorCallback const & onErrorCallback) :
     _networkConnection(move(networkConnection)),
-    _onBytes{},
-    _onError{},
+    _parseReceivedBytes{parseBytesCallback},
+    _onError{onErrorCallback},
     _readLoopHandle{},
     _readShouldRun{},
     _amqpBuffer{}
@@ -37,13 +40,10 @@ namespace MyAMQP {
         }
     }
     
-    void MyAMQPBufferedConnection::Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> const & onBytes, std::function<void(std::string const& errString)> const & onError) {
-        
+    void MyAMQPBufferedConnection::Open(std::string const& ipAddress) {
+    
         // Make robust to multiple opens.
         Close();
-        
-        _onBytes = onBytes;
-        _onError = onError;
         
         Connect(ipAddress, 5672);
         
@@ -112,8 +112,9 @@ namespace MyAMQP {
         ssize_t const amountToAppendFromRead = 1024;
         
         while (_readShouldRun) {
+            // Circular processing - add to the end from network reads, consume from the front via the parse callback.
             _amqpBuffer.AppendBack(networkReadFn, amountToAppendFromRead);
-            auto parsedBytes = _onBytes(_amqpBuffer.Get(), _amqpBuffer.Count());
+            auto parsedBytes = _parseReceivedBytes(_amqpBuffer.Get(), _amqpBuffer.Count());
             _amqpBuffer.ConsumeFront(parsedBytes);
             
         }        

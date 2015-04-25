@@ -25,6 +25,8 @@
 #include <atomic>
 
 /* The class below is not exported */
+/* The classes below are not exported */
+#pragma GCC visibility push(hidden)
 
 namespace MyAMQP {
     
@@ -36,11 +38,11 @@ namespace MyAMQP {
         // Copernica open source stuff.
         std::unique_ptr<AMQP::Connection> _amqpConnection;
         
-        // My stuff.
-        std::unique_ptr<MyAMQPBufferedConnection> _networkConnection;
-        
-        // Open source stuff.
+        // Copernica open source stuff.
         std::unique_ptr<AMQP::Channel> _channel;
+        
+        // My stuff.
+        std::unique_ptr<MyAMQPBufferedConnection> _bufferedConnection;
         
         std::mutex _mutex;
         
@@ -64,7 +66,7 @@ namespace MyAMQP {
         void SendHelloWorld(std::string const& exchange, std::string const& key, std::string const& greeting);
         
         void SubscribeToReceive(std::string const& queue,
-                                std::function<void(std::string const &, int64_t, bool)> const &handler,
+                                MyMessageCallback const &handler,
                                 bool threaded);
         
         // Class is final, virtual not needed.
@@ -143,5 +145,7 @@ namespace MyAMQP {
         AMQP::MessageCallback CreateThreadedMessageCallback(MyMessageCallback const& userHandler);
     };
 }
+
+#pragma GCC visibility pop
 
 #endif /* defined(__AMQP__MyAMQPClientImpl__) */

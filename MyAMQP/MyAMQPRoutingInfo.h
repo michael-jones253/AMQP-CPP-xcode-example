@@ -13,6 +13,8 @@
 #pragma GCC visibility push(default)
 
 namespace MyAMQP {
+    
+    // POD - plain old data.
     struct MyAMQPRoutingInfo {
         std::string ExchangeName;
         

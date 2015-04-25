@@ -18,6 +18,7 @@
 
 
 namespace MyAMQP {
+    // Circular buffer needed to meet the requirments of the Copernica connection handler abstraction.
     class MyAMQPBuffer {
         std::vector<char> _buffer;
         

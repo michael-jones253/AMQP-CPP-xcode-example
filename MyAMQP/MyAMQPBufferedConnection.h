@@ -37,7 +37,7 @@ namespace MyAMQP {
         // Whether the read loop should run or not.
         std::atomic<bool> _readShouldRun;
         
-        // Special buffer for handling the way the open source library works with buffers and parsing.
+        // Special buffer for handling the way the Copernica open source library works with buffers and parsing.
         MyAMQPBuffer _amqpBuffer;
         
     public:

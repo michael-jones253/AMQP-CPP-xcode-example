@@ -21,6 +21,7 @@
 
 namespace MyAMQP {
     
+    // Generic thread safe queue for movable types.
     template <typename T>
     class MyReceiveTaskQueue final {
         std::mutex _mutex;

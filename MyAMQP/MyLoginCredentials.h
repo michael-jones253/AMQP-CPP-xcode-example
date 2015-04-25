@@ -13,6 +13,8 @@
 #pragma GCC visibility push(default)
 
 namespace MyAMQP {
+    
+    // Plain old data (POD).
     struct MyLoginCredentials {
         std::string HostIpAddress;
         

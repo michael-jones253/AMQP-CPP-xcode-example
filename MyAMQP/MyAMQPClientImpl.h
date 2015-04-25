@@ -28,6 +28,7 @@
 
 namespace MyAMQP {
     
+    // Hides the Copernica amqp includes from Client applications.
     class MyAMQPClientImpl final : public AMQP::ConnectionHandler {
         // Private constructor for use with friend class only.
         friend class MyAMQPClient;

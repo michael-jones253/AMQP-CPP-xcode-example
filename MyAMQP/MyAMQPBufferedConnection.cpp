@@ -1,12 +1,12 @@
 //
-//  MyAMQPNetworkConnection.cpp
+//  MyAMQPBufferedConnection.cpp
 //  AMQP
 //
 //  Created by Michael Jones on 18/04/2015.
 //  Copyright (c) 2015 Michael Jones. All rights reserved.
 //
 
-#include "MyAMQPNetworkConnection.h"
+#include "MyAMQPBufferedConnection.h"
 
 #include <stdio.h>
 #include <assert.h>
@@ -16,7 +16,7 @@ using namespace std;
 namespace MyAMQP {
     
     
-    MyAMQPNetworkConnection::MyAMQPNetworkConnection() :
+    MyAMQPBufferedConnection::MyAMQPBufferedConnection() :
     _onBytes{},
     _onError{},
     _readLoopHandle{},
@@ -26,17 +26,17 @@ namespace MyAMQP {
         
     }
     
-    MyAMQPNetworkConnection::~MyAMQPNetworkConnection() {
+    MyAMQPBufferedConnection::~MyAMQPBufferedConnection() {
         try {
             Close();
         }
         catch(exception& ex)
         {
-            cerr << "Exception in MyAMQPNetworkConnection destruction: " << ex.what() << endl;
+            cerr << "Exception in MyAMQPBufferedConnection destruction: " << ex.what() << endl;
         }
     }
     
-    void MyAMQPNetworkConnection::Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> const & onBytes, std::function<void(std::string const& errString)> const & onError) {
+    void MyAMQPBufferedConnection::Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> const & onBytes, std::function<void(std::string const& errString)> const & onError) {
         
         // Make robust to multiple opens.
         Close();
@@ -64,7 +64,7 @@ namespace MyAMQP {
         _readLoopHandle = move(handle);
     }
     
-    void MyAMQPNetworkConnection::Close() {
+    void MyAMQPBufferedConnection::Close() {
         if (!_readShouldRun) {
             // Ensure robust to multiple closes.
             return;
@@ -81,7 +81,7 @@ namespace MyAMQP {
         
     }
     
-    void MyAMQPNetworkConnection::ReadLoop() {
+    void MyAMQPBufferedConnection::ReadLoop() {
         
         auto networkReadFn = [this](char* buf, ssize_t len)->ssize_t {
             auto ret = Read(buf, len);

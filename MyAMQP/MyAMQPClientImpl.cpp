@@ -108,7 +108,7 @@ namespace MyAMQP {
         _channel->consume(queue).onReceived(messageHandler);
     }
     
-    MyAMQPClientImpl::MyAMQPClientImpl(std::unique_ptr<MyAMQPNetworkConnection> networkConnection) :
+    MyAMQPClientImpl::MyAMQPClientImpl(std::unique_ptr<MyAMQPBufferedConnection> networkConnection) :
     ConnectionHandler{},
     _amqpConnection{},
     _networkConnection{},

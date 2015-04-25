@@ -1,13 +1,13 @@
 //
-//  MyAMQPNetworkConnection.h
+//  MyAMQPBufferedConnection.h
 //  AMQP
 //
 //  Created by Michael Jones on 18/04/2015.
 //  Copyright (c) 2015 Michael Jones. All rights reserved.
 //
 
-#ifndef AMQP_MyAMQPNetworkConnection_h
-#define AMQP_MyAMQPNetworkConnection_h
+#ifndef AMQP_MyAMQPBufferedConnection_h
+#define AMQP_MyAMQPBufferedConnection_h
 
 #include "MyAMQPBuffer.h"
 #include <functional>
@@ -21,7 +21,7 @@
 namespace MyAMQP {
     
     // Abstraction to keep OS dependent socket system out of this library.
-    class MyAMQPNetworkConnection {
+    class MyAMQPBufferedConnection {
         // Callback for when bytes are available from the network.
         std::function<size_t(char const* buf, ssize_t len)> _onBytes;
         
@@ -38,9 +38,9 @@ namespace MyAMQP {
         MyAMQPBuffer _amqpBuffer;
         
     public:
-        MyAMQPNetworkConnection();
+        MyAMQPBufferedConnection();
         
-        virtual ~MyAMQPNetworkConnection();
+        virtual ~MyAMQPBufferedConnection();
         
         void Open(std::string const& ipAddress, std::function<size_t(char const* buf, ssize_t len)> const& onBytes, std::function<void(std::string const& errString)> const & onError);
         

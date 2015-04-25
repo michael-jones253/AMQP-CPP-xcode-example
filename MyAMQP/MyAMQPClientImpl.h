@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include "amqpcpp.h"
 #include "MyAMQPTypes.h"
-#include "MyAMQPNetworkConnection.h"
+#include "MyAMQPBufferedConnection.h"
 #include "MyLoginCredentials.h"
 #include "MyAMQPRoutingInfo.h"
 
@@ -36,7 +36,7 @@ namespace MyAMQP {
         std::unique_ptr<AMQP::Connection> _amqpConnection;
         
         // My stuff.
-        std::unique_ptr<MyAMQPNetworkConnection> _networkConnection;
+        std::unique_ptr<MyAMQPBufferedConnection> _networkConnection;
         
         // Open source stuff.
         std::unique_ptr<AMQP::Channel> _channel;
@@ -129,7 +129,7 @@ namespace MyAMQP {
         void Close();
         
     private:
-        MyAMQPClientImpl(std::unique_ptr<MyAMQPNetworkConnection> networkConnection);
+        MyAMQPClientImpl(std::unique_ptr<MyAMQPBufferedConnection> networkConnection);
 
         size_t OnNetworkRead(char const* buf, int len);
         

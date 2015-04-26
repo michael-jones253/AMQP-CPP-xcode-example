@@ -55,6 +55,22 @@ namespace MyAMQP {
     void MyReceiveTaskQueue<T>::Reset() {
         _breakWait = false;
     }
+    
+    template <typename T>
+    bool MyReceiveTaskQueue<T>::Empty() const {
+        return _itemQueue.empty();
+    }
+    
+    template <typename T>
+    void MyReceiveTaskQueue<T>::Pop(T& item) {
+        if (_itemQueue.empty()) {
+            throw runtime_error("MyReceiveTaskQueue: Pop of empty queue");
+        }
+        
+        item = move(_itemQueue.front());
+        _itemQueue.pop();
+    }
+
 
     // It is more usual to the method definitions inline in the header, but if we want them in the cpp like
     // the above, then explicit template instantiations are needed for all template specialisations.

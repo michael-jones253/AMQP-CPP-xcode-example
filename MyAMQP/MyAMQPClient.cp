@@ -50,6 +50,6 @@ namespace MyAMQP {
     }
     
     void MyAMQPClient::Close() {
-        _impl->Close();
+        _impl->Close(false);
     }
 }

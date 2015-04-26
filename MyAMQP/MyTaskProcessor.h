@@ -30,12 +30,14 @@ namespace MyAMQP {
         ~MyTaskProcessor();
         
         void Start();
-        void Stop();
+        void Stop(bool flush);
         
         void Push(std::packaged_task<int64_t(void)>&& task);
         
     private:
         int ProcessLoop();
+        
+        void Flush();
     };
 }
 

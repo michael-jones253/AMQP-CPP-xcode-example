@@ -28,7 +28,7 @@ namespace MyAMQP {
     
     MyAckProcessor::~MyAckProcessor() {
         try {
-            Stop();
+            Stop(false);
         } catch (exception const& ex) {
             cerr << "MyAckProcessor destruction: " << ex.what() << endl;
         }
@@ -41,7 +41,7 @@ namespace MyAMQP {
         _loopHandle = async(launch::async, [this]() { return ProcessLoop(); });
     }
     
-    void MyAckProcessor::Stop() {
+    void MyAckProcessor::Stop(bool flush) {
         if (!_loopHandle.valid()) {
             return;
         }
@@ -53,6 +53,10 @@ namespace MyAMQP {
         
         if (ret < 0) {
             cout << "MyAckProcessor abnormal exit" << endl;
+        }
+        
+        if (flush) {
+            Flush();
         }
     }
     
@@ -67,25 +71,26 @@ namespace MyAMQP {
         }
         
         while (_shouldRun) {
-            future<int64_t> task{};
+            future<int64_t> tagResult{};
             
-            auto ok = _taskQueue.Wait(task);
+            auto ok = _taskQueue.Wait(tagResult);
             
             if (!ok) {
                 break;
             }
             
-            assert(task.valid());
+            assert(tagResult.valid());
             
             // The get might throw, if the user handler threw. In this case we do not ack.
             try {
                 while (_shouldRun) {
                     // The get() may wait forever if the task never executed, so we protect against that
-                    // in the shutdown case.
-                    auto ret = task.wait_for(seconds(1));
+                    // in the shutdown case where the task processor is closed without flushing (executing) all
+                    // of its packaged_task queue.
+                    auto ret = tagResult.wait_for(seconds(1));
                     
                     if (ret == future_status::ready) {
-                        auto tag = task.get();
+                        auto tag = tagResult.get();
                         _ackHandler(tag);
                         
                         // Move on to next future.
@@ -98,6 +103,17 @@ namespace MyAMQP {
         }
         
         return 0;
+    }
+    
+    void MyAckProcessor::Flush() {
+        while (!_taskQueue.Empty()) {
+            future<int64_t> tagResult{};
+            _taskQueue.Pop(tagResult);
+            
+            auto tag = tagResult.get();
+            
+            _ackHandler(tag);
+        }
     }
     
 }

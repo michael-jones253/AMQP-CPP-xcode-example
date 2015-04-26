@@ -33,12 +33,14 @@ namespace MyAMQP {
         ~MyAckProcessor();
         
         void Start(std::function<void(int64_t)> const& ackHandler);
-        void Stop();
+        void Stop(bool flush);
         
         void Push(std::future<int64_t>&& deliveryTagFuture);
         
     private:
         int ProcessLoop();
+        
+        void Flush();
     };
 }
 

@@ -134,7 +134,7 @@ namespace MyAMQP {
     
     MyAMQPClientImpl::~MyAMQPClientImpl() {
         try {
-            Close();
+            Close(false);
         }
         catch(exception& ex)
         {
@@ -142,7 +142,7 @@ namespace MyAMQP {
         }
     }
     
-    
+    // Interface implementation of data from the client that is destined for the server.
     void MyAMQPClientImpl::onData(AMQP::Connection *connection, const char *buffer, size_t size) {
         // cout << "onData: " << size << endl;
         // for (unsigned i=0; i<size; i++) cout << (int)buffer[i] << " ";
@@ -194,7 +194,7 @@ namespace MyAMQP {
     void MyAMQPClientImpl::Open(MyLoginCredentials const& loginInfo) {
         // A common problem with components that need to be opened/closed or stopped/started is not being
         // robust to multiple opens/closes. The pattern where we always close before opening overcomes this.
-        Close();
+        Close(false);
         
         _bufferedConnection->Open(loginInfo.HostIpAddress);
         
@@ -205,7 +205,7 @@ namespace MyAMQP {
         
     }
     
-    void MyAMQPClientImpl::Close() {
+    void MyAMQPClientImpl::Close(bool flush) {
         // Close must be robust to multiple calls or called before open.
         
         if (!_channel) {
@@ -234,8 +234,8 @@ namespace MyAMQP {
             _bufferedConnection->Close();
         }
         
-        _receiveTaskProcessor.Stop();
-        _ackProcessor.Stop();
+        _receiveTaskProcessor.Stop(flush);
+        _ackProcessor.Stop(flush);
     }
     
     size_t MyAMQPClientImpl::OnNetworkRead(char const* buf, int len) {

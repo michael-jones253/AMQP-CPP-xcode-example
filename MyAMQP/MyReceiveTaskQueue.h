@@ -39,6 +39,10 @@ namespace MyAMQP {
         void Push(T&& item);
         
         bool Wait(T& item);
+        
+        bool Empty() const;
+        
+        void Pop(T& item);
     };
 }
 

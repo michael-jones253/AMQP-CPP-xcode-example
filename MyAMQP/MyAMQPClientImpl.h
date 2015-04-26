@@ -129,7 +129,7 @@ namespace MyAMQP {
         
         void Open(MyLoginCredentials const& loginInfo);
         
-        void Close();
+        void Close(bool flush);
         
     private:
         MyAMQPClientImpl(std::unique_ptr<MyNetworkConnection> networkConnection);

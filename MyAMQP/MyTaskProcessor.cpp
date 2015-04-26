@@ -23,7 +23,7 @@ namespace MyAMQP {
     
     MyTaskProcessor::~MyTaskProcessor() {
         try {
-            Stop();
+            Stop(false);
         } catch (exception const& ex) {
             cerr << "MyTaskProcessor destruction: " << ex.what() << endl;
         }
@@ -35,7 +35,7 @@ namespace MyAMQP {
         _loopHandle = async(launch::async, [this]() { return ProcessLoop(); });
     }
     
-    void MyTaskProcessor::Stop() {
+    void MyTaskProcessor::Stop(bool flush) {
         if (!_loopHandle.valid()) {
             return;
         }
@@ -47,6 +47,10 @@ namespace MyAMQP {
         
         if (ret < 0) {
             cout << "MyTaskProcessor abnormal exit" << endl;
+        }
+        
+        if (flush) {
+            Flush();
         }
     }
     
@@ -76,6 +80,18 @@ namespace MyAMQP {
         }
         
         return 0;
+    }
+    
+    void MyTaskProcessor::Flush() {
+        while (!_taskQueue.Empty()) {
+            packaged_task<int64_t(void)> task{};
+            _taskQueue.Pop(task);
+            
+            assert(task.valid());
+            
+            // Execute the task. This blocks.
+            task();
+        }
     }
     
 }

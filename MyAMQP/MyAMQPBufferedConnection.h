@@ -46,8 +46,9 @@ namespace MyAMQP {
     public:
         
         // C++ Guru Herb Sutter recommends transfer of smart pointer ownership this way.
-        MyAMQPBufferedConnection(
-            std::unique_ptr<MyNetworkConnection> networkConnection,
+        MyAMQPBufferedConnection(std::unique_ptr<MyNetworkConnection> networkConnection);
+        
+        void SetCallbacks(
             ParseBytesCallback const& parseBytesCallback,
             NetworkErrorCallback const & onErrorCallback);
         

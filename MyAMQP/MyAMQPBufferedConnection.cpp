@@ -16,19 +16,25 @@ using namespace std;
 namespace MyAMQP {
     
     
-    MyAMQPBufferedConnection::MyAMQPBufferedConnection(
-                                                       std::unique_ptr<MyNetworkConnection> networkConnection,
-                                                       ParseBytesCallback const& parseBytesCallback,
-                                                       NetworkErrorCallback const & onErrorCallback) :
+    MyAMQPBufferedConnection::MyAMQPBufferedConnection(std::unique_ptr<MyNetworkConnection> networkConnection) :
     _networkConnection(move(networkConnection)),
-    _parseReceivedBytes{parseBytesCallback},
-    _onError{onErrorCallback},
+    _parseReceivedBytes{},
+    _onError{},
     _readLoopHandle{},
     _readShouldRun{},
     _amqpBuffer{}
     {
         
     }
+    
+    void MyAMQPBufferedConnection::SetCallbacks(
+                      ParseBytesCallback const& parseBytesCallback,
+                      NetworkErrorCallback const & onErrorCallback) {
+        
+        _parseReceivedBytes = parseBytesCallback;
+        _onError = onErrorCallback;
+    }
+
     
     MyAMQPBufferedConnection::~MyAMQPBufferedConnection() {
         try {
@@ -72,13 +78,14 @@ namespace MyAMQP {
         }
         
         _readShouldRun = false;
-        Disconnect();
 
         // Wait for async task to exit. (Equivalent of thread join).
         auto exitCode = _readLoopHandle.get();
         if (exitCode < 0) {
             cerr << "Read loop exited with error code" << endl;
         }
+
+        Disconnect();
         
         cout << "Maximum buffered: " << _amqpBuffer.Buffered()  << endl;
     }

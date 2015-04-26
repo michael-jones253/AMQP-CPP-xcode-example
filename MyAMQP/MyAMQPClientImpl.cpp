@@ -113,7 +113,7 @@ namespace MyAMQP {
     ConnectionHandler{},
     _amqpConnection{},
     _channel{},
-    _bufferedConnection{},
+    _bufferedConnection{move(networkConnection)},
     _mutex{},
     _conditional{},
     _channelOpen{},
@@ -124,13 +124,8 @@ namespace MyAMQP {
     {
         auto parseCallback = bind(&MyAMQPClientImpl::OnNetworkRead, this, placeholders::_1, placeholders::_2);
         auto onErrorCallback = bind(&MyAMQPClientImpl::OnNetworkReadError, this, placeholders::_1);
-
-        // Review - non polymorphic buffered connection does not need to be smart pointer.
-        _bufferedConnection = unique_ptr<MyAMQPBufferedConnection>(
-                                                      new MyAMQPBufferedConnection(move(networkConnection),
-                                                                                   parseCallback,
-                                                                                   onErrorCallback));
         
+        _bufferedConnection.SetCallbacks(parseCallback, onErrorCallback);
     }
     
     MyAMQPClientImpl::~MyAMQPClientImpl() {
@@ -149,12 +144,12 @@ namespace MyAMQP {
         // for (unsigned i=0; i<size; i++) cout << (int)buffer[i] << " ";
         // cout << endl;
         
-        _bufferedConnection->SendToServer(buffer, size);
+        _bufferedConnection.SendToServer(buffer, size);
     }
     
     void MyAMQPClientImpl::onError(AMQP::Connection *connection, const char *message) {
         cout << "AMQP error:" << message << endl;
-        _bufferedConnection->Close();
+        _bufferedConnection.Close();
     }
     
     void MyAMQPClientImpl::onConnected(AMQP::Connection *connection) {
@@ -197,7 +192,7 @@ namespace MyAMQP {
         // robust to multiple opens/closes. The pattern where we always close before opening overcomes this.
         Close(false);
         
-        _bufferedConnection->Open(loginInfo.HostIpAddress);
+        _bufferedConnection.Open(loginInfo.HostIpAddress);
         
         _amqpConnection = unique_ptr<AMQP::Connection>(new AMQP::Connection(this,
                                                                             AMQP::Login(loginInfo.UserName,
@@ -209,13 +204,10 @@ namespace MyAMQP {
     void MyAMQPClientImpl::Close(bool flush) {
         // Close must be robust to multiple calls or called before open.
         
-        if (!_channel) {
-            return;
-        }
-        
         _receiveTaskProcessor.Stop(flush);
         
         // Presumably flushing of acks needs to be done before the channel is closed.
+        // Definitely before the connection is closed.
         _ackProcessor.Stop(flush);
 
         auto finalize = [&](){
@@ -224,11 +216,12 @@ namespace MyAMQP {
             _conditional.notify_all();
         };
         
-        _channel->close().onFinalize(finalize);
-        
-        unique_lock<mutex> lock(_mutex);
-        
-        _conditional.wait(lock, [&]() { return _channelFinalized; });
+        if (_channel) {
+            _channel->close().onFinalize(finalize);
+            
+            unique_lock<mutex> lock(_mutex);            
+            _conditional.wait(lock, [&]() { return _channelFinalized; });
+        }
         
         cout << "Client closing" << endl;
         
@@ -236,9 +229,11 @@ namespace MyAMQP {
             _amqpConnection->close();
         }
         
-        if (_bufferedConnection) {
-            _bufferedConnection->Close();
-        }
+        // This will block until read loop exits.
+        _bufferedConnection.Close();
+
+        _channel.reset();
+        _amqpConnection.reset();
     }
     
     size_t MyAMQPClientImpl::OnNetworkRead(char const* buf, int len) {
@@ -249,7 +244,7 @@ namespace MyAMQP {
     
     void MyAMQPClientImpl::OnNetworkReadError(std::string const& errorStr){
         cout << "MyAMQPClient read error: " << errorStr << endl;
-        _bufferedConnection->Close();
+        _bufferedConnection.Close();
     }
     
     void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {

@@ -42,7 +42,7 @@ namespace MyAMQP {
         std::unique_ptr<AMQP::Channel> _channel;
         
         // My stuff.
-        std::unique_ptr<MyAMQPBufferedConnection> _bufferedConnection;
+        MyAMQPBufferedConnection _bufferedConnection;
         
         std::mutex _mutex;
         

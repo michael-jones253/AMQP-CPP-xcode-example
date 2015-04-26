@@ -131,6 +131,7 @@ int main(int argc, const char * argv[]) {
             
             if (strcasecmp(message.c_str(), "goodbye") == 0) {
                 breakWait = true;
+                benchmarkCondition.notify_one();
             }
         };
         

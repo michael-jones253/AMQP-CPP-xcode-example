@@ -38,13 +38,14 @@ namespace MyAMQP {
     
     void MyAMQPClientImpl::CreateHelloQueue(ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo) {
         unique_lock<mutex> lock(_mutex);
+
+        auto const timeout = seconds(5);
         
         // Prevent a race with queue creation before underlying channel is created.
-        _conditional.wait(lock, [this]() {
-            
-            // Review: check assumption that copernica will either callback on success or fail of channel open.
-            return _channelOpen || _channelInError;
-        });
+        // Don't wait forever if channel callback never happens.
+        _conditional.wait_for(lock,timeout , [this]() {
+                    return _channelOpen || _channelInError;
+                });
         
         if (_channelInError) {
             throw runtime_error("Hello Channel not created");
@@ -66,13 +67,13 @@ namespace MyAMQP {
         // bind queue and exchange
         _channel->bindQueue(routingInfo.ExchangeName, routingInfo.QueueName, routingInfo.Key).onSuccess([this]() {
             std::cout << "queue bound to exchange" << std::endl;
+            // If the bind worked then we can assume that the above operations of exchange and queue declare worked.
             _queueReady = true;
             _conditional.notify_one();
         });
         
         // Prevent a race with sending messages before the queue is ready for use.
         cout << "waiting for queue" << endl;
-        auto const timeout = seconds(5);
         
         // Don't wait forever if queue not declared.
         auto status = _conditional.wait_for(lock, timeout, [this]()->bool { return _queueReady; });

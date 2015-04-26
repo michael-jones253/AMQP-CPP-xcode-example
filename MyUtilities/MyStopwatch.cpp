@@ -20,11 +20,24 @@ namespace MyUtilities {
     }
     
     void MyStopwatch::Start() {
+        if (_isRunning) {
+            return;
+        }
+        
         _startTime = high_resolution_clock::now();
         _isRunning = true;
     }
     
+    void MyStopwatch::Restart() {
+        Stop();
+        Start();
+    }
+    
     void MyStopwatch::Stop() {
+        if (!_isRunning) {
+            return;
+        }
+        
         _endTime = high_resolution_clock::now();
         _isRunning = false;
     }

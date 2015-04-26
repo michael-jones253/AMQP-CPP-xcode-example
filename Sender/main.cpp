@@ -32,8 +32,9 @@ int main(int argc, const char * argv[]) {
             { "key",     required_argument,            nullptr,     'k'},
             { "queue",     required_argument,            nullptr,   'q'},
             { "count",   required_argument,      nullptr,           'c' },
-            { "receivers", required_argument,      nullptr,           'r' },
+            { "receivers", required_argument,      nullptr,         'r' },
             { "sleep",   required_argument,      nullptr,           's' },
+            { "bye",     required_argument,            nullptr,     'b'},
             { NULL,    0,                 nullptr,           0 }
         };
         
@@ -46,6 +47,7 @@ int main(int argc, const char * argv[]) {
         
         int messageCount{100};
         int sleepSeconds{};
+        bool sendGoodbyeMessage{};
         
         // We send multiple end messages, because each end message is only processed by one consumer
         // sending of multiple end messages means that multiple consumers can receive an end message.
@@ -54,7 +56,7 @@ int main(int argc, const char * argv[]) {
         auto const usageStr = string("Usage: [--fanout | --topic {default direct}] [--count <integer>] [--sleep <seconds>]");
         
         do {
-            auto ch = getopt_long(argc, (char* const *)(argv), "fte:k:q:c:s:", longopts, nullptr);
+            auto ch = getopt_long(argc, (char* const *)(argv), "fte:k:q:c:s:b", longopts, nullptr);
             
             switch (ch) {
                 case 'f':
@@ -87,6 +89,10 @@ int main(int argc, const char * argv[]) {
                     
                 case 's':
                     sleepSeconds = stoi(optarg);
+                    
+                case 'b':
+                    sendGoodbyeMessage = true;
+                    break;
                     
                 case -1:
                     break;
@@ -121,6 +127,10 @@ int main(int argc, const char * argv[]) {
         
         for (int x = 0; x < receiverCount; ++x) {
             myAmqp.SendHelloWorld(routingInfo.ExchangeName, routingInfo.Key, "end");
+        }
+        
+        if (sendGoodbyeMessage) {
+            myAmqp.SendHelloWorld(routingInfo.ExchangeName, routingInfo.Key, "goodbye");
         }
 
         // Close before capturing elapsed time, because the close involves flushing of messages out

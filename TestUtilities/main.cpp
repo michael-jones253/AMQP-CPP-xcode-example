@@ -34,8 +34,20 @@ int main(int argc, const char * argv[]) {
     stopwatch.Start();
     sleep_for(milliseconds(10));
     elapsed = stopwatch.GetElapsedMilliseconds();
-    assert(elapsed >= milliseconds{20} && "Time keeps accumulating unless the Restart method is called");
+    assert(elapsed >= milliseconds{20} && "Time should keep accumulating unless the Restart method is called");
     
+    stopwatch.Restart();
+    sleep_for(milliseconds(10));
+    elapsed = stopwatch.GetElapsedMilliseconds();
+    assert(elapsed >= milliseconds{10} && elapsed < milliseconds{20} && "Time should be reset after Restart is called");
+    
+    stopwatch.Stop();
+    sleep_for(milliseconds(20));
+    assert(elapsed >= milliseconds{10} && elapsed < milliseconds{20} && "Time must not advance after Stop is called");
+    
+    stopwatch.Start();
+    sleep_for(milliseconds(10));
+    assert(elapsed >= milliseconds{10} && elapsed < milliseconds{20} && "Time must be reset after Stop is called");
     
     return 0;
 }

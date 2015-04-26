@@ -29,6 +29,8 @@ namespace MyUtilities {
         
         void Start();
         
+        void Restart();
+        
         void Stop();
         
         bool IsRunning() const {

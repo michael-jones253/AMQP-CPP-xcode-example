@@ -80,6 +80,7 @@ namespace MyAMQP {
             cerr << "Read loop exited with error code" << endl;
         }
         
+        cout << "Maximum buffered: " << _amqpBuffer.Buffered()  << endl;
     }
     
     void MyAMQPBufferedConnection::Connect(std::string const& ipAddress, int port) {

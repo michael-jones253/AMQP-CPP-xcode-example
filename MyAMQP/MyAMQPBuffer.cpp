@@ -69,6 +69,8 @@ namespace MyAMQP {
         _startIndex += bytes;
         _count -= bytes;
         
+        assert(_count >= 0);
+        
         if (_count == 0) {
             // All data consumed, no need to retain existing, can overwrite.
             // Wrap data index back to start of buffer to prevent growing it forever.

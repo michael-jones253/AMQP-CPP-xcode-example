@@ -106,6 +106,7 @@ namespace MyAMQP {
     }
     
     void MyAckProcessor::Flush() {
+        int flushed{};
         while (!_taskQueue.Empty()) {
             future<int64_t> tagResult{};
             _taskQueue.Pop(tagResult);
@@ -113,7 +114,10 @@ namespace MyAMQP {
             auto tag = tagResult.get();
             
             _ackHandler(tag);
+            ++flushed;
         }
+        
+        cout << "Flushed: " << flushed << " acks" << endl;
     }
     
 }

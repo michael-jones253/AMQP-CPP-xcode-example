@@ -13,7 +13,11 @@ using namespace std;
 
 namespace MyAMQP {
     template <typename T>
-    MyReceiveTaskQueue<T>::MyReceiveTaskQueue() : _itemQueue{} {
+    MyReceiveTaskQueue<T>::MyReceiveTaskQueue() :
+    _mutex{},
+    _conditional{},
+    _breakWait{},
+    _itemQueue{} {
         
     }
     
@@ -63,6 +67,7 @@ namespace MyAMQP {
     
     template <typename T>
     void MyReceiveTaskQueue<T>::Pop(T& item) {
+        lock_guard<mutex> guard(_mutex);
         if (_itemQueue.empty()) {
             throw runtime_error("MyReceiveTaskQueue: Pop of empty queue");
         }

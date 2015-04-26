@@ -47,7 +47,7 @@ namespace MyAMQP {
         
         void Open(MyLoginCredentials const& loginInfo);
         
-        void Close();
+        void Close(bool flush);
         
     private:
         size_t OnNetworkRead(char const* buf, int len);

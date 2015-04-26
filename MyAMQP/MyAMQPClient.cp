@@ -49,7 +49,7 @@ namespace MyAMQP {
         _impl->Open(loginInfo);
     }
     
-    void MyAMQPClient::Close() {
-        _impl->Close(false);
+    void MyAMQPClient::Close(bool flush) {
+        _impl->Close(flush);
     }
 }

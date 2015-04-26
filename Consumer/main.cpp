@@ -32,6 +32,7 @@ int main(int argc, const char * argv[]) {
             { "fanout",  no_argument,            nullptr,           'f'},
             { "topic",   no_argument,            nullptr,           't'},
             { "inline",   no_argument,            nullptr,          'i'},
+            { "flush",    no_argument,            nullptr,          'F'},
             { "exchange",     required_argument,            nullptr,'e'},
             { "key",     required_argument,            nullptr,     'k'},
             { "queue",     required_argument,            nullptr,   'q'},
@@ -48,6 +49,7 @@ int main(int argc, const char * argv[]) {
         
         int sleepSeconds{};
         bool threaded{true};
+        bool flushOnClose{};
         
         auto const usageStr = string("Usage: [--fanout | --topic {default direct}] [--count <integer>] [--sleep <seconds>]");
         
@@ -66,6 +68,10 @@ int main(int argc, const char * argv[]) {
                 case 'i':
                     cout << "inline handler" << endl;
                     threaded = false;
+                    break;
+                    
+                case 'F':
+                    flushOnClose = true;
                     break;
                     
                 case 'e':
@@ -150,7 +156,7 @@ int main(int argc, const char * argv[]) {
             benchmarkStopwatch.Stop();
         }
         
-        myAmqp.Close();
+        myAmqp.Close(flushOnClose);
         
     } catch (exception& ex) {
         cerr << ex.what() << endl;

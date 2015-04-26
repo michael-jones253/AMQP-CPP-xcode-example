@@ -135,7 +135,7 @@ int main(int argc, const char * argv[]) {
 
         // Close before capturing elapsed time, because the close involves flushing of messages out
         // of the Copernica library.
-        myAmqp.Close();
+        myAmqp.Close(true);
         
         // Benchmark if sending out one after another.
         if (sleepSeconds == 0) {

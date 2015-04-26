@@ -125,6 +125,7 @@ namespace MyAMQP {
         auto parseCallback = bind(&MyAMQPClientImpl::OnNetworkRead, this, placeholders::_1, placeholders::_2);
         auto onErrorCallback = bind(&MyAMQPClientImpl::OnNetworkReadError, this, placeholders::_1);
 
+        // Review - non polymorphic buffered connection does not need to be smart pointer.
         _bufferedConnection = unique_ptr<MyAMQPBufferedConnection>(
                                                       new MyAMQPBufferedConnection(move(networkConnection),
                                                                                    parseCallback,
@@ -211,6 +212,11 @@ namespace MyAMQP {
         if (!_channel) {
             return;
         }
+        
+        _receiveTaskProcessor.Stop(flush);
+        
+        // Presumably flushing of acks needs to be done before the channel is closed.
+        _ackProcessor.Stop(flush);
 
         auto finalize = [&](){
             cout << "channel finalized" << endl;
@@ -233,9 +239,6 @@ namespace MyAMQP {
         if (_bufferedConnection) {
             _bufferedConnection->Close();
         }
-        
-        _receiveTaskProcessor.Stop(flush);
-        _ackProcessor.Stop(flush);
     }
     
     size_t MyAMQPClientImpl::OnNetworkRead(char const* buf, int len) {

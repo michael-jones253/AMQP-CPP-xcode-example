@@ -13,7 +13,6 @@
 		B211546B1AEDD21B003FA861 /* MyNetworkUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = B21154691AEDD21B003FA861 /* MyNetworkUtilities.h */; };
 		B22E60D41AE796D700CB0B2F /* MyReceiveTaskQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B22E60D21AE796D700CB0B2F /* MyReceiveTaskQueue.cpp */; };
 		B22E60D51AE796D700CB0B2F /* MyReceiveTaskQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = B22E60D31AE796D700CB0B2F /* MyReceiveTaskQueue.h */; };
-		B22E60DD1AE798A800CB0B2F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B22E60DC1AE798A800CB0B2F /* main.cpp */; };
 		B22E60E11AE798DA00CB0B2F /* libMyAMQP.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */; };
 		B23007D41AE1CDB9005BAB20 /* MyAMQPBufferedConnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B23007D31AE1CDB9005BAB20 /* MyAMQPBufferedConnection.cpp */; };
 		B2344B4D1AE0CB7A00B47CB2 /* MyAMQPPriv.h in Headers */ = {isa = PBXBuildFile; fileRef = B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */; };
@@ -23,6 +22,15 @@
 		B235801A1AE8575500DA1EC3 /* MyReceiveTaskQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B22E60D21AE796D700CB0B2F /* MyReceiveTaskQueue.cpp */; };
 		B235801D1AE8692600DA1EC3 /* MyTaskProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B235801B1AE8692600DA1EC3 /* MyTaskProcessor.cpp */; };
 		B235801E1AE8692600DA1EC3 /* MyTaskProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = B235801C1AE8692600DA1EC3 /* MyTaskProcessor.h */; };
+		B237D85F1AEEEA46008CAD0B /* MyCompletionCallbacks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B237D85D1AEEEA46008CAD0B /* MyCompletionCallbacks.cpp */; };
+		B237D8601AEEEA46008CAD0B /* MyCompletionCallbacks.h in Headers */ = {isa = PBXBuildFile; fileRef = B237D85E1AEEEA46008CAD0B /* MyCompletionCallbacks.h */; };
+		B237D8631AEEEB36008CAD0B /* MyCompletionNotifier.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B237D8611AEEEB36008CAD0B /* MyCompletionNotifier.cpp */; };
+		B237D8641AEEEB36008CAD0B /* MyCompletionNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = B237D8621AEEEB36008CAD0B /* MyCompletionNotifier.h */; };
+		B237D8731AEEF58A008CAD0B /* libMyAMQP.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */; };
+		B237D8741AEEF73D008CAD0B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B237D8711AEEF542008CAD0B /* main.cpp */; };
+		B237D8771AEEFC73008CAD0B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B237D8751AEEFC55008CAD0B /* main.cpp */; };
+		B237D87A1AEEFCD5008CAD0B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B237D8781AEEFCCE008CAD0B /* main.cpp */; };
+		B237D87D1AEEFD5C008CAD0B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B237D87B1AEEFD53008CAD0B /* main.cpp */; };
 		B23A095F1AE0A22F00533FFA /* AMQPSTL.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A095E1AE0A22F00533FFA /* AMQPSTL.h */; };
 		B23A09611AE0A22F00533FFA /* AMQPSTLPriv.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09601AE0A22F00533FFA /* AMQPSTLPriv.h */; };
 		B23A09631AE0A22F00533FFA /* AMQPSTL.cp in Sources */ = {isa = PBXBuildFile; fileRef = B23A09621AE0A22F00533FFA /* AMQPSTL.cp */; };
@@ -169,13 +177,11 @@
 		B29989871AEB63B600435A5E /* MyStopwatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B29989851AEB63B600435A5E /* MyStopwatch.cpp */; };
 		B29989881AEB63B600435A5E /* MyStopwatch.h in Headers */ = {isa = PBXBuildFile; fileRef = B29989861AEB63B600435A5E /* MyStopwatch.h */; };
 		B29989891AEB678E00435A5E /* libMyUtilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B299897A1AEB631400435A5E /* libMyUtilities.a */; };
-		B29989911AEB74F500435A5E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B29989901AEB74F500435A5E /* main.cpp */; };
 		B29989951AEB750A00435A5E /* libMyUtilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B299897A1AEB631400435A5E /* libMyUtilities.a */; };
 		B2BE4F401AE358D5009B8194 /* libAMQPSTL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */; };
 		B2BE4F421AE35ABB009B8194 /* MyAMQPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */; };
 		B2FDFDFE1AE30BEB00542DA0 /* MyAMQPCircularBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FDFDFC1AE30BEB00542DA0 /* MyAMQPCircularBuffer.cpp */; };
 		B2FDFDFF1AE30BEB00542DA0 /* MyAMQPCircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = B2FDFDFD1AE30BEB00542DA0 /* MyAMQPCircularBuffer.h */; };
-		B2FDFE071AE3213A00542DA0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FDFE061AE3213A00542DA0 /* main.cpp */; };
 		B2FDFE0B1AE3216300542DA0 /* libMyAMQP.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */; };
 /* End PBXBuildFile section */
 
@@ -191,6 +197,15 @@
 
 /* Begin PBXCopyFilesBuildPhase section */
 		B22E60D81AE798A800CB0B2F /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		B237D8681AEEEF1D008CAD0B /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -245,7 +260,6 @@
 		B22E60D21AE796D700CB0B2F /* MyReceiveTaskQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyReceiveTaskQueue.cpp; sourceTree = "<group>"; };
 		B22E60D31AE796D700CB0B2F /* MyReceiveTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyReceiveTaskQueue.h; sourceTree = "<group>"; };
 		B22E60DA1AE798A800CB0B2F /* TestTaskQueue */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestTaskQueue; sourceTree = BUILT_PRODUCTS_DIR; };
-		B22E60DC1AE798A800CB0B2F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B23007CC1AE1BCF4005BAB20 /* MyAMQPBufferedConnection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQPBufferedConnection.h; sourceTree = "<group>"; };
 		B23007D31AE1CDB9005BAB20 /* MyAMQPBufferedConnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPBufferedConnection.cpp; sourceTree = "<group>"; };
 		B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libMyAMQP.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -256,6 +270,15 @@
 		B235F8361AE9D78200B9D7A8 /* MyAMQPTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQPTypes.h; sourceTree = "<group>"; };
 		B236E3011AE5E5CB00B30017 /* MyLoginCredentials.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyLoginCredentials.h; sourceTree = "<group>"; };
 		B236E3041AE5EB8900B30017 /* MyAMQPRoutingInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAMQPRoutingInfo.h; sourceTree = "<group>"; };
+		B237D85D1AEEEA46008CAD0B /* MyCompletionCallbacks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyCompletionCallbacks.cpp; sourceTree = "<group>"; };
+		B237D85E1AEEEA46008CAD0B /* MyCompletionCallbacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCompletionCallbacks.h; sourceTree = "<group>"; };
+		B237D8611AEEEB36008CAD0B /* MyCompletionNotifier.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyCompletionNotifier.cpp; sourceTree = "<group>"; };
+		B237D8621AEEEB36008CAD0B /* MyCompletionNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyCompletionNotifier.h; sourceTree = "<group>"; };
+		B237D86A1AEEEF1D008CAD0B /* TestCompletionCallbacks */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestCompletionCallbacks; sourceTree = BUILT_PRODUCTS_DIR; };
+		B237D8711AEEF542008CAD0B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		B237D8751AEEFC55008CAD0B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		B237D8781AEEFCCE008CAD0B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		B237D87B1AEEFD53008CAD0B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libAMQPSTL.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		B23A095E1AE0A22F00533FFA /* AMQPSTL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMQPSTL.h; sourceTree = "<group>"; };
 		B23A09601AE0A22F00533FFA /* AMQPSTLPriv.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AMQPSTLPriv.h; sourceTree = "<group>"; };
@@ -403,12 +426,10 @@
 		B29989851AEB63B600435A5E /* MyStopwatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyStopwatch.cpp; sourceTree = "<group>"; };
 		B29989861AEB63B600435A5E /* MyStopwatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyStopwatch.h; sourceTree = "<group>"; };
 		B299898E1AEB74F500435A5E /* TestUtilities */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestUtilities; sourceTree = BUILT_PRODUCTS_DIR; };
-		B29989901AEB74F500435A5E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPClient.h; sourceTree = "<group>"; };
 		B2FDFDFC1AE30BEB00542DA0 /* MyAMQPCircularBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPCircularBuffer.cpp; sourceTree = "<group>"; };
 		B2FDFDFD1AE30BEB00542DA0 /* MyAMQPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPCircularBuffer.h; sourceTree = "<group>"; };
 		B2FDFE041AE3213A00542DA0 /* TestBuffer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestBuffer; sourceTree = BUILT_PRODUCTS_DIR; };
-		B2FDFE061AE3213A00542DA0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -425,6 +446,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2344B531AE0CB9C00B47CB2 /* libAMQPSTL.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B237D8671AEEEF1D008CAD0B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B237D8731AEEF58A008CAD0B /* libMyAMQP.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,7 +522,7 @@
 		B22E60DB1AE798A800CB0B2F /* TestTaskQueue */ = {
 			isa = PBXGroup;
 			children = (
-				B22E60DC1AE798A800CB0B2F /* main.cpp */,
+				B237D8781AEEFCCE008CAD0B /* main.cpp */,
 			);
 			path = TestTaskQueue;
 			sourceTree = "<group>";
@@ -502,6 +531,8 @@
 			isa = PBXGroup;
 			children = (
 				B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */,
+				B237D85D1AEEEA46008CAD0B /* MyCompletionCallbacks.cpp */,
+				B237D85E1AEEEA46008CAD0B /* MyCompletionCallbacks.h */,
 				B24A9E7D1AE738B500B8879B /* MyAMQPClientImpl.cpp */,
 				B24A9E7E1AE738B500B8879B /* MyAMQPClientImpl.h */,
 				B235F8361AE9D78200B9D7A8 /* MyAMQPTypes.h */,
@@ -520,8 +551,29 @@
 				B23007D31AE1CDB9005BAB20 /* MyAMQPBufferedConnection.cpp */,
 				B22E60D21AE796D700CB0B2F /* MyReceiveTaskQueue.cpp */,
 				B22E60D31AE796D700CB0B2F /* MyReceiveTaskQueue.h */,
+				B237D8611AEEEB36008CAD0B /* MyCompletionNotifier.cpp */,
+				B237D8621AEEEB36008CAD0B /* MyCompletionNotifier.h */,
 			);
 			path = MyAMQP;
+			sourceTree = "<group>";
+		};
+		B237D8651AEEEE37008CAD0B /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				B2FDFE051AE3213A00542DA0 /* TestBuffer */,
+				B22E60DB1AE798A800CB0B2F /* TestTaskQueue */,
+				B299898F1AEB74F500435A5E /* TestUtilities */,
+				B237D86B1AEEEF1D008CAD0B /* TestCompletionCallbacks */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		B237D86B1AEEEF1D008CAD0B /* TestCompletionCallbacks */ = {
+			isa = PBXGroup;
+			children = (
+				B237D8711AEEF542008CAD0B /* main.cpp */,
+			);
+			path = TestCompletionCallbacks;
 			sourceTree = "<group>";
 		};
 		B23A09481AE0A1F800533FFA = {
@@ -530,12 +582,10 @@
 				B23A095D1AE0A22F00533FFA /* AMQPSTL */,
 				B23A096D1AE0A77000533FFA /* Sender */,
 				B2344B491AE0CB7A00B47CB2 /* MyAMQP */,
-				B2FDFE051AE3213A00542DA0 /* TestBuffer */,
+				B237D8651AEEEE37008CAD0B /* Tests */,
 				B25CA1111AE6098300BDD034 /* Consumer */,
 				B25CA12B1AE614D200BDD034 /* MyNetworkConnection */,
-				B22E60DB1AE798A800CB0B2F /* TestTaskQueue */,
 				B299897B1AEB631400435A5E /* MyUtilities */,
-				B299898F1AEB74F500435A5E /* TestUtilities */,
 				B23A09521AE0A1F800533FFA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -552,6 +602,7 @@
 				B22E60DA1AE798A800CB0B2F /* TestTaskQueue */,
 				B299897A1AEB631400435A5E /* libMyUtilities.a */,
 				B299898E1AEB74F500435A5E /* TestUtilities */,
+				B237D86A1AEEEF1D008CAD0B /* TestCompletionCallbacks */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -750,7 +801,7 @@
 		B299898F1AEB74F500435A5E /* TestUtilities */ = {
 			isa = PBXGroup;
 			children = (
-				B29989901AEB74F500435A5E /* main.cpp */,
+				B237D8751AEEFC55008CAD0B /* main.cpp */,
 			);
 			path = TestUtilities;
 			sourceTree = "<group>";
@@ -758,7 +809,7 @@
 		B2FDFE051AE3213A00542DA0 /* TestBuffer */ = {
 			isa = PBXGroup;
 			children = (
-				B2FDFE061AE3213A00542DA0 /* main.cpp */,
+				B237D87B1AEEFD53008CAD0B /* main.cpp */,
 			);
 			path = TestBuffer;
 			sourceTree = "<group>";
@@ -775,8 +826,10 @@
 				B2344B4D1AE0CB7A00B47CB2 /* MyAMQPPriv.h in Headers */,
 				B24A9E801AE738B500B8879B /* MyAMQPClientImpl.h in Headers */,
 				B235801E1AE8692600DA1EC3 /* MyTaskProcessor.h in Headers */,
+				B237D8601AEEEA46008CAD0B /* MyCompletionCallbacks.h in Headers */,
 				B22E60D51AE796D700CB0B2F /* MyReceiveTaskQueue.h in Headers */,
 				B2FDFDFF1AE30BEB00542DA0 /* MyAMQPCircularBuffer.h in Headers */,
+				B237D8641AEEEB36008CAD0B /* MyCompletionNotifier.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -961,6 +1014,23 @@
 			productReference = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */;
 			productType = "com.apple.product-type.library.dynamic";
 		};
+		B237D8691AEEEF1D008CAD0B /* TestCompletionCallbacks */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B237D86E1AEEEF1D008CAD0B /* Build configuration list for PBXNativeTarget "TestCompletionCallbacks" */;
+			buildPhases = (
+				B237D8661AEEEF1D008CAD0B /* Sources */,
+				B237D8671AEEEF1D008CAD0B /* Frameworks */,
+				B237D8681AEEEF1D008CAD0B /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestCompletionCallbacks;
+			productName = TestCompletionCallbacks;
+			productReference = B237D86A1AEEEF1D008CAD0B /* TestCompletionCallbacks */;
+			productType = "com.apple.product-type.tool";
+		};
 		B23A095B1AE0A22F00533FFA /* AMQPSTL */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B23A09641AE0A22F00533FFA /* Build configuration list for PBXNativeTarget "AMQPSTL" */;
@@ -1096,6 +1166,9 @@
 					B2344B471AE0CB7A00B47CB2 = {
 						CreatedOnToolsVersion = 6.3;
 					};
+					B237D8691AEEEF1D008CAD0B = {
+						CreatedOnToolsVersion = 6.3;
+					};
 					B23A095B1AE0A22F00533FFA = {
 						CreatedOnToolsVersion = 6.3;
 					};
@@ -1140,6 +1213,7 @@
 				B22E60D91AE798A800CB0B2F /* TestTaskQueue */,
 				B29989791AEB631400435A5E /* MyUtilities */,
 				B299898D1AEB74F500435A5E /* TestUtilities */,
+				B237D8691AEEEF1D008CAD0B /* TestCompletionCallbacks */,
 			);
 		};
 /* End PBXProject section */
@@ -1149,8 +1223,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B237D87A1AEEFCD5008CAD0B /* main.cpp in Sources */,
 				B235801A1AE8575500DA1EC3 /* MyReceiveTaskQueue.cpp in Sources */,
-				B22E60DD1AE798A800CB0B2F /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1160,11 +1234,21 @@
 			files = (
 				B2FDFDFE1AE30BEB00542DA0 /* MyAMQPCircularBuffer.cpp in Sources */,
 				B23007D41AE1CDB9005BAB20 /* MyAMQPBufferedConnection.cpp in Sources */,
+				B237D85F1AEEEA46008CAD0B /* MyCompletionCallbacks.cpp in Sources */,
 				B22E60D41AE796D700CB0B2F /* MyReceiveTaskQueue.cpp in Sources */,
 				B2344B4F1AE0CB7A00B47CB2 /* MyAMQPClient.cp in Sources */,
 				B200A9631AE8904100ED0A27 /* MyAckProcessor.cpp in Sources */,
+				B237D8631AEEEB36008CAD0B /* MyCompletionNotifier.cpp in Sources */,
 				B235801D1AE8692600DA1EC3 /* MyTaskProcessor.cpp in Sources */,
 				B24A9E7F1AE738B500B8879B /* MyAMQPClientImpl.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B237D8661AEEEF1D008CAD0B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B237D8741AEEF73D008CAD0B /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1224,7 +1308,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B29989911AEB74F500435A5E /* main.cpp in Sources */,
+				B237D8771AEEFC73008CAD0B /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1232,7 +1316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2FDFE071AE3213A00542DA0 /* main.cpp in Sources */,
+				B237D87D1AEEFD5C008CAD0B /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1296,6 +1380,34 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/**";
+			};
+			name = Release;
+		};
+		B237D86F1AEEEF1D008CAD0B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B237D8701AEEEF1D008CAD0B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -1562,6 +1674,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		B237D86E1AEEEF1D008CAD0B /* Build configuration list for PBXNativeTarget "TestCompletionCallbacks" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B237D86F1AEEEF1D008CAD0B /* Debug */,
+				B237D8701AEEEF1D008CAD0B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		B23A094C1AE0A1F800533FFA /* Build configuration list for PBXProject "AMQP" */ = {
 			isa = XCConfigurationList;

@@ -83,7 +83,7 @@ int main(int argc, const char * argv[]) {
         
         results.clear();
         
-        processor.Stop();
+        processor.Stop(true);
         
         MyAckProcessor ackProcessor{};
         
@@ -123,7 +123,7 @@ int main(int argc, const char * argv[]) {
         sleep_for(seconds(2));
         
         // This tests a stoppping the processor while there are still messages in its queue.
-        ackProcessor.Stop();
+        ackProcessor.Stop(true);
         cout << "Goodbye world: " << endl;
     }
     catch (exception const& ex) {

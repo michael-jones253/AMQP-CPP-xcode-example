@@ -37,6 +37,9 @@ namespace MyAMQP {
         // Thread handle.
         std::future<int> _readLoopHandle;
         
+        // For protecting against calling back into wait on the same thread context.
+        std::thread::id _loopExitAssertionId;
+        
         // Whether the read loop should run or not.
         std::atomic<bool> _readShouldRun;
         

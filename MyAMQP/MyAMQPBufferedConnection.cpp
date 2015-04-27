@@ -21,6 +21,7 @@ namespace MyAMQP {
     _parseReceivedBytes{},
     _onError{},
     _readLoopHandle{},
+    _loopExitAssertionId{},
     _readShouldRun{},
     _amqpBuffer{}
     {
@@ -61,6 +62,7 @@ namespace MyAMQP {
                 ReadLoop();
             } catch (exception& ex) {
                 errCode = -1;
+                _loopExitAssertionId = this_thread::get_id();
                 _onError(ex.what());
             }
             
@@ -72,7 +74,11 @@ namespace MyAMQP {
     }
     
     void MyAMQPBufferedConnection::Close() {
-        if (!_readShouldRun) {
+        
+        // Must not be called from the context of the onError callback.
+        assert(this_thread::get_id() != _loopExitAssertionId);
+
+        if (!_readLoopHandle.valid()) {
             // Ensure robust to multiple closes.
             return;
         }

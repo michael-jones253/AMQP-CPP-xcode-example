@@ -7,6 +7,7 @@
 //
 
 #include "MyUnixNetworkConnection.h"
+#include "MyNetworkUtilities.h"
 #include <iostream>
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -15,6 +16,7 @@
 #include <unistd.h>
 
 using namespace MyAMQP;
+using namespace MyUtilities;
 using namespace std;
 
 MyUnixNetworkConnection::MyUnixNetworkConnection() :
@@ -30,7 +32,7 @@ void MyUnixNetworkConnection::Connect(string const& ipAddress, int port) {
     _socketFd = socket(AF_INET, SOCK_STREAM, 0);
     if (_socketFd < 0)
     {
-        string err = "sock you";
+        string err = "Socket for: " + ipAddress + ": " + MyNetworkUtilities::SysError();
         throw runtime_error(err);
     }
     
@@ -44,7 +46,7 @@ void MyUnixNetworkConnection::Connect(string const& ipAddress, int port) {
     
     if (ret < 0)
     {
-        string err = "you aton";
+        string err = yourInet + ": " + MyNetworkUtilities::SysError();
         throw runtime_error(err);
     }
     
@@ -52,8 +54,7 @@ void MyUnixNetworkConnection::Connect(string const& ipAddress, int port) {
     int con_ret = connect(_socketFd, (sockaddr*)&sin_you, sizeof(sin_you));
     if (con_ret < 0)
     {
-        perror(nullptr);
-        string err = "connect you";
+        string err = "connect: " + ipAddress + ": " + MyNetworkUtilities::SysError();
         throw runtime_error(err);
     }
     
@@ -68,9 +69,11 @@ void MyUnixNetworkConnection::Disconnect() {
 
 ssize_t MyUnixNetworkConnection::Read(char* buf, size_t len) {
     auto ret = recv(_socketFd, buf, len, 0);
-    if (ret < 0) {
+    if (ret <= 0) {
+        auto sysErr = ret == 0 ? string{"connection closed"} : MyNetworkUtilities::SysError();
+        auto errStr = "MyUnixNetworkConnection read failed: " + sysErr;
         if (_canRead) {
-            throw runtime_error("MyUnixNetworkConnection read failed");
+            throw runtime_error(errStr);
         }
         
         // Allow for clean exit if disconnected during read.
@@ -89,7 +92,8 @@ void MyUnixNetworkConnection::WriteAll(char const* buf, size_t len) {
         
         // FIX ME there are errno codes such as EINTR which need handling.
         if (ret < 0) {
-            throw runtime_error("MyUnixNetworkConnection write failed");
+            auto errStr = "MyUnixNetworkConnection write failed: " + MyNetworkUtilities::SysError();
+            throw runtime_error(errStr);
         }
         
         amountWritten -= ret;

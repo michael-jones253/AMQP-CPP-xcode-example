@@ -1,13 +1,13 @@
 //
-//  MyAMQPBuffer.h
+//  MyAMQPCircularBuffer.h
 //  AMQP
 //
 //  Created by Michael Jones on 19/04/2015.
 //  Copyright (c) 2015 Michael Jones. All rights reserved.
 //
 
-#ifndef __AMQP__MyAMQPBuffer__
-#define __AMQP__MyAMQPBuffer__
+#ifndef __AMQP__MyAMQPCircularBuffer__
+#define __AMQP__MyAMQPCircularBuffer__
 
 #include <stdio.h>
 #include <vector>
@@ -19,7 +19,7 @@
 
 namespace MyAMQP {
     // Circular buffer needed to meet the requirments of the Copernica connection handler abstraction.
-    class MyAMQPBuffer {
+    class MyAMQPCircularBuffer {
         std::vector<char> _buffer;
         
         // Consuming from the front moves the start index forward.
@@ -29,7 +29,7 @@ namespace MyAMQP {
         ssize_t _count;
         
     public:
-        MyAMQPBuffer();
+        MyAMQPCircularBuffer();
         
         // Get the start of the un-consumed storage i.e. not the same thing as the start of the
         // underlying storage.
@@ -52,6 +52,6 @@ namespace MyAMQP {
     };
 }
 #pragma GCC visibility pop
-#endif /* defined(__AMQP__MyAMQPBuffer__) */
+#endif /* defined(__AMQP__MyAMQPCircularBuffer__) */
 
 

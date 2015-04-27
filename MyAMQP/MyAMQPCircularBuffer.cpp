@@ -1,12 +1,12 @@
 //
-//  MyAMQPBuffer.cpp
+//  MyAMQPCircularBuffer.cpp
 //  AMQP
 //
 //  Created by Michael Jones on 19/04/2015.
 //  Copyright (c) 2015 Michael Jones. All rights reserved.
 //
 
-#include "MyAMQPBuffer.h"
+#include "MyAMQPCircularBuffer.h"
 #include <exception>
 #include <assert.h>
 
@@ -14,14 +14,14 @@ using namespace std;
 
 namespace MyAMQP {
     
-    MyAMQPBuffer::MyAMQPBuffer() :
+    MyAMQPCircularBuffer::MyAMQPCircularBuffer() :
     _startIndex{},
     _buffer{},
     _count{} {
         
     }
     
-    char const * MyAMQPBuffer::Get() const {
+    char const * MyAMQPCircularBuffer::Get() const {
         return _buffer.data() + _startIndex;
     }
     
@@ -32,12 +32,12 @@ namespace MyAMQP {
     // Until that catch up happens this buffer will keep growing when data is appended on the end. However
     // it is assumed that the Copernica connection handler will always consume from the front to prevent it
     // growing indefinitely.
-    void MyAMQPBuffer::AppendBack(std::function<ssize_t(char*, ssize_t)>const & readFn, ssize_t maxLen) {
+    void MyAMQPCircularBuffer::AppendBack(std::function<ssize_t(char*, ssize_t)>const & readFn, ssize_t maxLen) {
         auto storageRequired = _startIndex + _count + maxLen;
         
         if (storageRequired > _buffer.max_size()) {
             // REVIEW: might want to provide a smaller limit.
-            throw runtime_error("MyAMQPBuffer: exceeded absolute maximum limit");
+            throw runtime_error("MyAMQPCircularBuffer: exceeded absolute maximum limit");
         }
 
         if (maxLen > AvailableForAppend()) {
@@ -53,17 +53,17 @@ namespace MyAMQP {
         _count += bytes;
     }
 
-    ssize_t MyAMQPBuffer::AvailableForAppend() const {
+    ssize_t MyAMQPCircularBuffer::AvailableForAppend() const {
         return _buffer.size() - (_startIndex + _count);
     }
     
-    ssize_t MyAMQPBuffer::Count() const {
+    ssize_t MyAMQPCircularBuffer::Count() const {
         return _count;
     }
     
-    void MyAMQPBuffer::ConsumeFront(ssize_t bytes) {
+    void MyAMQPCircularBuffer::ConsumeFront(ssize_t bytes) {
         if (bytes > _count) {
-            throw runtime_error("MyAMQPBuffer: Consume exceeds available");
+            throw runtime_error("MyAMQPCircularBuffer: Consume exceeds available");
         }
         
         _startIndex += bytes;

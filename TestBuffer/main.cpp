@@ -9,7 +9,7 @@
 #include <iostream>
 
 #include "AMQPSTL.h"
-#include "MyAMQPBuffer.h"
+#include "MyAMQPCircularBuffer.h"
 #include "string.h"
 #include <assert.h>
 #include <string>
@@ -28,7 +28,7 @@ int main(int argc, const char * argv[]) {
         inst->HelloWorld("Hi");
         
         
-        MyAMQPBuffer myAmqBuffer;
+        MyAMQPCircularBuffer myAmqBuffer;
         
         int const ParsableFrameSize = 99;
         

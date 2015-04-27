@@ -171,8 +171,8 @@
 		B29989951AEB750A00435A5E /* libMyUtilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B299897A1AEB631400435A5E /* libMyUtilities.a */; };
 		B2BE4F401AE358D5009B8194 /* libAMQPSTL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */; };
 		B2BE4F421AE35ABB009B8194 /* MyAMQPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */; };
-		B2FDFDFE1AE30BEB00542DA0 /* MyAMQPBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FDFDFC1AE30BEB00542DA0 /* MyAMQPBuffer.cpp */; };
-		B2FDFDFF1AE30BEB00542DA0 /* MyAMQPBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = B2FDFDFD1AE30BEB00542DA0 /* MyAMQPBuffer.h */; };
+		B2FDFDFE1AE30BEB00542DA0 /* MyAMQPCircularBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FDFDFC1AE30BEB00542DA0 /* MyAMQPCircularBuffer.cpp */; };
+		B2FDFDFF1AE30BEB00542DA0 /* MyAMQPCircularBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = B2FDFDFD1AE30BEB00542DA0 /* MyAMQPCircularBuffer.h */; };
 		B2FDFE071AE3213A00542DA0 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FDFE061AE3213A00542DA0 /* main.cpp */; };
 		B2FDFE0B1AE3216300542DA0 /* libMyAMQP.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */; };
 /* End PBXBuildFile section */
@@ -401,8 +401,8 @@
 		B299898E1AEB74F500435A5E /* TestUtilities */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestUtilities; sourceTree = BUILT_PRODUCTS_DIR; };
 		B29989901AEB74F500435A5E /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPClient.h; sourceTree = "<group>"; };
-		B2FDFDFC1AE30BEB00542DA0 /* MyAMQPBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPBuffer.cpp; sourceTree = "<group>"; };
-		B2FDFDFD1AE30BEB00542DA0 /* MyAMQPBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPBuffer.h; sourceTree = "<group>"; };
+		B2FDFDFC1AE30BEB00542DA0 /* MyAMQPCircularBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPCircularBuffer.cpp; sourceTree = "<group>"; };
+		B2FDFDFD1AE30BEB00542DA0 /* MyAMQPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPCircularBuffer.h; sourceTree = "<group>"; };
 		B2FDFE041AE3213A00542DA0 /* TestBuffer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestBuffer; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2FDFE061AE3213A00542DA0 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -507,8 +507,8 @@
 				B200A9621AE8904100ED0A27 /* MyAckProcessor.h */,
 				B236E3011AE5E5CB00B30017 /* MyLoginCredentials.h */,
 				B236E3041AE5EB8900B30017 /* MyAMQPRoutingInfo.h */,
-				B2FDFDFC1AE30BEB00542DA0 /* MyAMQPBuffer.cpp */,
-				B2FDFDFD1AE30BEB00542DA0 /* MyAMQPBuffer.h */,
+				B2FDFDFC1AE30BEB00542DA0 /* MyAMQPCircularBuffer.cpp */,
+				B2FDFDFD1AE30BEB00542DA0 /* MyAMQPCircularBuffer.h */,
 				B2344B4C1AE0CB7A00B47CB2 /* MyAMQPPriv.h */,
 				B2344B4E1AE0CB7A00B47CB2 /* MyAMQPClient.cp */,
 				B23007CC1AE1BCF4005BAB20 /* MyAMQPBufferedConnection.h */,
@@ -770,7 +770,7 @@
 				B24A9E801AE738B500B8879B /* MyAMQPClientImpl.h in Headers */,
 				B235801E1AE8692600DA1EC3 /* MyTaskProcessor.h in Headers */,
 				B22E60D51AE796D700CB0B2F /* MyReceiveTaskQueue.h in Headers */,
-				B2FDFDFF1AE30BEB00542DA0 /* MyAMQPBuffer.h in Headers */,
+				B2FDFDFF1AE30BEB00542DA0 /* MyAMQPCircularBuffer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1151,7 +1151,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2FDFDFE1AE30BEB00542DA0 /* MyAMQPBuffer.cpp in Sources */,
+				B2FDFDFE1AE30BEB00542DA0 /* MyAMQPCircularBuffer.cpp in Sources */,
 				B23007D41AE1CDB9005BAB20 /* MyAMQPBufferedConnection.cpp in Sources */,
 				B22E60D41AE796D700CB0B2F /* MyReceiveTaskQueue.cpp in Sources */,
 				B2344B4F1AE0CB7A00B47CB2 /* MyAMQPClient.cp in Sources */,
@@ -1607,6 +1607,7 @@
 				B29989841AEB631400435A5E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B29989921AEB74F500435A5E /* Build configuration list for PBXNativeTarget "TestUtilities" */ = {
 			isa = XCConfigurationList;
@@ -1615,6 +1616,7 @@
 				B29989941AEB74F500435A5E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B2FDFE081AE3213A00542DA0 /* Build configuration list for PBXNativeTarget "TestBuffer" */ = {
 			isa = XCConfigurationList;

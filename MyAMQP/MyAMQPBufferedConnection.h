@@ -10,7 +10,7 @@
 #define AMQP_MyAMQPBufferedConnection_h
 
 #include "MyNetworkConnection.h"
-#include "MyAMQPBuffer.h"
+#include "MyAMQPCircularBuffer.h"
 #include <functional>
 #include <string>
 #include <future>
@@ -41,7 +41,7 @@ namespace MyAMQP {
         std::atomic<bool> _readShouldRun;
         
         // Special buffer for handling the way the Copernica open source library works with buffers and parsing.
-        MyAMQPBuffer _amqpBuffer;
+        MyAMQPCircularBuffer _amqpBuffer;
         
     public:
         

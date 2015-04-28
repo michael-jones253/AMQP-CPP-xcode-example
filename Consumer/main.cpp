@@ -112,11 +112,15 @@ int main(int argc, const char * argv[]) {
         
         int messageCount{};
         bool breakWait{};
+        bool isEndMessage{};
         
         auto errorHandler = [&](string err) {
             cout << "Client error: " << err << endl;
-            breakWait = true;
-            benchmarkCondition.notify_one();            
+            {
+                lock_guard<mutex> guard(benchmarkMutex);
+                breakWait = true;
+            }
+            benchmarkCondition.notify_one();
         };
         
         MyAMQPClient myAmqp{move(netConnection)};
@@ -128,38 +132,45 @@ int main(int argc, const char * argv[]) {
         
         auto handler = [&](string const & message, int64_t tag, bool redelivered) {
             // Atomic recording of message count and elapsed time.
-            lock_guard<mutex> guard(benchmarkMutex);
-            auto isEndMessage = strcasecmp(message.c_str(), "end") == 0;
-            
-            if (!isEndMessage && !benchmarkStopwatch.IsRunning()) {
-                benchmarkStopwatch.Start();
+            {
+                lock_guard<mutex> guard(benchmarkMutex);
+                isEndMessage = strcasecmp(message.c_str(), "end") == 0;
+                
+                if (!isEndMessage && !benchmarkStopwatch.IsRunning()) {
+                    benchmarkStopwatch.Start();
+                }
+                
+                if (strcasecmp(message.c_str(), "goodbye") == 0) {
+                    breakWait = true;
+                }
+                
+                cout << message << ", tag: " << tag << ", redelivered: " << redelivered << endl;
+                ++messageCount;
             }
-            
-            cout << message << ", tag: " << tag << ", redelivered: " << redelivered << endl;
-            ++messageCount;
             
             if (isEndMessage && benchmarkStopwatch.IsRunning()) {
                 benchmarkCondition.notify_one();
             }
             
-            if (strcasecmp(message.c_str(), "goodbye") == 0) {
-                breakWait = true;
+            if (breakWait) {
                 benchmarkCondition.notify_one();
             }
+            
         };
         
         myAmqp.SubscribeToReceive(routingInfo.QueueName, handler, threaded);
         
         while (!breakWait) {
             unique_lock<mutex> lock(benchmarkMutex);
-            benchmarkCondition.wait(lock, [&]{ return benchmarkStopwatch.IsRunning() || breakWait; });
-
+            benchmarkCondition.wait(lock, [&]{ return (isEndMessage && benchmarkStopwatch.IsRunning()) || breakWait; });
+            
             auto elapsedMs = benchmarkStopwatch.GetElapsedMilliseconds();
             stringstream messageStr;
             messageStr << messageCount << " messages received in: " << elapsedMs.count() << " ms";
             
             cout << messageStr.str() << endl;
             messageCount = 0;
+            isEndMessage = false;
             benchmarkStopwatch.Stop();
         }
         

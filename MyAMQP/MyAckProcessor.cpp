@@ -120,6 +120,7 @@ namespace MyAMQP {
                 _ackHandler(tag);
                 ++flushed;
             } catch (exception const& ex) {
+                // FIX ME - if the exception was a network write then take the client down.
                 cerr << "MyAckProcessor Flush: " << ex.what() << endl;
             }
         }

@@ -45,9 +45,13 @@ namespace MyAMQP {
 
         // Prevent a race with queue creation before underlying channel is created.
         // Don't wait forever if channel callback never happens.
-        _conditional.wait_for(lock, CopernicaCompletionTimeout , [this]() {
+        auto ok = _conditional.wait_for(lock, CopernicaCompletionTimeout , [this]() {
                     return _channelOpen || _channelInError;
                 });
+        
+        if (!ok) {
+            throw runtime_error("Channel open timed out");
+        }
         
         if (_channelInError) {
             throw runtime_error("Hello Channel not created");
@@ -70,7 +74,10 @@ namespace MyAMQP {
         _channel->bindQueue(routingInfo.ExchangeName, routingInfo.QueueName, routingInfo.Key).onSuccess([this]() {
             std::cout << "queue bound to exchange" << std::endl;
             // If the bind worked then we can assume that the above operations of exchange and queue declare worked.
-            _queueReady = true;
+            {
+                lock_guard<mutex> guard(_mutex);
+                _queueReady = true;
+            }
             _conditional.notify_one();
         });
         
@@ -160,7 +167,10 @@ namespace MyAMQP {
         
         auto onChannelOpen = [this]() {
             cout << "Channel open" << endl;
-            _channelOpen = true;
+            {
+                lock_guard<mutex> guard(_mutex);
+                _channelOpen = true;
+            }
             
             // No need to notify under lock.
             _conditional.notify_one();
@@ -168,8 +178,11 @@ namespace MyAMQP {
         
         auto onChannelError = [this](char const* errMsg) {
             cout << "Channel error: " << errMsg << endl;
-            _channelOpen = false;
-            _channelInError = true;
+            {
+                lock_guard<mutex> guard(_mutex);
+                _channelOpen = false;
+                _channelInError = true;
+            }
             
             // No need to notify under lock.
             _conditional.notify_one();
@@ -216,7 +229,11 @@ namespace MyAMQP {
 
         auto finalize = [&](){
             cout << "channel finalized" << endl;
-            _channelFinalized = true;
+            {
+                // Good coding standard, but mutex not necessary for single bool that is not being tested.
+                lock_guard<mutex> guard(_mutex);
+                _channelFinalized = true;
+            }
             _conditional.notify_all();
         };
         
@@ -224,7 +241,10 @@ namespace MyAMQP {
             _channel->close().onFinalize(finalize);
             
             unique_lock<mutex> lock(_mutex);            
-            _conditional.wait_for(lock, CopernicaCompletionTimeout, [&]() { return _channelFinalized; });
+            auto ok = _conditional.wait_for(lock, CopernicaCompletionTimeout, [&]() { return _channelFinalized; });
+            if (!ok) {
+                cerr << "Channel finalize timed out" << endl;
+            }
         }
         
         cout << "Client closing" << endl;
@@ -254,7 +274,7 @@ namespace MyAMQP {
     void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {
         _channel->ack(deliveryTag);
         
-        // FIX ME.
+        // FIX ME. Simulating delay on ack send.
         this_thread::sleep_for(milliseconds(1));
         // cout << "Acked tag: " << deliveryTag << endl;
     }
@@ -268,7 +288,7 @@ namespace MyAMQP {
                 // This model assumes that the invoking of the handler needs to be done serially.
                 userHandler(message.message(), deliveryTag, redelivered);
                 
-                // FIX ME.
+                // FIX ME. simulating delay on ack send.
                 this_thread::sleep_for(milliseconds(1));
 
                 // Acks are done from the context of this callback, which means they could potentially block on a

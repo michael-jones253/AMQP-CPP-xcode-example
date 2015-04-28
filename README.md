@@ -13,7 +13,7 @@ Threading/performance considerations. The receiver app has command line options 
 
 The impl or hidden implementation - implementation include files are confined to the impl and hidden from the wrapper class by use of a forward declaration for the impl. This reduces application dependencies, speeds application compilation and it is easy to make the wrapper object movable. See MyAMQPClientImpl and note that all the non 'impl' classes and include files are hidden from the application in this impl.
 
-Smart pointers - std::unique_ptr is the first choice for efficiency and clear ownership reasons. Design based on the alternative std::shared_ptr can sometimes become a tangled model where ownership/responsibility is not clear to the maintainer and destruction order can be difficult to determine. However std::shared_ptr does have its uses.
+Smart pointers - std::unique_ptr is the first choice for efficiency and clear ownership reasons. Design based on the alternative std::shared_ptr can sometimes become a tangled model where ownership/responsibility is not clear to the maintainer and destruction order can be difficult to determine. However std::shared_ptr does have its uses. Usage of shared_ptr and weak_ptr is demonstrated in the MyCallbacksNotifier class which uses weak_ptr to model the situation where the ownership of the callbacks is outside of the client and temporary ownership for notification is required by the client.
 
 The thread safe queue. This is a classic real time design pattern and allows a module/thread to have sole control over certain resources thus avoiding sharing resources across threads and ending up with convoluted deadlock prone code.
 

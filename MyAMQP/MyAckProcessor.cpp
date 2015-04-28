@@ -61,6 +61,12 @@ namespace MyAMQP {
     }
     
     void MyAckProcessor::Push(future<int64_t>&& task) {
+        assert(_shouldRun);
+        
+        if (!_shouldRun) {
+            return;
+        }
+        
         _taskQueue.Push(move(task));
     }
     
@@ -83,20 +89,8 @@ namespace MyAMQP {
             
             // The get might throw, if the user handler threw. In this case we do not ack.
             try {
-                while (_shouldRun) {
-                    // The get() may wait forever if the task never executed, so we protect against that
-                    // in the shutdown case where the task processor is closed without flushing (executing) all
-                    // of its packaged_task queue.
-                    auto ret = tagResult.wait_for(seconds(1));
-                    
-                    if (ret == future_status::ready) {
-                        auto tag = tagResult.get();
-                        _ackHandler(tag);
-                        
-                        // Move on to next future.
-                        break;
-                    }
-                }
+                auto tag = tagResult.get();
+                _ackHandler(tag);
             } catch (exception const& ex) {
                 cerr << "MyAckProcessor: " << ex.what() << endl;
             }
@@ -108,13 +102,26 @@ namespace MyAMQP {
     void MyAckProcessor::Flush() {
         int flushed{};
         while (!_taskQueue.Empty()) {
-            future<int64_t> tagResult{};
-            _taskQueue.Pop(tagResult);
-            
-            auto tag = tagResult.get();
-            
-            _ackHandler(tag);
-            ++flushed;
+            try {
+                future<int64_t> tagResult{};
+                _taskQueue.Pop(tagResult);
+                
+                assert(tagResult.valid());
+                auto status = tagResult.wait_for(seconds(5));
+                if (status == future_status::timeout) {
+                    // Review: this shouldn't be needed.
+                    assert(false);
+                    cerr << "Not expecting ack flush to timeout" << endl;
+                    break;
+                }
+                
+                auto tag = tagResult.get();
+                
+                _ackHandler(tag);
+                ++flushed;
+            } catch (exception const& ex) {
+                cerr << "MyAckProcessor Flush: " << ex.what() << endl;
+            }
         }
         
         cout << "Flushed: " << flushed << " acks" << endl;

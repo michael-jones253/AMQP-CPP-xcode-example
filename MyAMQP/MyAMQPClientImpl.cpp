@@ -253,6 +253,9 @@ namespace MyAMQP {
     
     void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {
         _channel->ack(deliveryTag);
+        
+        // FIX ME.
+        this_thread::sleep_for(milliseconds(1));
         // cout << "Acked tag: " << deliveryTag << endl;
     }
     
@@ -265,6 +268,9 @@ namespace MyAMQP {
                 // This model assumes that the invoking of the handler needs to be done serially.
                 userHandler(message.message(), deliveryTag, redelivered);
                 
+                // FIX ME.
+                this_thread::sleep_for(milliseconds(1));
+
                 // Acks are done from the context of this callback, which means they could potentially block on a
                 // network send.
                 _channel->ack(deliveryTag);
@@ -295,7 +301,11 @@ namespace MyAMQP {
                 // The Copernica library invokes this callback in the context for the socket read thread.
                 // So rather than block this thread we package the handler to be invoked by another task.
                 // This model assumes that the invoking of the handler needs to be serialised.
-                _receiveTaskProcessor.Push(move(deliveryTask));
+                auto accepted = _receiveTaskProcessor.Push(move(deliveryTask));
+                
+                if (!accepted) {
+                    return;
+                }
                 
                 // Acks are done in another thread, to avoid the user handler blocking on a network send.
                 // This means that it is possible that handlers are invoked and their corresponding acks

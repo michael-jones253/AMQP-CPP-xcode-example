@@ -10,13 +10,15 @@
 #include <sstream>
 #include <memory>
 #include "MyAMQPClient.h"
-#include "../MyNetworkConnection/MyUnixNetworkConnection.h"
+#include "MyStopwatch.h"
+#include "MyUnixNetworkConnection.h"
 
 #include <thread>
 #include <chrono>
 #include <getopt.h>
 
 using namespace MyAMQP;
+using namespace MyUtilities;
 using namespace std;
 using namespace std::this_thread;
 using namespace std::chrono;
@@ -34,7 +36,8 @@ int main(int argc, const char * argv[]) {
             { "count",   required_argument,      nullptr,           'c' },
             { "receivers", required_argument,      nullptr,         'r' },
             { "sleep",   required_argument,      nullptr,           's' },
-            { "bye",     required_argument,            nullptr,     'b'},
+            { "bye",     no_argument,            nullptr,     'b'},
+            { "noflush", no_argument,            nullptr,           'N'},
             { NULL,    0,                 nullptr,           0 }
         };
         
@@ -48,6 +51,7 @@ int main(int argc, const char * argv[]) {
         int messageCount{100};
         int sleepSeconds{};
         bool sendGoodbyeMessage{};
+        bool doFlush{true};
         
         // We send multiple end messages, because each end message is only processed by one consumer
         // sending of multiple end messages means that multiple consumers can receive an end message.
@@ -94,6 +98,10 @@ int main(int argc, const char * argv[]) {
                     sendGoodbyeMessage = true;
                     break;
                     
+                case 'N':
+                    doFlush = false;
+                    break;
+                    
                 case -1:
                     break;
                     
@@ -117,7 +125,8 @@ int main(int argc, const char * argv[]) {
         
         myAmqp.CreateHelloQueue(exchangeType, routingInfo);
         
-        auto startTime = system_clock::now();
+        MyStopwatch benchmarkStopwatch{};
+        benchmarkStopwatch.Start();
         
         for (int count = 0; count < messageCount; count++) {
             myAmqp.SendHelloWorld(routingInfo.ExchangeName, routingInfo.Key, "sawasdee krup");
@@ -135,12 +144,11 @@ int main(int argc, const char * argv[]) {
 
         // Close before capturing elapsed time, because the close involves flushing of messages out
         // of the Copernica library.
-        myAmqp.Close(true);
+        myAmqp.Close(doFlush);
         
         // Benchmark if sending out one after another.
         if (sleepSeconds == 0) {
-            auto elapsed = system_clock::now() - startTime;
-            auto elapsedMs = duration_cast<milliseconds>(elapsed);
+            auto elapsedMs = benchmarkStopwatch.GetElapsedMilliseconds();
             stringstream messageStr;
             messageStr << messageCount << " messages sent in: " << elapsedMs.count() << " ms";
             

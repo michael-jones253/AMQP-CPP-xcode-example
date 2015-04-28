@@ -32,7 +32,7 @@ int main(int argc, const char * argv[]) {
             { "fanout",  no_argument,            nullptr,           'f'},
             { "topic",   no_argument,            nullptr,           't'},
             { "inline",   no_argument,            nullptr,          'i'},
-            { "flush",    no_argument,            nullptr,          'F'},
+            { "noflush",    no_argument,            nullptr,        'N'},
             { "exchange",     required_argument,            nullptr,'e'},
             { "key",     required_argument,            nullptr,     'k'},
             { "queue",     required_argument,            nullptr,   'q'},
@@ -49,7 +49,7 @@ int main(int argc, const char * argv[]) {
         
         int sleepSeconds{};
         bool threaded{true};
-        bool flushOnClose{};
+        bool flushOnClose{true};
         
         auto const usageStr = string("Usage: [--fanout | --topic {default direct}] [--count <integer>] [--sleep <seconds>]");
         
@@ -70,8 +70,8 @@ int main(int argc, const char * argv[]) {
                     threaded = false;
                     break;
                     
-                case 'F':
-                    flushOnClose = true;
+                case 'N':
+                    flushOnClose = false;
                     break;
                     
                 case 'e':

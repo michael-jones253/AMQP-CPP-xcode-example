@@ -84,14 +84,14 @@ namespace MyAMQP {
         }
         
         _readShouldRun = false;
+        
+        Disconnect();
 
         // Wait for async task to exit. (Equivalent of thread join).
         auto exitCode = _readLoopHandle.get();
         if (exitCode < 0) {
             cerr << "Read loop exited with error code" << endl;
         }
-
-        Disconnect();
         
         cout << "Maximum buffered: " << _amqpBuffer.Buffered()  << endl;
     }

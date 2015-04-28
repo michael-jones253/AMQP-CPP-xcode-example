@@ -54,8 +54,14 @@ namespace MyAMQP {
         }
     }
     
-    void MyTaskProcessor::Push(std::packaged_task<int64_t(void)>&& task) {
+    bool MyTaskProcessor::Push(std::packaged_task<int64_t(void)>&& task) {
+        if (!_shouldRun) {
+            // Discard further messages once stop is called.
+            return false;
+        }
+        
         _taskQueue.Push(move(task));
+        return true;
     }
     
     int MyTaskProcessor::ProcessLoop() {

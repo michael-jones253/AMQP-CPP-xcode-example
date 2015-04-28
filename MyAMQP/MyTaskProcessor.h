@@ -32,7 +32,7 @@ namespace MyAMQP {
         void Start();
         void Stop(bool flush);
         
-        void Push(std::packaged_task<int64_t(void)>&& task);
+        bool Push(std::packaged_task<int64_t(void)>&& task);
         
     private:
         int ProcessLoop();

@@ -106,19 +106,26 @@ int main(int argc, const char * argv[]) {
         
         auto netConnection = unique_ptr<MyUnixNetworkConnection>(new MyUnixNetworkConnection());
         
-        MyAMQPClient myAmqp{move(netConnection)};
-        
-        myAmqp.Open(loginInfo);
-        
-        myAmqp.CreateHelloQueue(exchangeType, routingInfo);
-        
         condition_variable benchmarkCondition{};
         mutex benchmarkMutex{};
         MyStopwatch benchmarkStopwatch{};
         
         int messageCount{};
         bool breakWait{};
-
+        
+        auto errorHandler = [&](string err) {
+            cout << "Client error: " << err << endl;
+            breakWait = true;
+            benchmarkCondition.notify_one();            
+        };
+        
+        MyAMQPClient myAmqp{move(netConnection)};
+        
+        auto completionHandlers = myAmqp.Open(loginInfo);
+        completionHandlers.SubscribeToError(errorHandler);
+        
+        myAmqp.CreateHelloQueue(exchangeType, routingInfo);
+        
         auto handler = [&](string const & message, int64_t tag, bool redelivered) {
             // Atomic recording of message count and elapsed time.
             lock_guard<mutex> guard(benchmarkMutex);

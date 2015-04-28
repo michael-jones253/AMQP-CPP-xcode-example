@@ -21,6 +21,10 @@ using namespace std::chrono;
 
 // Anonymous namespace.
 namespace  {
+    // The Copernica library does not guarantee delivery of completion and error callbacks, so we protect against
+    // waiting forever for these to occur.
+    auto const CopernicaCompletionTimeout = seconds(5);
+    
     int64_t deliverMessage(MyAMQP::MyMessageCallback const &userHandler,
                            string const& message,
                            uint64_t tag,
@@ -39,11 +43,9 @@ namespace MyAMQP {
     void MyAMQPClientImpl::CreateHelloQueue(ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo) {
         unique_lock<mutex> lock(_mutex);
 
-        auto const timeout = seconds(5);
-        
         // Prevent a race with queue creation before underlying channel is created.
         // Don't wait forever if channel callback never happens.
-        _conditional.wait_for(lock,timeout , [this]() {
+        _conditional.wait_for(lock, CopernicaCompletionTimeout , [this]() {
                     return _channelOpen || _channelInError;
                 });
         
@@ -76,7 +78,7 @@ namespace MyAMQP {
         cout << "waiting for queue" << endl;
         
         // Don't wait forever if queue not declared.
-        auto status = _conditional.wait_for(lock, timeout, [this]()->bool { return _queueReady; });
+        auto status = _conditional.wait_for(lock, CopernicaCompletionTimeout, [this]()->bool { return _queueReady; });
         
         if (!status) {
             throw runtime_error("Queue bind timed out");
@@ -120,7 +122,8 @@ namespace MyAMQP {
     _channelInError{},
     _queueReady{},
     _receiveTaskProcessor{},
-    _channelFinalized{}
+    _channelFinalized{},
+    _completionNotifier{}
     {
         auto parseCallback = bind(&MyAMQPClientImpl::OnNetworkRead, this, placeholders::_1, placeholders::_2);
         auto onErrorCallback = bind(&MyAMQPClientImpl::OnNetworkReadError, this, placeholders::_1);
@@ -187,7 +190,7 @@ namespace MyAMQP {
         cout << "MyAMQPClient onClosed" << endl;
     }
     
-    void MyAMQPClientImpl::Open(MyLoginCredentials const& loginInfo) {
+    MyCompletionCallbacks MyAMQPClientImpl::Open(MyLoginCredentials const& loginInfo) {
         // A common problem with components that need to be opened/closed or stopped/started is not being
         // robust to multiple opens/closes. The pattern where we always close before opening overcomes this.
         Close(false);
@@ -199,6 +202,7 @@ namespace MyAMQP {
                                                                                         loginInfo.Password), "/"));
         _amqpConnection->login();
         
+        return _completionNotifier.CreateCompletionCallbacks();        
     }
     
     void MyAMQPClientImpl::Close(bool flush) {
@@ -216,11 +220,11 @@ namespace MyAMQP {
             _conditional.notify_all();
         };
         
-        if (_channel) {
+        if (_channel && flush) {
             _channel->close().onFinalize(finalize);
             
             unique_lock<mutex> lock(_mutex);            
-            _conditional.wait(lock, [&]() { return _channelFinalized; });
+            _conditional.wait_for(lock, CopernicaCompletionTimeout, [&]() { return _channelFinalized; });
         }
         
         cout << "Client closing" << endl;
@@ -243,8 +247,8 @@ namespace MyAMQP {
     }
     
     void MyAMQPClientImpl::OnNetworkReadError(std::string const& errorStr){
-        cout << "MyAMQPClient read error: " << errorStr << endl;
-        _bufferedConnection.Close();
+        string err = "MyAMQPClient read error: " + errorStr;
+        _completionNotifier.NotifyError(err);
     }
     
     void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {
@@ -309,6 +313,4 @@ namespace MyAMQP {
         
         return receiveHandler;
     }
-
-
 }

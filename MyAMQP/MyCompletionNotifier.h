@@ -25,7 +25,7 @@ namespace MyAMQP {
         
     public:
         // Factory method to create callbacks for use by subscribers.
-        MyCompletionCallbacks CreateSharedCallbacks();
+        MyCompletionCallbacks CreateCompletionCallbacks();
         
         void NotifyError(std::string const& error) const;
         void NotifyExit(int exitCode) const;

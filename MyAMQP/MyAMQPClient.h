@@ -17,6 +17,7 @@
 #include "MyNetworkConnection.h"
 #include "MyLoginCredentials.h"
 #include "MyAMQPRoutingInfo.h"
+#include "MyCompletionCallbacks.h"
 
 #include <string>
 
@@ -45,7 +46,7 @@ namespace MyAMQP {
         // Class is final, virtual not needed.
         ~MyAMQPClient();
         
-        void Open(MyLoginCredentials const& loginInfo);
+        MyCompletionCallbacks Open(MyLoginCredentials const& loginInfo);
         
         void Close(bool flush);
         

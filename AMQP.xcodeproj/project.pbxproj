@@ -31,6 +31,7 @@
 		B237D8771AEEFC73008CAD0B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B237D8751AEEFC55008CAD0B /* main.cpp */; };
 		B237D87A1AEEFCD5008CAD0B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B237D8781AEEFCCE008CAD0B /* main.cpp */; };
 		B237D87D1AEEFD5C008CAD0B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B237D87B1AEEFD53008CAD0B /* main.cpp */; };
+		B237D87E1AEF0C97008CAD0B /* libMyUtilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B299897A1AEB631400435A5E /* libMyUtilities.a */; };
 		B23A095F1AE0A22F00533FFA /* AMQPSTL.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A095E1AE0A22F00533FFA /* AMQPSTL.h */; };
 		B23A09611AE0A22F00533FFA /* AMQPSTLPriv.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A09601AE0A22F00533FFA /* AMQPSTLPriv.h */; };
 		B23A09631AE0A22F00533FFA /* AMQPSTL.cp in Sources */ = {isa = PBXBuildFile; fileRef = B23A09621AE0A22F00533FFA /* AMQPSTL.cp */; };
@@ -468,6 +469,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B237D87E1AEF0C97008CAD0B /* libMyUtilities.a in Frameworks */,
 				B25CA1381AE61AF700BDD034 /* libMyNetworkConnection.a in Frameworks */,
 				B2344B541AE0CCE100B47CB2 /* libMyAMQP.dylib in Frameworks */,
 				B23A09731AE0A86500533FFA /* libAMQPSTL.dylib in Frameworks */,

@@ -13,7 +13,7 @@ using namespace std;
 namespace MyAMQP {
     
     
-    MyCompletionCallbacks MyCompletionNotifier::CreateSharedCallbacks() {
+    MyCompletionCallbacks MyCompletionNotifier::CreateCompletionCallbacks() {
         _weakCallbacks = make_shared<MyWeakCallbacks>();
         
         return MyCompletionCallbacks(_weakCallbacks);

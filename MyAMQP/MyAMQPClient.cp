@@ -45,8 +45,8 @@ namespace MyAMQP {
     MyAMQPClient::~MyAMQPClient() {
     }
     
-    void MyAMQPClient::Open(MyLoginCredentials const& loginInfo) {
-        _impl->Open(loginInfo);
+    MyCompletionCallbacks MyAMQPClient::Open(MyLoginCredentials const& loginInfo) {
+        return _impl->Open(loginInfo);
     }
     
     void MyAMQPClient::Close(bool flush) {

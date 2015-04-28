@@ -15,6 +15,7 @@
 #include "MyAMQPBufferedConnection.h"
 #include "MyLoginCredentials.h"
 #include "MyAMQPRoutingInfo.h"
+#include "MyCompletionNotifier.h"
 
 #include "MyTaskProcessor.h"
 #include "MyAckProcessor.h"
@@ -59,6 +60,8 @@ namespace MyAMQP {
         MyAckProcessor _ackProcessor;
         
         bool _channelFinalized;
+        
+        MyCompletionNotifier _completionNotifier;
         
     public:
         void CreateHelloQueue(AMQP::ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo);
@@ -127,7 +130,7 @@ namespace MyAMQP {
          */
         void onClosed(AMQP::Connection *connection) override;
         
-        void Open(MyLoginCredentials const& loginInfo);
+        MyCompletionCallbacks Open(MyLoginCredentials const& loginInfo);
         
         void Close(bool flush);
         

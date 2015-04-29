@@ -221,6 +221,8 @@ namespace MyAMQP {
     void MyAMQPClientImpl::Close(bool flush) {
         // Close must be robust to multiple calls or called before open.
         
+        int retCode{};
+        
         _receiveTaskProcessor.Stop(flush);
         
         // Presumably flushing of acks needs to be done before the channel is closed.
@@ -244,6 +246,7 @@ namespace MyAMQP {
             auto ok = _conditional.wait_for(lock, CopernicaCompletionTimeout, [&]() { return _channelFinalized; });
             if (!ok) {
                 cerr << "Channel finalize timed out" << endl;
+                retCode = -1;
             }
         }
         
@@ -255,6 +258,7 @@ namespace MyAMQP {
         
         // This will block until read loop exits.
         _bufferedConnection.Close();
+        _completionNotifier.NotifyExit(retCode);
 
         _channel.reset();
         _amqpConnection.reset();

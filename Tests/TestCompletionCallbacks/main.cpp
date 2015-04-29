@@ -20,6 +20,9 @@ int main(int argc, const char * argv[]) {
     
     int errorCount{};
     
+    // Nothing should happen - no callbacks created.
+    notifier.NotifyExit(99);
+    
     auto globalCountPtr = make_shared<int>(0);
     {
         auto callbacks = notifier.CreateCompletionCallbacks();

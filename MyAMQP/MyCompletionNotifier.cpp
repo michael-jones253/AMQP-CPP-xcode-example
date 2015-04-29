@@ -20,6 +20,10 @@ namespace MyAMQP {
     }
     
     void MyCompletionNotifier::NotifyExit(int exitCode) const {
+        if (!_weakCallbacks) {
+            return;
+        }
+        
         auto locked = _weakCallbacks->_exitHandler.lock();
         
         if (locked) {
@@ -28,6 +32,10 @@ namespace MyAMQP {
     }
     
     void MyCompletionNotifier::NotifyError(string const& error) const {
+        if (!_weakCallbacks) {
+            return;
+        }
+
         auto locked = _weakCallbacks->_errorHandler.lock();
         
         if (locked) {

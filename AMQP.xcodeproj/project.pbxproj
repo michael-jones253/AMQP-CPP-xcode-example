@@ -13,6 +13,10 @@
 		B211546B1AEDD21B003FA861 /* MyNetworkUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = B21154691AEDD21B003FA861 /* MyNetworkUtilities.h */; };
 		B222A3201AF057C300C7762E /* MyNetworkException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B222A31E1AF057C300C7762E /* MyNetworkException.cpp */; };
 		B222A3211AF057C300C7762E /* MyNetworkException.h in Headers */ = {isa = PBXBuildFile; fileRef = B222A31F1AF057C300C7762E /* MyNetworkException.h */; };
+		B222A32F1AF0661500C7762E /* libMyAMQP.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */; };
+		B222A3301AF0662200C7762E /* libMyNetworkConnection.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B25CA12A1AE614D200BDD034 /* libMyNetworkConnection.a */; };
+		B222A3311AF0662900C7762E /* libMyUtilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B299897A1AEB631400435A5E /* libMyUtilities.a */; };
+		B222A3321AF069BE00C7762E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B222A32D1AF065F200C7762E /* main.cpp */; };
 		B22E60D41AE796D700CB0B2F /* MyReceiveTaskQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B22E60D21AE796D700CB0B2F /* MyReceiveTaskQueue.cpp */; };
 		B22E60D51AE796D700CB0B2F /* MyReceiveTaskQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = B22E60D31AE796D700CB0B2F /* MyReceiveTaskQueue.h */; };
 		B22E60E11AE798DA00CB0B2F /* libMyAMQP.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */; };
@@ -199,6 +203,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		B222A3241AF0654900C7762E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		B22E60D81AE798A800CB0B2F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -262,6 +275,8 @@
 		B21154691AEDD21B003FA861 /* MyNetworkUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNetworkUtilities.h; sourceTree = "<group>"; };
 		B222A31E1AF057C300C7762E /* MyNetworkException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyNetworkException.cpp; sourceTree = "<group>"; };
 		B222A31F1AF057C300C7762E /* MyNetworkException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNetworkException.h; sourceTree = "<group>"; };
+		B222A3261AF0654900C7762E /* TestBufferedConnection */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestBufferedConnection; sourceTree = BUILT_PRODUCTS_DIR; };
+		B222A32D1AF065F200C7762E /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B22E60D21AE796D700CB0B2F /* MyReceiveTaskQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyReceiveTaskQueue.cpp; sourceTree = "<group>"; };
 		B22E60D31AE796D700CB0B2F /* MyReceiveTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyReceiveTaskQueue.h; sourceTree = "<group>"; };
 		B22E60DA1AE798A800CB0B2F /* TestTaskQueue */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestTaskQueue; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -438,6 +453,16 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B222A3231AF0654900C7762E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B222A3311AF0662900C7762E /* libMyUtilities.a in Frameworks */,
+				B222A3301AF0662200C7762E /* libMyNetworkConnection.a in Frameworks */,
+				B222A32F1AF0661500C7762E /* libMyAMQP.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B22E60D71AE798A800CB0B2F /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -525,6 +550,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B222A3271AF0654900C7762E /* TestBufferedConnection */ = {
+			isa = PBXGroup;
+			children = (
+				B222A32D1AF065F200C7762E /* main.cpp */,
+			);
+			path = TestBufferedConnection;
+			sourceTree = "<group>";
+		};
 		B22E60DB1AE798A800CB0B2F /* TestTaskQueue */ = {
 			isa = PBXGroup;
 			children = (
@@ -567,6 +600,7 @@
 			isa = PBXGroup;
 			children = (
 				B2FDFE051AE3213A00542DA0 /* TestBuffer */,
+				B222A3271AF0654900C7762E /* TestBufferedConnection */,
 				B22E60DB1AE798A800CB0B2F /* TestTaskQueue */,
 				B299898F1AEB74F500435A5E /* TestUtilities */,
 				B237D86B1AEEEF1D008CAD0B /* TestCompletionCallbacks */,
@@ -609,6 +643,7 @@
 				B299897A1AEB631400435A5E /* libMyUtilities.a */,
 				B299898E1AEB74F500435A5E /* TestUtilities */,
 				B237D86A1AEEEF1D008CAD0B /* TestCompletionCallbacks */,
+				B222A3261AF0654900C7762E /* TestBufferedConnection */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -989,6 +1024,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		B222A3251AF0654900C7762E /* TestBufferedConnection */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B222A32A1AF0654900C7762E /* Build configuration list for PBXNativeTarget "TestBufferedConnection" */;
+			buildPhases = (
+				B222A3221AF0654900C7762E /* Sources */,
+				B222A3231AF0654900C7762E /* Frameworks */,
+				B222A3241AF0654900C7762E /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestBufferedConnection;
+			productName = TestBufferedConnection;
+			productReference = B222A3261AF0654900C7762E /* TestBufferedConnection */;
+			productType = "com.apple.product-type.tool";
+		};
 		B22E60D91AE798A800CB0B2F /* TestTaskQueue */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B22E60DE1AE798A800CB0B2F /* Build configuration list for PBXNativeTarget "TestTaskQueue" */;
@@ -1169,6 +1221,9 @@
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Michael Jones";
 				TargetAttributes = {
+					B222A3251AF0654900C7762E = {
+						CreatedOnToolsVersion = 6.3;
+					};
 					B22E60D91AE798A800CB0B2F = {
 						CreatedOnToolsVersion = 6.3;
 					};
@@ -1223,11 +1278,20 @@
 				B29989791AEB631400435A5E /* MyUtilities */,
 				B299898D1AEB74F500435A5E /* TestUtilities */,
 				B237D8691AEEEF1D008CAD0B /* TestCompletionCallbacks */,
+				B222A3251AF0654900C7762E /* TestBufferedConnection */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B222A3221AF0654900C7762E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B222A3321AF069BE00C7762E /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B22E60D61AE798A800CB0B2F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1341,6 +1405,24 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		B222A32B1AF0654900C7762E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B222A32C1AF0654900C7762E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		B22E60DF1AE798A800CB0B2F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1667,6 +1749,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B222A32A1AF0654900C7762E /* Build configuration list for PBXNativeTarget "TestBufferedConnection" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B222A32B1AF0654900C7762E /* Debug */,
+				B222A32C1AF0654900C7762E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		B22E60DE1AE798A800CB0B2F /* Build configuration list for PBXNativeTarget "TestTaskQueue" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -48,7 +48,9 @@ namespace MyAMQP {
     }
     
     void MyAMQPBufferedConnection::Open(std::string const& ipAddress) {
-    
+        assert(_parseReceivedBytes != nullptr);
+        assert(_onError != nullptr);
+        
         // Make robust to multiple opens.
         Close();
         

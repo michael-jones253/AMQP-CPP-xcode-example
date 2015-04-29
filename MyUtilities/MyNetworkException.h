@@ -18,7 +18,8 @@
 
 namespace MyUtilities {
     class MyNetworkException final : public std::runtime_error {
-        MyNetworkException(std::string message);
+    public:
+        MyNetworkException(std::string message, bool useSysError = true);
     };
 }
 

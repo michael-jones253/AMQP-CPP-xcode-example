@@ -7,7 +7,7 @@
 //
 
 #include "MyUnixNetworkConnection.h"
-#include "MyNetworkUtilities.h"
+#include "MyNetworkException.h"
 #include <iostream>
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -32,8 +32,8 @@ void MyUnixNetworkConnection::Connect(string const& ipAddress, int port) {
     _socketFd = socket(AF_INET, SOCK_STREAM, 0);
     if (_socketFd < 0)
     {
-        string err = "Socket for: " + ipAddress + ": " + MyNetworkUtilities::SysError();
-        throw runtime_error(err);
+        string err = "Socket for: " + ipAddress;
+        throw MyNetworkException(err);
     }
     
     struct sockaddr_in sin_you;
@@ -46,16 +46,16 @@ void MyUnixNetworkConnection::Connect(string const& ipAddress, int port) {
     
     if (ret < 0)
     {
-        string err = yourInet + ": " + MyNetworkUtilities::SysError();
-        throw runtime_error(err);
+        string err = yourInet;
+        throw MyNetworkException(err);
     }
     
     // Connect to you on send socket.
     int con_ret = connect(_socketFd, (sockaddr*)&sin_you, sizeof(sin_you));
     if (con_ret < 0)
     {
-        string err = "connect: " + ipAddress + ": " + MyNetworkUtilities::SysError();
-        throw runtime_error(err);
+        string err = "connect: " + ipAddress;
+        throw MyNetworkException(err);
     }
     
     _canRead = true;
@@ -70,10 +70,12 @@ void MyUnixNetworkConnection::Disconnect() {
 ssize_t MyUnixNetworkConnection::Read(char* buf, size_t len) {
     auto ret = recv(_socketFd, buf, len, 0);
     if (ret <= 0) {
-        auto sysErr = ret == 0 ? string{"connection closed"} : MyNetworkUtilities::SysError();
-        auto errStr = "MyUnixNetworkConnection read failed: " + sysErr;
+        auto reason = ret == 0 ? string{": connection closed by host"} : "";
+        auto errStr = "MyUnixNetworkConnection read failed" + reason;
+        auto useSysError = ret != 0;
+        
         if (_canRead) {
-            throw runtime_error(errStr);
+            throw MyNetworkException(errStr, useSysError);
         }
         
         // Allow for clean exit if disconnected during read.
@@ -92,8 +94,8 @@ void MyUnixNetworkConnection::WriteAll(char const* buf, size_t len) {
         
         // FIX ME there are errno codes such as EINTR which need handling.
         if (ret < 0) {
-            auto errStr = "MyUnixNetworkConnection write failed: " + MyNetworkUtilities::SysError();
-            throw runtime_error(errStr);
+            auto errStr = "MyUnixNetworkConnection write failed";
+            throw MyNetworkException(errStr);
         }
         
         amountWritten -= ret;

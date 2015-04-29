@@ -172,6 +172,8 @@
 		B23A0A741AE0AFF200533FFA /* amqpcpp.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A731AE0AFF200533FFA /* amqpcpp.h */; };
 		B24A9E7F1AE738B500B8879B /* MyAMQPClientImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B24A9E7D1AE738B500B8879B /* MyAMQPClientImpl.cpp */; };
 		B24A9E801AE738B500B8879B /* MyAMQPClientImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = B24A9E7E1AE738B500B8879B /* MyAMQPClientImpl.h */; };
+		B2566CB11AF0D2040086D2A1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2566CB01AF0D2040086D2A1 /* main.cpp */; };
+		B2566CB21AF0D25B0086D2A1 /* libMyUtilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B299897A1AEB631400435A5E /* libMyUtilities.a */; };
 		B25CA1131AE6098300BDD034 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B25CA1121AE6098300BDD034 /* main.cpp */; };
 		B25CA12D1AE614D200BDD034 /* MyUnixNetworkConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = B25CA12C1AE614D200BDD034 /* MyUnixNetworkConnection.h */; };
 		B25CA12F1AE614D200BDD034 /* MyNetworkConnectionPriv.h in Headers */ = {isa = PBXBuildFile; fileRef = B25CA12E1AE614D200BDD034 /* MyNetworkConnectionPriv.h */; };
@@ -185,6 +187,8 @@
 		B29989881AEB63B600435A5E /* MyStopwatch.h in Headers */ = {isa = PBXBuildFile; fileRef = B29989861AEB63B600435A5E /* MyStopwatch.h */; };
 		B29989891AEB678E00435A5E /* libMyUtilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B299897A1AEB631400435A5E /* libMyUtilities.a */; };
 		B29989951AEB750A00435A5E /* libMyUtilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B299897A1AEB631400435A5E /* libMyUtilities.a */; };
+		B2AB37611AF09FE400242E40 /* MySignalHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2AB375F1AF09FE400242E40 /* MySignalHandler.cpp */; };
+		B2AB37621AF09FE400242E40 /* MySignalHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = B2AB37601AF09FE400242E40 /* MySignalHandler.h */; };
 		B2BE4F401AE358D5009B8194 /* libAMQPSTL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */; };
 		B2BE4F421AE35ABB009B8194 /* MyAMQPClient.h in Headers */ = {isa = PBXBuildFile; fileRef = B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */; };
 		B2FDFDFE1AE30BEB00542DA0 /* MyAMQPCircularBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2FDFDFC1AE30BEB00542DA0 /* MyAMQPCircularBuffer.cpp */; };
@@ -231,6 +235,15 @@
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		B23A096A1AE0A77000533FFA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		B2566CA71AF0D1820086D2A1 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -434,6 +447,8 @@
 		B23A0A731AE0AFF200533FFA /* amqpcpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = amqpcpp.h; sourceTree = "<group>"; };
 		B24A9E7D1AE738B500B8879B /* MyAMQPClientImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPClientImpl.cpp; sourceTree = "<group>"; };
 		B24A9E7E1AE738B500B8879B /* MyAMQPClientImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPClientImpl.h; sourceTree = "<group>"; };
+		B2566CA91AF0D1820086D2A1 /* TestSignalHandler */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestSignalHandler; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2566CB01AF0D2040086D2A1 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B25CA1101AE6098300BDD034 /* Consumer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Consumer; sourceTree = BUILT_PRODUCTS_DIR; };
 		B25CA1121AE6098300BDD034 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B25CA12A1AE614D200BDD034 /* libMyNetworkConnection.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMyNetworkConnection.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -446,6 +461,8 @@
 		B29989851AEB63B600435A5E /* MyStopwatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyStopwatch.cpp; sourceTree = "<group>"; };
 		B29989861AEB63B600435A5E /* MyStopwatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyStopwatch.h; sourceTree = "<group>"; };
 		B299898E1AEB74F500435A5E /* TestUtilities */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestUtilities; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2AB375F1AF09FE400242E40 /* MySignalHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MySignalHandler.cpp; sourceTree = "<group>"; };
+		B2AB37601AF09FE400242E40 /* MySignalHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySignalHandler.h; sourceTree = "<group>"; };
 		B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPClient.h; sourceTree = "<group>"; };
 		B2FDFDFC1AE30BEB00542DA0 /* MyAMQPCircularBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPCircularBuffer.cpp; sourceTree = "<group>"; };
 		B2FDFDFD1AE30BEB00542DA0 /* MyAMQPCircularBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPCircularBuffer.h; sourceTree = "<group>"; };
@@ -502,6 +519,14 @@
 				B25CA1381AE61AF700BDD034 /* libMyNetworkConnection.a in Frameworks */,
 				B2344B541AE0CCE100B47CB2 /* libMyAMQP.dylib in Frameworks */,
 				B23A09731AE0A86500533FFA /* libAMQPSTL.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B2566CA61AF0D1820086D2A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2566CB21AF0D25B0086D2A1 /* libMyUtilities.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -604,6 +629,7 @@
 				B22E60DB1AE798A800CB0B2F /* TestTaskQueue */,
 				B299898F1AEB74F500435A5E /* TestUtilities */,
 				B237D86B1AEEEF1D008CAD0B /* TestCompletionCallbacks */,
+				B2566CAA1AF0D1820086D2A1 /* TestSignalHandler */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -644,6 +670,7 @@
 				B299898E1AEB74F500435A5E /* TestUtilities */,
 				B237D86A1AEEEF1D008CAD0B /* TestCompletionCallbacks */,
 				B222A3261AF0654900C7762E /* TestBufferedConnection */,
+				B2566CA91AF0D1820086D2A1 /* TestSignalHandler */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -809,6 +836,14 @@
 			name = src;
 			sourceTree = "<group>";
 		};
+		B2566CAA1AF0D1820086D2A1 /* TestSignalHandler */ = {
+			isa = PBXGroup;
+			children = (
+				B2566CB01AF0D2040086D2A1 /* main.cpp */,
+			);
+			path = TestSignalHandler;
+			sourceTree = "<group>";
+		};
 		B25CA1111AE6098300BDD034 /* Consumer */ = {
 			isa = PBXGroup;
 			children = (
@@ -837,6 +872,8 @@
 				B222A31F1AF057C300C7762E /* MyNetworkException.h */,
 				B29989861AEB63B600435A5E /* MyStopwatch.h */,
 				B299897E1AEB631400435A5E /* MyUtilitiesPriv.h */,
+				B2AB375F1AF09FE400242E40 /* MySignalHandler.cpp */,
+				B2AB37601AF09FE400242E40 /* MySignalHandler.h */,
 			);
 			path = MyUtilities;
 			sourceTree = "<group>";
@@ -1014,6 +1051,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2AB37621AF09FE400242E40 /* MySignalHandler.h in Headers */,
 				B29989881AEB63B600435A5E /* MyStopwatch.h in Headers */,
 				B222A3211AF057C300C7762E /* MyNetworkException.h in Headers */,
 				B299897F1AEB631400435A5E /* MyUtilitiesPriv.h in Headers */,
@@ -1125,6 +1163,23 @@
 			name = Sender;
 			productName = Sender;
 			productReference = B23A096C1AE0A77000533FFA /* Sender */;
+			productType = "com.apple.product-type.tool";
+		};
+		B2566CA81AF0D1820086D2A1 /* TestSignalHandler */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B2566CAF1AF0D1820086D2A1 /* Build configuration list for PBXNativeTarget "TestSignalHandler" */;
+			buildPhases = (
+				B2566CA51AF0D1820086D2A1 /* Sources */,
+				B2566CA61AF0D1820086D2A1 /* Frameworks */,
+				B2566CA71AF0D1820086D2A1 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestSignalHandler;
+			productName = TestSignalHandler;
+			productReference = B2566CA91AF0D1820086D2A1 /* TestSignalHandler */;
 			productType = "com.apple.product-type.tool";
 		};
 		B25CA10F1AE6098300BDD034 /* Consumer */ = {
@@ -1239,6 +1294,9 @@
 					B23A096B1AE0A77000533FFA = {
 						CreatedOnToolsVersion = 6.3;
 					};
+					B2566CA81AF0D1820086D2A1 = {
+						CreatedOnToolsVersion = 6.3;
+					};
 					B25CA10F1AE6098300BDD034 = {
 						CreatedOnToolsVersion = 6.3;
 					};
@@ -1279,6 +1337,7 @@
 				B299898D1AEB74F500435A5E /* TestUtilities */,
 				B237D8691AEEEF1D008CAD0B /* TestCompletionCallbacks */,
 				B222A3251AF0654900C7762E /* TestBufferedConnection */,
+				B2566CA81AF0D1820086D2A1 /* TestSignalHandler */,
 			);
 		};
 /* End PBXProject section */
@@ -1352,6 +1411,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B2566CA51AF0D1820086D2A1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2566CB11AF0D2040086D2A1 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B25CA10C1AE6098300BDD034 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1374,6 +1441,7 @@
 			files = (
 				B222A3201AF057C300C7762E /* MyNetworkException.cpp in Sources */,
 				B29989871AEB63B600435A5E /* MyStopwatch.cpp in Sources */,
+				B2AB37611AF09FE400242E40 /* MySignalHandler.cpp in Sources */,
 				B211546A1AEDD21B003FA861 /* MyNetworkUtilities.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1636,6 +1704,24 @@
 			};
 			name = Release;
 		};
+		B2566CAD1AF0D1820086D2A1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		B2566CAE1AF0D1820086D2A1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		B25CA1141AE6098300BDD034 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1756,6 +1842,7 @@
 				B222A32C1AF0654900C7762E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B22E60DE1AE798A800CB0B2F /* Build configuration list for PBXNativeTarget "TestTaskQueue" */ = {
 			isa = XCConfigurationList;
@@ -1810,6 +1897,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		B2566CAF1AF0D1820086D2A1 /* Build configuration list for PBXNativeTarget "TestSignalHandler" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B2566CAD1AF0D1820086D2A1 /* Debug */,
+				B2566CAE1AF0D1820086D2A1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		B25CA1161AE6098300BDD034 /* Build configuration list for PBXNativeTarget "Consumer" */ = {
 			isa = XCConfigurationList;

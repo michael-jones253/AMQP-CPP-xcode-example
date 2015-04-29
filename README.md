@@ -3,9 +3,9 @@ A RabbitMQ message broker C11/C++ client Mac Xcode example project built on Cope
 
 Sample work created to show my command of the C11/C++ language, demonstrate some good design practises and real-time development patterns/techniques.
 
-This repo shows how to use Copernica’s AMQP-CPP C++ library to create a RabbitMQ client. The Xcode project contains 2 sample command line apps for message sender and consumer clients.
+This repo shows how to use Copernica’s AMQP-CPP C++ library to create a RabbitMQ client. The Xcode project contains 2 sample command line apps for message "Sender" and "Consumer" clients.
 
-Everything which begins with “My” is my code. Everything in the AMQPSTL directory is code from Copernica packaged into a dynamic library for ease of Xcode on OS X development.
+Everything which begins with “My” is my code. Most of my interesting stuff described below is in the MyAMQP directory. Everything in the AMQPSTL directory is code from Copernica packaged into a dynamic library for ease of Xcode on OS X development.
 
 Some techniques demonstrated are:
 

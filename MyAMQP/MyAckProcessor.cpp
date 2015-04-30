@@ -7,12 +7,14 @@
 //
 
 #include "MyAckProcessor.h"
+#include "MyNetworkException.h"
 
 #include <iostream>
 #include <chrono>
 
 #include <assert.h>
 
+using namespace MyUtilities;
 using namespace std;
 using namespace std::chrono;
 
@@ -119,8 +121,14 @@ namespace MyAMQP {
                 
                 _ackHandler(tag);
                 ++flushed;
-            } catch (exception const& ex) {
-                // FIX ME - if the exception was a network write then take the client down.
+            }
+            catch (MyNetworkException const& netEx) {
+                // Exception due to network write and not client message handler.
+                cerr << "MyAckProcessor Flush: " << netEx.what() << endl;
+                throw;
+            }
+            catch (exception const& ex) {
+                // Allow client message handler to throw in the packaged task..
                 cerr << "MyAckProcessor Flush: " << ex.what() << endl;
             }
         }

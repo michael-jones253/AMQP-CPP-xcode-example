@@ -10,6 +10,7 @@
 #include <memory>
 #include "MyAMQPClient.h"
 #include "MyStopwatch.h"
+#include "MySignalCallbacks.h"
 #include "../MyNetworkConnection/MyUnixNetworkConnection.h"
 
 #include <thread>
@@ -113,6 +114,48 @@ int main(int argc, const char * argv[]) {
         int messageCount{};
         bool breakWait{};
         bool isEndMessage{};
+        bool caughtTerminate{};
+        
+        auto termHandler = [&](bool x, bool y) {
+            cerr << "SIGTERM." << endl;
+            {
+                // FIX ME - wait on terminate predicate.
+                lock_guard<mutex> guard(benchmarkMutex);
+                caughtTerminate = true;
+            }
+            
+            benchmarkCondition.notify_one();
+            
+        };
+        
+        auto hupHandler = [](bool, bool) {
+            cerr << "SIGHUP" << endl;
+        };
+        
+        auto ctrlCHandler = [](bool, bool) {
+            cerr << "CTRL-C" << endl;
+        };
+        
+        auto pipeHandler = [](bool, bool) {
+            // Without this a broken pipe e.g. write to a socket which has been closed by the server will crash
+            // this program. However this program catches it and lets the client act on the resulting network
+            // exception.
+            cerr << "Handling broken PIPE" << endl;
+        };
+        
+        // Singletons can make it very difficult for the coder to determine destruction order of globals,
+        // sometimes with unexpected results. See RAII signal ownership below to add some clear determination
+        // to signal handling release.
+
+        MySignalHandler::Instance()->Initialise(false);
+        
+        // RAII release of signal handlers from OS.
+        MySignalCallbacks signalCallbacks;
+        
+        signalCallbacks.InstallTerminateHandler(termHandler);
+        signalCallbacks.InstallReloadHandler(hupHandler);
+        signalCallbacks.InstallCtrlCHandler(ctrlCHandler);
+        signalCallbacks.InstallBrokenPipeHandler(pipeHandler);
         
         auto errorHandler = [&](string err) {
             cout << "Client error: " << err << endl;

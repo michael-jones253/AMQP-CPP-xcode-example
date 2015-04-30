@@ -19,10 +19,17 @@
 /* The classes below are exported */
 #pragma GCC visibility push(default)
 
+// Forward declaration.
+struct __siginfo;
+
 namespace MyUtilities {
     using SignalCallback = std::function<void(bool isSelf, bool isDaemon)>;
     
     class MySignalHandler final {
+        friend class MySignalCallbacks;
+        
+        friend void SignalHandler(int sig, __siginfo *siginfo, void *context);
+        
         int _processGroupId;
         
         int _processId;
@@ -37,23 +44,30 @@ namespace MyUtilities {
         
         static MySignalHandler* Instance();
         
+        static bool IsInitialised();
+        
         void Initialise(bool daemonize);
         
-        void InstallHupHandler(std::shared_ptr<SignalCallback const> handler);
-        
-        void InstallPipeHandler(std::shared_ptr<SignalCallback const> handler);
-        
-        void InstallTermHandler(std::shared_ptr<SignalCallback const> handler);
-        
-        // Not for application use.
-        void Handle(int sig, int signallingProcessId);
         
     private:
         MySignalHandler();
+
+        static void Reset();
         
         void Daemonise();
         
+        void InstallReloadHandler(std::shared_ptr<SignalCallback const> handler);
+        
+        void InstallBrokenPipeHandler(std::shared_ptr<SignalCallback const> handler);
+        
+        void InstallTerminateHandler(std::shared_ptr<SignalCallback const> handler);
+
+        void InstallCtrlCHandler(std::shared_ptr<SignalCallback const> handler);
+        
         void InstallHandler(int sig, std::shared_ptr<SignalCallback const> handler);
+
+        // Not for application use.
+        void Handle(int sig, int signallingProcessId);
         
     };
 

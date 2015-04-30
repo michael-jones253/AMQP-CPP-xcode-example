@@ -17,6 +17,8 @@
 		B222A3301AF0662200C7762E /* libMyNetworkConnection.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B25CA12A1AE614D200BDD034 /* libMyNetworkConnection.a */; };
 		B222A3311AF0662900C7762E /* libMyUtilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B299897A1AEB631400435A5E /* libMyUtilities.a */; };
 		B222A3321AF069BE00C7762E /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B222A32D1AF065F200C7762E /* main.cpp */; };
+		B22ADA8E1AF191FC006F0E23 /* MySignalCallbacks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B22ADA8C1AF191FC006F0E23 /* MySignalCallbacks.cpp */; };
+		B22ADA8F1AF191FC006F0E23 /* MySignalCallbacks.h in Headers */ = {isa = PBXBuildFile; fileRef = B22ADA8D1AF191FC006F0E23 /* MySignalCallbacks.h */; };
 		B22E60D41AE796D700CB0B2F /* MyReceiveTaskQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B22E60D21AE796D700CB0B2F /* MyReceiveTaskQueue.cpp */; };
 		B22E60D51AE796D700CB0B2F /* MyReceiveTaskQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = B22E60D31AE796D700CB0B2F /* MyReceiveTaskQueue.h */; };
 		B22E60E11AE798DA00CB0B2F /* libMyAMQP.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B2344B481AE0CB7A00B47CB2 /* libMyAMQP.dylib */; };
@@ -290,6 +292,8 @@
 		B222A31F1AF057C300C7762E /* MyNetworkException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNetworkException.h; sourceTree = "<group>"; };
 		B222A3261AF0654900C7762E /* TestBufferedConnection */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestBufferedConnection; sourceTree = BUILT_PRODUCTS_DIR; };
 		B222A32D1AF065F200C7762E /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		B22ADA8C1AF191FC006F0E23 /* MySignalCallbacks.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MySignalCallbacks.cpp; sourceTree = "<group>"; };
+		B22ADA8D1AF191FC006F0E23 /* MySignalCallbacks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySignalCallbacks.h; sourceTree = "<group>"; };
 		B22E60D21AE796D700CB0B2F /* MyReceiveTaskQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyReceiveTaskQueue.cpp; sourceTree = "<group>"; };
 		B22E60D31AE796D700CB0B2F /* MyReceiveTaskQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyReceiveTaskQueue.h; sourceTree = "<group>"; };
 		B22E60DA1AE798A800CB0B2F /* TestTaskQueue */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestTaskQueue; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -874,6 +878,8 @@
 				B299897E1AEB631400435A5E /* MyUtilitiesPriv.h */,
 				B2AB375F1AF09FE400242E40 /* MySignalHandler.cpp */,
 				B2AB37601AF09FE400242E40 /* MySignalHandler.h */,
+				B22ADA8C1AF191FC006F0E23 /* MySignalCallbacks.cpp */,
+				B22ADA8D1AF191FC006F0E23 /* MySignalCallbacks.h */,
 			);
 			path = MyUtilities;
 			sourceTree = "<group>";
@@ -1054,6 +1060,7 @@
 				B2AB37621AF09FE400242E40 /* MySignalHandler.h in Headers */,
 				B29989881AEB63B600435A5E /* MyStopwatch.h in Headers */,
 				B222A3211AF057C300C7762E /* MyNetworkException.h in Headers */,
+				B22ADA8F1AF191FC006F0E23 /* MySignalCallbacks.h in Headers */,
 				B299897F1AEB631400435A5E /* MyUtilitiesPriv.h in Headers */,
 				B211546B1AEDD21B003FA861 /* MyNetworkUtilities.h in Headers */,
 			);
@@ -1439,6 +1446,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B22ADA8E1AF191FC006F0E23 /* MySignalCallbacks.cpp in Sources */,
 				B222A3201AF057C300C7762E /* MyNetworkException.cpp in Sources */,
 				B29989871AEB63B600435A5E /* MyStopwatch.cpp in Sources */,
 				B2AB37611AF09FE400242E40 /* MySignalHandler.cpp in Sources */,
@@ -1905,6 +1913,7 @@
 				B2566CAE1AF0D1820086D2A1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B25CA1161AE6098300BDD034 /* Build configuration list for PBXNativeTarget "Consumer" */ = {
 			isa = XCConfigurationList;

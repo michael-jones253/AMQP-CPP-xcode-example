@@ -16,18 +16,18 @@
 using namespace std;
 using namespace std::placeholders;
 
-namespace  {
+namespace {
     static struct sigaction act;
+
+}
+
+namespace MyUtilities {
     
     void SignalHandler(int sig, siginfo_t *siginfo, void *context) {
         cout << "Caught signal:" << sig << endl;
         MyUtilities::MySignalHandler::Instance()->Handle(sig, siginfo->si_pid);
     }
 
-}
-
-
-namespace MyUtilities {
     // Singletons are usually BAD, but we don't have much choice with signal handling.
     std::unique_ptr<MySignalHandler> MySignalHandler::Singleton{};
     
@@ -43,6 +43,8 @@ namespace MyUtilities {
         
         /* Reset flags to use sa_handler instead of sa_sigaction. */
         memset (&act, '\0', sizeof(act));
+        
+        /* Instruct sigaction to reset system handlers back to default */
         act.sa_handler = SIG_DFL;
         
         for (auto & entry : _handlers) {
@@ -56,6 +58,14 @@ namespace MyUtilities {
         }
         
         return Singleton.get();
+    }
+    
+    bool MySignalHandler::IsInitialised() {
+        return Singleton != nullptr;
+    }
+
+    void MySignalHandler::Reset() {
+        Singleton.reset();
     }
     
     void MySignalHandler::Initialise(bool daemonise) {
@@ -78,16 +88,20 @@ namespace MyUtilities {
 
     }
     
-    void MySignalHandler::InstallHupHandler(std::shared_ptr<SignalCallback const> handler) {
+    void MySignalHandler::InstallReloadHandler(std::shared_ptr<SignalCallback const> handler) {
         InstallHandler(SIGHUP, handler);
     }
     
-    void MySignalHandler::InstallPipeHandler(std::shared_ptr<SignalCallback const> handler) {
+    void MySignalHandler::InstallBrokenPipeHandler(std::shared_ptr<SignalCallback const> handler) {
         InstallHandler(SIGPIPE, handler);
     }
     
-    void MySignalHandler::InstallTermHandler(std::shared_ptr<SignalCallback const> handler) {
+    void MySignalHandler::InstallTerminateHandler(std::shared_ptr<SignalCallback const> handler) {
         InstallHandler(SIGTERM, handler);
+    }
+
+    void MySignalHandler::InstallCtrlCHandler(std::shared_ptr<SignalCallback const> handler) {
+        InstallHandler(SIGINT, handler);
     }
     
     void MySignalHandler::InstallHandler(int sig, std::shared_ptr<SignalCallback const> handler) {

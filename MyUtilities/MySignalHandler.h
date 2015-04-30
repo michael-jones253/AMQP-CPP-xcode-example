@@ -24,9 +24,28 @@ struct __siginfo;
 
 namespace MyUtilities {
     using SignalCallback = std::function<void(bool isSelf, bool isDaemon)>;
-    
+
+// Forward declaration to hide platform dependent impl.
+#if defined(__APPLE__)
+    class MyUnixSignalHandlerImpl;
+#else
+    class MyWindowsSignalHanderImpl;
+#endif
+
     class MySignalHandler final {
         friend class MySignalCallbacks;
+        
+        // Singletons are usually BAD, but we don't have much choice with signal handling.
+        static std::unique_ptr<MySignalHandler> Singleton;
+        
+#if defined(__APPLE__)
+        std::unique_ptr<MyUnixSignalHandlerImpl> _impl;
+#else
+        std::unique_ptr<MyWindowsSignalHanderImpl> _impl;
+#endif
+        
+        // FIX ME - remove the following platform dependent stuff.
+    
         
         friend void SignalHandler(int sig, __siginfo *siginfo, void *context);
         
@@ -35,9 +54,6 @@ namespace MyUtilities {
         int _processId;
         
         std::unordered_map<int, std::weak_ptr<SignalCallback const>> _handlers;
-        
-        // Singletons are usually BAD, but we don't have much choice with signal handling.
-        static std::unique_ptr<MySignalHandler> Singleton;
         
     public:
         ~MySignalHandler();

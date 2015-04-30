@@ -7,6 +7,11 @@
 //
 
 #include "MySignalHandler.h"
+
+#if defined(__APPLE__)
+#include "MyUnixSignalHandlerImpl.h"
+#endif
+
 #include <iostream>
 #include <stdlib.h>
 #include <unistd.h>
@@ -34,11 +39,18 @@ namespace MyUtilities {
     MySignalHandler::MySignalHandler() :
     _processId{},
     _processGroupId{},
-    _handlers{} {
+    _handlers{},
+    _impl{} {
+        auto signalHandler = bind(&MySignalHandler::Handle, this, placeholders::_1, placeholders::_2);
+        
+#if defined(__APPLE__)
+        _impl = unique_ptr<MyUnixSignalHandlerImpl>( new MyUnixSignalHandlerImpl(signalHandler) );
+#endif
         
     }
     
     MySignalHandler::~MySignalHandler() {
+#if defined(FIXME)
         // RAII to ensure that once this destructs signals will not attempt to access this.
         
         /* Reset flags to use sa_handler instead of sa_sigaction. */
@@ -50,6 +62,7 @@ namespace MyUtilities {
         for (auto & entry : _handlers) {
             sigaction(entry.first, &act, nullptr);
         }
+#endif
     }
     
     MySignalHandler* MySignalHandler::Instance() {
@@ -69,9 +82,15 @@ namespace MyUtilities {
     }
     
     void MySignalHandler::Initialise(bool daemonise) {
+        /*
         if (daemonise) {
+            
             Daemonise();
         }
+         */
+        
+        _impl->Initialise(daemonise);
+#if defined(FIXME)
         
         _processGroupId = setsid();
         
@@ -85,6 +104,7 @@ namespace MyUtilities {
         
         /* The SA_SIGINFO flag tells sigaction() to use the sa_sigaction field, not sa_handler. */
         act.sa_flags = SA_SIGINFO;
+#endif
 
     }
     
@@ -105,27 +125,20 @@ namespace MyUtilities {
     }
     
     void MySignalHandler::InstallHandler(int sig, std::shared_ptr<SignalCallback const> handler) {
+        /*
         if (sigaction(sig, &act, nullptr) < 0) {
             perror ("sigaction for TERM");
             return;
         }
+         */
+        _impl->InstallHandler(sig);
 
         _handlers[sig] = handler;
     }
     
     void MySignalHandler::Daemonise() {
-        
-        auto ret = fork();
-        
-        if (ret < 0) {
-            // Error
-            exit(-1);
-        }
-        else if (ret > 1) {
-            // Parent.
-            cout << "Parent exits" << endl;
-            exit(0);
-        }        
+        // FIX ME not needed.
+        _impl->Daemonise();
     }
     
     void MySignalHandler::Handle(int sig, int signallingProcessId) {
@@ -137,8 +150,9 @@ namespace MyUtilities {
         }
         
         auto locked = handler->second.lock();
-        
-        (*locked)(_processId == signallingProcessId, _processId == _processGroupId);
+        if (locked) {
+            (*locked)(_processId == signallingProcessId, _processId == _processGroupId);
+        }
     }
     
 

@@ -35,6 +35,10 @@ Condition variables. Allows consistent waiting/notifiying of the predicate becau
 
 Test driven development. Apart from the obvious of providing better testing, this methodology encourages  modular component design. The test driven coder soon realises that unit testing is facilitated by providing classes that can be tested in isolation without having to drag in heaps of dependencies and #include files. The pure abstract class or interface is one such technique - see MyNetworkInterface in the MyAMQP directory of this project. Passing of callbacks as arguments is also another technique. Visual studio has test projects as does Xcode for Swift and Objective-C, but not C++, hence my use of assert with an && “comment” in the directories beginning with “Test”.
 
+Minimise use of singletons. Generally these are BAD, because they are global data which make it very difficult for the coder to determine destruction order of such data - sometimes with unexpected program behaviour on exit. They can also lead to a convoluted object ownership model - similar problem to a design based on shared_ptr (see above).
+
+However, in the MyUtilities directory I have used the singleton pattern for a signal handler which by its nature is a singleton operation. To avoid the unclear destruction order problem that singletons suffer from I have used the RAII design pattern. The destruction of the signal callbacks is on the stack and deterministic and their destructor releases the installed signal handlers and restores system default handling. Thus ensuring that when our handlers go out of scope, system defaults take over. See MySignalCallbacks in the MyUtilities directory.
+
 Notes:
 Copernica’s  AMQP-CPP repository compiled without modification except for adding the pragmas to export the symbols in “classes.h” from a dylib.
 

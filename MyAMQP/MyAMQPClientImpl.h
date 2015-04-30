@@ -64,6 +64,9 @@ namespace MyAMQP {
         MyCompletionNotifier _completionNotifier;
         
     public:
+        // Class is final, virtual not needed.
+        ~MyAMQPClientImpl();
+        
         void CreateHelloQueue(AMQP::ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo);
         
         void SendHelloWorld(std::string const& exchange, std::string const& key, std::string const& greeting);
@@ -71,9 +74,6 @@ namespace MyAMQP {
         void SubscribeToReceive(std::string const& queue,
                                 MyMessageCallback const &handler,
                                 bool threaded);
-        
-        // Class is final, virtual not needed.
-        ~MyAMQPClientImpl();
         
         /**
          *  Method that is called when data needs to be sent over the network

@@ -25,6 +25,17 @@ using namespace std;
 using namespace std::this_thread;
 using namespace std::chrono;
 
+void OpenQueueForRx(MyAMQPClient& client,
+                    AMQP::ExchangeType exchangeType,
+                    MyAMQPRoutingInfo const & routingInfo,
+                    bool threaded,
+                    MyMessageCallback const& messageCallback) {
+    
+    client.CreateHelloQueue(exchangeType, routingInfo);
+    
+    client.SubscribeToReceive(routingInfo.QueueName, messageCallback, threaded);
+}
+
 int main(int argc, const char * argv[]) {
     // insert code here...
     try {
@@ -115,6 +126,7 @@ int main(int argc, const char * argv[]) {
         bool breakWait{};
         bool isEndMessage{};
         bool caughtTerminate{};
+        bool caughtReload{};
         
         auto termHandler = [&](bool x, bool y) {
             cerr << "SIGTERM." << endl;
@@ -128,8 +140,14 @@ int main(int argc, const char * argv[]) {
             
         };
         
-        auto hupHandler = [](bool, bool) {
-            cerr << "SIGHUP" << endl;
+        auto hupHandler = [&](bool, bool) {
+            cerr << "SIGHUP - reopening." << endl;
+            {
+                lock_guard<mutex> guard(benchmarkMutex);
+                caughtReload = true;
+            }
+            
+            benchmarkCondition.notify_one();
         };
         
         auto ctrlCHandler = [](bool, bool) {
@@ -157,7 +175,7 @@ int main(int argc, const char * argv[]) {
         signalCallbacks.InstallCtrlCHandler(ctrlCHandler);
         signalCallbacks.InstallBrokenPipeHandler(pipeHandler);
         
-        auto errorHandler = [&](string err) {
+        auto errorHandler = [&](string const& err) {
             cout << "Client error: " << err << endl;
             {
                 lock_guard<mutex> guard(benchmarkMutex);
@@ -173,7 +191,7 @@ int main(int argc, const char * argv[]) {
         
         myAmqp.CreateHelloQueue(exchangeType, routingInfo);
         
-        auto handler = [&](string const & message, int64_t tag, bool redelivered) {
+        auto messageHandler = [&](string const & message, int64_t tag, bool redelivered) {
             // Atomic recording of message count and elapsed time.
             {
                 lock_guard<mutex> guard(benchmarkMutex);
@@ -201,11 +219,14 @@ int main(int argc, const char * argv[]) {
             
         };
         
-        myAmqp.SubscribeToReceive(routingInfo.QueueName, handler, threaded);
+        myAmqp.SubscribeToReceive(routingInfo.QueueName, messageHandler, threaded);
         
         while (!breakWait) {
             unique_lock<mutex> lock(benchmarkMutex);
-            benchmarkCondition.wait(lock, [&]{ return (isEndMessage && benchmarkStopwatch.IsRunning()) || breakWait; });
+            benchmarkCondition.wait(lock, [&]{
+                return (isEndMessage && benchmarkStopwatch.IsRunning())
+                || breakWait
+                || caughtReload; });
             
             auto elapsedMs = benchmarkStopwatch.GetElapsedMilliseconds();
             stringstream messageStr;
@@ -215,7 +236,17 @@ int main(int argc, const char * argv[]) {
             messageCount = 0;
             isEndMessage = false;
             benchmarkStopwatch.Stop();
+            
+            if (caughtReload) {
+                myAmqp.Close(flushOnClose);
+                myAmqp.Open(loginInfo);
+                OpenQueueForRx(myAmqp, exchangeType, routingInfo, threaded, messageHandler);
+                cout << "Reopened" << endl;
+                caughtReload = false;
+            }
         }
+
+        // OpenQueueForReceive(myAmqp, exchangeType, routingInfo, threaded, nullptr);
         
         myAmqp.Close(flushOnClose);
         

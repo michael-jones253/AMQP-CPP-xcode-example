@@ -40,6 +40,36 @@ namespace  {
 
 namespace MyAMQP {
     
+    MyAMQPClientImpl::MyAMQPClientImpl(std::unique_ptr<MyNetworkConnection> networkConnection) :
+    ConnectionHandler{},
+    _amqpConnection{},
+    _channel{},
+    _bufferedConnection{move(networkConnection)},
+    _mutex{},
+    _conditional{},
+    _channelOpen{},
+    _channelInError{},
+    _queueReady{},
+    _receiveTaskProcessor{},
+    _channelFinalized{},
+    _completionNotifier{}
+    {
+        auto parseCallback = bind(&MyAMQPClientImpl::OnNetworkRead, this, placeholders::_1, placeholders::_2);
+        auto onErrorCallback = bind(&MyAMQPClientImpl::OnNetworkReadError, this, placeholders::_1);
+        
+        _bufferedConnection.SetCallbacks(parseCallback, onErrorCallback);
+    }
+    
+    MyAMQPClientImpl::~MyAMQPClientImpl() {
+        try {
+            Close(false);
+        }
+        catch(exception& ex)
+        {
+            cerr << "Exception in MyAMQPClient destruction: " << ex.what() << endl;
+        }
+    }
+    
     void MyAMQPClientImpl::CreateHelloQueue(ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo) {
         unique_lock<mutex> lock(_mutex);
 
@@ -118,36 +148,6 @@ namespace MyAMQP {
         _channel->consume(queue).onReceived(messageHandler);
     }
     
-    MyAMQPClientImpl::MyAMQPClientImpl(std::unique_ptr<MyNetworkConnection> networkConnection) :
-    ConnectionHandler{},
-    _amqpConnection{},
-    _channel{},
-    _bufferedConnection{move(networkConnection)},
-    _mutex{},
-    _conditional{},
-    _channelOpen{},
-    _channelInError{},
-    _queueReady{},
-    _receiveTaskProcessor{},
-    _channelFinalized{},
-    _completionNotifier{}
-    {
-        auto parseCallback = bind(&MyAMQPClientImpl::OnNetworkRead, this, placeholders::_1, placeholders::_2);
-        auto onErrorCallback = bind(&MyAMQPClientImpl::OnNetworkReadError, this, placeholders::_1);
-        
-        _bufferedConnection.SetCallbacks(parseCallback, onErrorCallback);
-    }
-    
-    MyAMQPClientImpl::~MyAMQPClientImpl() {
-        try {
-            Close(false);
-        }
-        catch(exception& ex)
-        {
-            cerr << "Exception in MyAMQPClient destruction: " << ex.what() << endl;
-        }
-    }
-    
     // Interface implementation of data from the client that is destined for the server.
     void MyAMQPClientImpl::onData(AMQP::Connection *connection, const char *buffer, size_t size) {
         // cout << "onData: " << size << endl;
@@ -207,6 +207,12 @@ namespace MyAMQP {
         // A common problem with components that need to be opened/closed or stopped/started is not being
         // robust to multiple opens/closes. The pattern where we always close before opening overcomes this.
         Close(false);
+        
+        // Reset state information to allow for reopening.
+        _channelOpen = false;
+        _channelInError = false;
+        _queueReady = false;
+        _channelFinalized = false;
         
         _bufferedConnection.Open(loginInfo.HostIpAddress);
         

@@ -18,17 +18,15 @@ namespace MyUtilities {
     
     void UnixSignalHandler(int sig, siginfo_t *siginfo, void *context) {
         cout << "Caught signal:" << sig << endl;
-        MyUnixSignalHandlerImpl::Handle(sig, siginfo->si_pid);
+        MyUnixSignalHandlerImpl::Handle(sig, *siginfo);
     }
     
-     struct sigaction MyUnixSignalHandlerImpl::SigAct;
-    
-    SignalFunction MyUnixSignalHandlerImpl::SignalCallback;
-
-    
+    struct sigaction MyUnixSignalHandlerImpl::SigAct{};
+    SignalFunction MyUnixSignalHandlerImpl::SignalCallback{};
+    int MyUnixSignalHandlerImpl::ProcessGroupId{};
+    int MyUnixSignalHandlerImpl::ProcessId{};
+            
     MyUnixSignalHandlerImpl::MyUnixSignalHandlerImpl(SignalFunction const& signalCallback) :
-    _processGroupId{},
-    _processId{},
     _handledSignals{}
     {
         SignalCallback = signalCallback;
@@ -46,7 +44,7 @@ namespace MyUtilities {
         for (auto & entry : _handledSignals) {
             sigaction(entry, &SigAct, nullptr);
         }
-
+        
     }
     
     void MyUnixSignalHandlerImpl::Initialise(bool daemonise) {
@@ -54,9 +52,9 @@ namespace MyUtilities {
             Daemonise();
         }
         
-        _processGroupId = setsid();
+        ProcessGroupId = setsid();
         
-        _processId = getpid();        
+        ProcessId = getpid();
         
         memset (&SigAct, '\0', sizeof(SigAct));
         
@@ -93,8 +91,8 @@ namespace MyUtilities {
         }
     }
     
-    void MyUnixSignalHandlerImpl::Handle(int sig, int processId) {
-        SignalCallback(sig, processId);
+    void MyUnixSignalHandlerImpl::Handle(int sig,  siginfo_t const& siginfo) {
+        SignalCallback(sig, ProcessId == siginfo.si_pid, ProcessGroupId == siginfo.si_pid);
     }
-
+    
 }

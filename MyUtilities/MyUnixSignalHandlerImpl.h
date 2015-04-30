@@ -14,8 +14,13 @@
 #include <functional>
 #include <set>
 
+#define MY_SIGHUP SIGHUP
+#define MY_SIGTERM SIGTERM
+#define MY_SIGINT SIGINT
+#define MY_SIGPIPE SIGPIPE
+
 namespace MyUtilities {
-    using SignalFunction = std::function<void(int sig, int processId)>;
+    using SignalFunction = std::function<void(int sig, bool fromSelf, bool isDaemon)>;
     
     class MyUnixSignalHandlerImpl final {
         friend void UnixSignalHandler(int sig, siginfo_t *siginfo, void *context);
@@ -24,9 +29,9 @@ namespace MyUtilities {
         
         static SignalFunction SignalCallback;
         
-        int _processGroupId;
+        static int ProcessGroupId;
         
-        int _processId;
+        static int ProcessId;
         
         std::set<int> _handledSignals;
         
@@ -38,7 +43,7 @@ namespace MyUtilities {
         void Daemonise();
         
     private:
-        static void Handle(int sig, int processId);
+        static void Handle(int sig, siginfo_t const& siginfo);
     };
     
 }

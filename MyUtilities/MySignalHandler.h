@@ -19,8 +19,6 @@
 /* The classes below are exported */
 #pragma GCC visibility push(default)
 
-// Forward declaration.
-struct __siginfo;
 
 namespace MyUtilities {
     using SignalCallback = std::function<void(bool isSelf, bool isDaemon)>;
@@ -44,15 +42,6 @@ namespace MyUtilities {
         std::unique_ptr<MyWindowsSignalHanderImpl> _impl;
 #endif
         
-        // FIX ME - remove the following platform dependent stuff.
-    
-        
-        friend void SignalHandler(int sig, __siginfo *siginfo, void *context);
-        
-        int _processGroupId;
-        
-        int _processId;
-        
         std::unordered_map<int, std::weak_ptr<SignalCallback const>> _handlers;
         
     public:
@@ -70,8 +59,6 @@ namespace MyUtilities {
 
         static void Reset();
         
-        void Daemonise();
-        
         void InstallReloadHandler(std::shared_ptr<SignalCallback const> handler);
         
         void InstallBrokenPipeHandler(std::shared_ptr<SignalCallback const> handler);
@@ -83,7 +70,7 @@ namespace MyUtilities {
         void InstallHandler(int sig, std::shared_ptr<SignalCallback const> handler);
 
         // Not for application use.
-        void Handle(int sig, int signallingProcessId);
+        void Handle(int sig, bool fromSelf, bool isDaemon);
         
     };
 

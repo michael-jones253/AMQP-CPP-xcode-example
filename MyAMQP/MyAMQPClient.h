@@ -41,7 +41,13 @@ namespace MyAMQP {
                                 MyMessageCallback const &userHandler,
                                 bool threaded);
         
+        MyAMQPClient();
+        
         MyAMQPClient(std::unique_ptr<MyNetworkConnection> networkConnection);
+        
+        MyAMQPClient(MyAMQPClient&& rhs);
+        
+        MyAMQPClient& operator=(MyAMQPClient&& rhs);
 
         // Class is final, virtual not needed.
         ~MyAMQPClient();
@@ -49,6 +55,10 @@ namespace MyAMQP {
         MyCompletionCallbacks Open(MyLoginCredentials const& loginInfo);
         
         void Close(bool flush);
+        
+        void Pause();
+        
+        void Resume();
         
     private:
         size_t OnNetworkRead(char const* buf, int len);

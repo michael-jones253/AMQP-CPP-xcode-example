@@ -36,10 +36,27 @@ namespace MyAMQP {
         _impl->SubscribeToReceive(queueName, handler, threaded);
     }
     
+    MyAMQPClient::MyAMQPClient() :
+    _impl{} {
+        
+    }
+    
     MyAMQPClient::MyAMQPClient(std::unique_ptr<MyNetworkConnection> networkConnection) :
     _impl{}
     {
         _impl = unique_ptr<MyAMQPClientImpl>(new MyAMQPClientImpl(move(networkConnection)));
+    }
+    
+    MyAMQPClient::MyAMQPClient(MyAMQPClient&& rhs) {        
+        _impl = move(rhs._impl);
+    }
+    
+    MyAMQPClient&  MyAMQPClient::operator=(MyAMQPClient&& rhs) {
+        if (this != & rhs) {
+            _impl = move(rhs._impl);
+        }
+        
+        return *this;
     }
     
     MyAMQPClient::~MyAMQPClient() {
@@ -51,5 +68,13 @@ namespace MyAMQP {
     
     void MyAMQPClient::Close(bool flush) {
         _impl->Close(flush);
+    }
+    
+    void MyAMQPClient::Pause() {
+        _impl->Pause();
+    }
+    
+    void MyAMQPClient::Resume() {
+        _impl->Resume();
     }
 }

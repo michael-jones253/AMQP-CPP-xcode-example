@@ -152,23 +152,23 @@ int main(int argc, const char * argv[]) {
             benchmarkCondition.notify_one();
         };
         
+        MyAMQPClient ampqClient{};
+        
         auto ctrlCHandler = [&](bool, bool) {
-            vector<string> options{"abort", "flush and quit", "continue"};
+            ampqClient.Pause();
             
+            vector<string> options{"abort", "flush and quit", "continue"};
             auto input = MyKeyboardInput::GetOption(options);
             switch (input) {
                 case 'a': {
-                    {
-                        lock_guard<mutex> guard(benchmarkMutex);
-                        flushOnClose = false;
-                        breakWait = true;
-                    }
-                    benchmarkCondition.notify_one();
+                    lock_guard<mutex> guard(benchmarkMutex);
+                    flushOnClose = false;
+                    breakWait = true;
                 }
+                benchmarkCondition.notify_one();
                     break;
                     
-                case 'f':
-                {
+                case 'f': {
                     lock_guard<mutex> guard(benchmarkMutex);
                     flushOnClose = true;
                     breakWait = true;
@@ -179,6 +179,8 @@ int main(int argc, const char * argv[]) {
                 default:
                     break;
             }
+            
+            ampqClient.Resume();
             
         };
         
@@ -212,9 +214,10 @@ int main(int argc, const char * argv[]) {
             benchmarkCondition.notify_one();
         };
         
-        MyAMQPClient myAmqp{move(netConnection)};
+        // Move a client with network connection in.
+        ampqClient = MyAMQPClient{move(netConnection)};
         
-        auto completionHandlers = myAmqp.Open(loginInfo);
+        auto completionHandlers = ampqClient.Open(loginInfo);
         completionHandlers.SubscribeToError(errorHandler);
         
         auto messageHandler = [&](string const & message, int64_t tag, bool redelivered) {
@@ -245,7 +248,7 @@ int main(int argc, const char * argv[]) {
             
         };
         
-        OpenQueueForReceive(myAmqp, exchangeType, routingInfo, threaded, messageHandler);
+        OpenQueueForReceive(ampqClient, exchangeType, routingInfo, threaded, messageHandler);
         
         while (!breakWait) {
             unique_lock<mutex> lock(benchmarkMutex);
@@ -264,15 +267,15 @@ int main(int argc, const char * argv[]) {
             benchmarkStopwatch.Stop();
             
             if (caughtReload) {
-                myAmqp.Close(flushOnClose);
-                myAmqp.Open(loginInfo);
-                OpenQueueForReceive(myAmqp, exchangeType, routingInfo, threaded, messageHandler);
+                ampqClient.Close(flushOnClose);
+                ampqClient.Open(loginInfo);
+                OpenQueueForReceive(ampqClient, exchangeType, routingInfo, threaded, messageHandler);
                 cout << "Reopened" << endl;
                 caughtReload = false;
             }
         }
         
-        myAmqp.Close(flushOnClose);
+        ampqClient.Close(flushOnClose);
         
     } catch (exception& ex) {
         cerr << ex.what() << endl;

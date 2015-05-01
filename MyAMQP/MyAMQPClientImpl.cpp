@@ -24,18 +24,6 @@ namespace  {
     // The Copernica library does not guarantee delivery of completion and error callbacks, so we protect against
     // waiting forever for these to occur.
     auto const CopernicaCompletionTimeout = seconds(5);
-    
-    int64_t deliverMessage(MyAMQP::MyMessageCallback const &userHandler,
-                           string const& message,
-                           uint64_t tag,
-                           bool redelivered) {
-        
-        // User handler may throw, in which case we don't return tag for acknowledgment.
-        userHandler(message, tag, redelivered);
-        
-        return static_cast<int64_t>(tag);
-    }
-    
 }
 
 namespace MyAMQP {
@@ -270,6 +258,19 @@ namespace MyAMQP {
         _amqpConnection.reset();
     }
     
+    void MyAMQPClientImpl::Pause() {
+        _pauseClient = true;
+    }
+    
+    void MyAMQPClientImpl::Resume() {
+        {
+            lock_guard<mutex> guard(_mutex);
+            _pauseClient = false;
+        }
+        
+        _conditional.notify_all();
+    }
+    
     size_t MyAMQPClientImpl::OnNetworkRead(char const* buf, int len) {
         auto parsedBytes = _amqpConnection->parse(buf, len);
         
@@ -281,18 +282,41 @@ namespace MyAMQP {
         _completionNotifier.NotifyError(err);
     }
     
-    void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {
-        _channel->ack(deliveryTag);
+    
+    int64_t MyAMQPClientImpl::DeliverMessage(MyAMQP::MyMessageCallback const &userHandler,
+                           string const& message,
+                           uint64_t tag,
+                           bool redelivered) {
+        // This blocks the task processor.
+        unique_lock<mutex> lock(_mutex);
+        _conditional.wait(lock, [this]() { return !_pauseClient; });
         
+        // User handler may throw, in which case we don't return tag for acknowledgment.
+        userHandler(message, tag, redelivered);
+        
+        return static_cast<int64_t>(tag);
+    }
+    
+    void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {
+        // This blocks the ack processor.
+        unique_lock<mutex> lock(_mutex);
+        _conditional.wait(lock, [this]() { return !_pauseClient; });
+
         // FIX ME. Simulating delay on ack send.
         this_thread::sleep_for(milliseconds(1));
         // cout << "Acked tag: " << deliveryTag << endl;
+        _channel->ack(deliveryTag);
+        
     }
     
     MessageCallback MyAMQPClientImpl::CreateInlineMessageCallback(MyMessageCallback const& userHandler) {
         // Take a copy of handler.
         auto receiveHandler = [this,userHandler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
             try {
+                // This blocks the network thread. Task and ack processor not running when this callback is in effect.
+                unique_lock<mutex> lock(_mutex);
+                _conditional.wait(lock, [this]() { return !_pauseClient; });
+                
                 // The Copernica library invokes this callback in the context for the socket read thread.
                 // So rather than block this thread we package the handler to be invoked by another task.
                 // This model assumes that the invoking of the handler needs to be done serially.
@@ -319,10 +343,20 @@ namespace MyAMQP {
         // Take a copy of handler.
         auto receiveHandler = [this,userHandler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
             try {
+                // This blocks the network thread.
+                unique_lock<mutex> lock(_mutex);
+                _conditional.wait(lock, [this]() { return !_pauseClient; });
+
                 // Because messages will be cached in the queue, we need to take a copy.
                 string messageCopy{message.message()};
                 
-                auto handleReceive = bind(deliverMessage, userHandler, move(messageCopy), deliveryTag, redelivered);
+                auto handleReceive = bind(
+                                          &MyAMQPClientImpl::DeliverMessage,
+                                          this,
+                                          userHandler,
+                                          move(messageCopy),
+                                          deliveryTag,
+                                          redelivered);
                 
                 auto deliveryTask = packaged_task<int64_t(void)>{ move(handleReceive) };
                 

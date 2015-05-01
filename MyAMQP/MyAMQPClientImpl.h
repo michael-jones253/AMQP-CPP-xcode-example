@@ -55,6 +55,8 @@ namespace MyAMQP {
         
         std::atomic<bool> _queueReady;
         
+        std::atomic<bool> _pauseClient;
+        
         MyTaskProcessor _receiveTaskProcessor;
         
         MyAckProcessor _ackProcessor;
@@ -134,12 +136,21 @@ namespace MyAMQP {
         
         void Close(bool flush);
         
+        void Pause();
+        
+        void Resume();
+        
     private:
         MyAMQPClientImpl(std::unique_ptr<MyNetworkConnection> networkConnection);
 
         size_t OnNetworkRead(char const* buf, int len);
         
         void OnNetworkReadError(std::string const& errorStr);
+        
+        int64_t DeliverMessage(MyAMQP::MyMessageCallback const &userHandler,
+                               std::string const& message,
+                               uint64_t tag,
+                               bool redelivered);
         
         void AckMessage(int64_t deliveryTag);
 

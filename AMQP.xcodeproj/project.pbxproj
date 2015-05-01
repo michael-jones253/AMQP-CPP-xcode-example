@@ -176,6 +176,8 @@
 		B23A0A741AE0AFF200533FFA /* amqpcpp.h in Headers */ = {isa = PBXBuildFile; fileRef = B23A0A731AE0AFF200533FFA /* amqpcpp.h */; };
 		B24A9E7F1AE738B500B8879B /* MyAMQPClientImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B24A9E7D1AE738B500B8879B /* MyAMQPClientImpl.cpp */; };
 		B24A9E801AE738B500B8879B /* MyAMQPClientImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = B24A9E7E1AE738B500B8879B /* MyAMQPClientImpl.h */; };
+		B24B9A191AF313C000506C31 /* MyKeyboardInput.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B24B9A171AF313C000506C31 /* MyKeyboardInput.cpp */; };
+		B24B9A1A1AF313C000506C31 /* MyKeyboardInput.h in Headers */ = {isa = PBXBuildFile; fileRef = B24B9A181AF313C000506C31 /* MyKeyboardInput.h */; };
 		B2566CB11AF0D2040086D2A1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2566CB01AF0D2040086D2A1 /* main.cpp */; };
 		B2566CB21AF0D25B0086D2A1 /* libMyUtilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B299897A1AEB631400435A5E /* libMyUtilities.a */; };
 		B25CA1131AE6098300BDD034 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B25CA1121AE6098300BDD034 /* main.cpp */; };
@@ -455,6 +457,8 @@
 		B23A0A731AE0AFF200533FFA /* amqpcpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = amqpcpp.h; sourceTree = "<group>"; };
 		B24A9E7D1AE738B500B8879B /* MyAMQPClientImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyAMQPClientImpl.cpp; sourceTree = "<group>"; };
 		B24A9E7E1AE738B500B8879B /* MyAMQPClientImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPClientImpl.h; sourceTree = "<group>"; };
+		B24B9A171AF313C000506C31 /* MyKeyboardInput.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyKeyboardInput.cpp; sourceTree = "<group>"; };
+		B24B9A181AF313C000506C31 /* MyKeyboardInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyKeyboardInput.h; sourceTree = "<group>"; };
 		B2566CA91AF0D1820086D2A1 /* TestSignalHandler */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestSignalHandler; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2566CB01AF0D2040086D2A1 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B25CA1101AE6098300BDD034 /* Consumer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Consumer; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -879,6 +883,8 @@
 				B222A31E1AF057C300C7762E /* MyNetworkException.cpp */,
 				B222A31F1AF057C300C7762E /* MyNetworkException.h */,
 				B29989861AEB63B600435A5E /* MyStopwatch.h */,
+				B24B9A171AF313C000506C31 /* MyKeyboardInput.cpp */,
+				B24B9A181AF313C000506C31 /* MyKeyboardInput.h */,
 				B299897E1AEB631400435A5E /* MyUtilitiesPriv.h */,
 				B2AB375F1AF09FE400242E40 /* MySignalHandler.cpp */,
 				B2AB37601AF09FE400242E40 /* MySignalHandler.h */,
@@ -1069,6 +1075,7 @@
 				B22ADA8F1AF191FC006F0E23 /* MySignalCallbacks.h in Headers */,
 				B299897F1AEB631400435A5E /* MyUtilitiesPriv.h in Headers */,
 				B211546B1AEDD21B003FA861 /* MyNetworkUtilities.h in Headers */,
+				B24B9A1A1AF313C000506C31 /* MyKeyboardInput.h in Headers */,
 				B21BEEE31AF1FAFB003BC26A /* MyUnixSignalHandlerImpl.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1456,6 +1463,7 @@
 				B21BEEE21AF1FAFB003BC26A /* MyUnixSignalHandlerImpl.cpp in Sources */,
 				B22ADA8E1AF191FC006F0E23 /* MySignalCallbacks.cpp in Sources */,
 				B222A3201AF057C300C7762E /* MyNetworkException.cpp in Sources */,
+				B24B9A191AF313C000506C31 /* MyKeyboardInput.cpp in Sources */,
 				B29989871AEB63B600435A5E /* MyStopwatch.cpp in Sources */,
 				B2AB37611AF09FE400242E40 /* MySignalHandler.cpp in Sources */,
 				B211546A1AEDD21B003FA861 /* MyNetworkUtilities.cpp in Sources */,

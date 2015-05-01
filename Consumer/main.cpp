@@ -11,13 +11,15 @@
 #include "MyAMQPClient.h"
 #include "MyStopwatch.h"
 #include "MySignalCallbacks.h"
-#include "../MyNetworkConnection/MyUnixNetworkConnection.h"
+#include "MyKeyboardInput.h"
+#include "MyUnixNetworkConnection.h"
 
 #include <thread>
 #include <condition_variable>
 #include <mutex>
 #include <chrono>
 #include <getopt.h>
+#include <assert.h>
 
 using namespace MyAMQP;
 using namespace MyUtilities;
@@ -25,11 +27,11 @@ using namespace std;
 using namespace std::this_thread;
 using namespace std::chrono;
 
-void OpenQueueForRx(MyAMQPClient& client,
-                    AMQP::ExchangeType exchangeType,
-                    MyAMQPRoutingInfo const & routingInfo,
-                    bool threaded,
-                    MyMessageCallback const& messageCallback) {
+void OpenQueueForReceive(MyAMQPClient& client,
+                         AMQP::ExchangeType exchangeType,
+                         MyAMQPRoutingInfo const & routingInfo,
+                         bool threaded,
+                         MyMessageCallback const& messageCallback) {
     
     client.CreateHelloQueue(exchangeType, routingInfo);
     
@@ -129,7 +131,7 @@ int main(int argc, const char * argv[]) {
         bool caughtReload{};
         
         auto termHandler = [&](bool x, bool y) {
-            cerr << "SIGTERM." << endl;
+            cout << "SIGTERM." << endl;
             {
                 // FIX ME - wait on terminate predicate.
                 lock_guard<mutex> guard(benchmarkMutex);
@@ -141,7 +143,7 @@ int main(int argc, const char * argv[]) {
         };
         
         auto hupHandler = [&](bool, bool) {
-            cerr << "SIGHUP - reopening." << endl;
+            cout << "SIGHUP - reopening." << endl;
             {
                 lock_guard<mutex> guard(benchmarkMutex);
                 caughtReload = true;
@@ -150,8 +152,34 @@ int main(int argc, const char * argv[]) {
             benchmarkCondition.notify_one();
         };
         
-        auto ctrlCHandler = [](bool, bool) {
-            cerr << "CTRL-C" << endl;
+        auto ctrlCHandler = [&](bool, bool) {
+            vector<string> options{"abort", "flush and quit", "continue"};
+            
+            auto input = MyKeyboardInput::GetOption(options);
+            switch (input) {
+                case 'a': {
+                    {
+                        lock_guard<mutex> guard(benchmarkMutex);
+                        flushOnClose = false;
+                        breakWait = true;
+                    }
+                    benchmarkCondition.notify_one();
+                }
+                    break;
+                    
+                case 'f':
+                {
+                    lock_guard<mutex> guard(benchmarkMutex);
+                    flushOnClose = true;
+                    breakWait = true;
+                }
+                benchmarkCondition.notify_one();
+                    break;
+                    
+                default:
+                    break;
+            }
+            
         };
         
         auto pipeHandler = [](bool, bool) {
@@ -164,7 +192,7 @@ int main(int argc, const char * argv[]) {
         // Singletons can make it very difficult for the coder to determine destruction order of globals,
         // sometimes with unexpected results. See RAII signal ownership below to add some clear determination
         // to signal handling release.
-
+        
         MySignalHandler::Instance()->Initialise(false);
         
         // RAII release of signal handlers from OS.
@@ -188,8 +216,6 @@ int main(int argc, const char * argv[]) {
         
         auto completionHandlers = myAmqp.Open(loginInfo);
         completionHandlers.SubscribeToError(errorHandler);
-        
-        myAmqp.CreateHelloQueue(exchangeType, routingInfo);
         
         auto messageHandler = [&](string const & message, int64_t tag, bool redelivered) {
             // Atomic recording of message count and elapsed time.
@@ -219,7 +245,7 @@ int main(int argc, const char * argv[]) {
             
         };
         
-        myAmqp.SubscribeToReceive(routingInfo.QueueName, messageHandler, threaded);
+        OpenQueueForReceive(myAmqp, exchangeType, routingInfo, threaded, messageHandler);
         
         while (!breakWait) {
             unique_lock<mutex> lock(benchmarkMutex);
@@ -240,13 +266,11 @@ int main(int argc, const char * argv[]) {
             if (caughtReload) {
                 myAmqp.Close(flushOnClose);
                 myAmqp.Open(loginInfo);
-                OpenQueueForRx(myAmqp, exchangeType, routingInfo, threaded, messageHandler);
+                OpenQueueForReceive(myAmqp, exchangeType, routingInfo, threaded, messageHandler);
                 cout << "Reopened" << endl;
                 caughtReload = false;
             }
         }
-
-        // OpenQueueForReceive(myAmqp, exchangeType, routingInfo, threaded, nullptr);
         
         myAmqp.Close(flushOnClose);
         

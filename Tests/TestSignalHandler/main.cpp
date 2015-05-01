@@ -9,6 +9,7 @@
 #include <iostream>
 
 #include "MySignalCallbacks.h"
+#include "MyKeyboardInput.h"
 #include <thread>
 #include <chrono>
 #include <mutex>
@@ -47,8 +48,18 @@ int main(int argc, const char * argv[]) {
     
     auto ctrlCHandler = [](bool, bool) {
         cerr << "CTRL-C" << endl;
+        
+        vector<string> options{"abort", "flush and quit", "continue"};
+        
+        while (true) {
+            auto ch = MyKeyboardInput::GetOption(options);
+            if (ch == 'a' || ch == 'f' || ch == 'c') {
+                cout << "got option: " << ch << endl;
+                break;
+            }
+        }
     };
-
+    
     auto pipeHandler = [](bool, bool) {
         cerr << "PIPE" << endl;
     };

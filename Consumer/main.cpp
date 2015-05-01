@@ -132,11 +132,9 @@ int main(int argc, const char * argv[]) {
         
         auto termHandler = [&](bool x, bool y) {
             cout << "SIGTERM." << endl;
-            {
-                // FIX ME - wait on terminate predicate.
-                lock_guard<mutex> guard(benchmarkMutex);
-                caughtTerminate = true;
-            }
+            // FIX ME - wait on terminate predicate.
+            // NB Signal Trampoline means we must not lock the mutex.
+            caughtTerminate = true;
             
             benchmarkCondition.notify_one();
             
@@ -144,10 +142,8 @@ int main(int argc, const char * argv[]) {
         
         auto hupHandler = [&](bool, bool) {
             cout << "SIGHUP - reopening." << endl;
-            {
-                lock_guard<mutex> guard(benchmarkMutex);
-                caughtReload = true;
-            }
+            // NB Signal Trampoline means we must not lock the mutex.
+            caughtReload = true;
             
             benchmarkCondition.notify_one();
         };
@@ -160,20 +156,18 @@ int main(int argc, const char * argv[]) {
             vector<string> options{"abort", "flush and quit", "continue"};
             auto input = MyKeyboardInput::GetOption(options);
             switch (input) {
-                case 'a': {
-                    lock_guard<mutex> guard(benchmarkMutex);
+                case 'a':
+                    // NB Signal Trampoline means we must not lock the mutex.
                     flushOnClose = false;
                     breakWait = true;
-                }
-                benchmarkCondition.notify_one();
+                    benchmarkCondition.notify_one();
                     break;
                     
-                case 'f': {
-                    lock_guard<mutex> guard(benchmarkMutex);
+                case 'f':
+                    // NB Signal Trampoline means we must not lock the mutex.
                     flushOnClose = true;
                     breakWait = true;
-                }
-                benchmarkCondition.notify_one();
+                    benchmarkCondition.notify_one();
                     break;
                     
                 default:
@@ -251,20 +245,23 @@ int main(int argc, const char * argv[]) {
         OpenQueueForReceive(ampqClient, exchangeType, routingInfo, threaded, messageHandler);
         
         while (!breakWait) {
-            unique_lock<mutex> lock(benchmarkMutex);
-            benchmarkCondition.wait(lock, [&]{
-                return (isEndMessage && benchmarkStopwatch.IsRunning())
-                || breakWait
-                || caughtReload; });
-            
-            auto elapsedMs = benchmarkStopwatch.GetElapsedMilliseconds();
-            stringstream messageStr;
-            messageStr << messageCount << " messages received in: " << elapsedMs.count() << " ms";
-            
-            cout << messageStr.str() << endl;
-            messageCount = 0;
-            isEndMessage = false;
-            benchmarkStopwatch.Stop();
+            {
+                // We have to be very careful with deadlock when more than one mutex is involved.
+                unique_lock<mutex> lock(benchmarkMutex);
+                benchmarkCondition.wait(lock, [&]{
+                    return (isEndMessage && benchmarkStopwatch.IsRunning())
+                    || breakWait
+                    || caughtReload; });
+                
+                auto elapsedMs = benchmarkStopwatch.GetElapsedMilliseconds();
+                stringstream messageStr;
+                messageStr << messageCount << " messages received in: " << elapsedMs.count() << " ms";
+                
+                cout << messageStr.str() << endl;
+                messageCount = 0;
+                isEndMessage = false;
+                benchmarkStopwatch.Stop();
+            }
             
             if (caughtReload) {
                 ampqClient.Close(flushOnClose);

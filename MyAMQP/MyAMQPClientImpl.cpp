@@ -287,9 +287,13 @@ namespace MyAMQP {
                            string const& message,
                            uint64_t tag,
                            bool redelivered) {
-        // This blocks the task processor.
-        unique_lock<mutex> lock(_mutex);
-        _conditional.wait(lock, [this]() { return !_pauseClient; });
+        {
+            // This blocks the task processor. We have to be very careful with deadlock. The only reason for this
+            // lock is to wait. We do not need to protect the user handler. This is being called from one thread
+            // context only - the task processor.
+            unique_lock<mutex> lock(_mutex);
+            _conditional.wait(lock, [this]() { return !_pauseClient; });
+        }
         
         // User handler may throw, in which case we don't return tag for acknowledgment.
         userHandler(message, tag, redelivered);
@@ -298,9 +302,12 @@ namespace MyAMQP {
     }
     
     void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {
-        // This blocks the ack processor.
-        unique_lock<mutex> lock(_mutex);
-        _conditional.wait(lock, [this]() { return !_pauseClient; });
+        {
+            // This blocks the ack processor. We have to be very careful with deadlock. The only reason for this
+            // lock is to wait. We do not need to protect the ack call.
+            unique_lock<mutex> lock(_mutex);
+            _conditional.wait(lock, [this]() { return !_pauseClient; });
+        }
 
         // FIX ME. Simulating delay on ack send.
         this_thread::sleep_for(milliseconds(1));

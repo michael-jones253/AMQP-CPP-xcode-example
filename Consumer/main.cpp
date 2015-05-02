@@ -151,6 +151,10 @@ int main(int argc, const char * argv[]) {
         MyAMQPClient ampqClient{};
         
         auto ctrlCHandler = [&](bool, bool) {
+            // FIX ME - because of sigtramp (Signal Trampoline) where the signalling line of execution parks itself
+            // on some random part of the main thread this sometimes goes wrong depending on what the main thread
+            // was doing. Take the approach of the other handlers and signal a condition only (without the lock in
+            // case the lock is already taken).
             ampqClient.Pause();
             
             vector<string> options{"abort", "flush and quit", "continue"};
@@ -229,9 +233,9 @@ int main(int argc, const char * argv[]) {
                 }
                 
                 ++messageCount;
+                cout << message << ", tag: " << tag << ", redelivered: " << redelivered << endl;
             }
             
-            cout << message << ", tag: " << tag << ", redelivered: " << redelivered << endl;
 
             if (isEndMessage && benchmarkStopwatch.IsRunning()) {
                 benchmarkCondition.notify_one();

@@ -197,10 +197,13 @@ namespace MyAMQP {
         Close(false);
         
         // Reset state information to allow for reopening.
-        _channelOpen = false;
-        _channelInError = false;
-        _queueReady = false;
-        _channelFinalized = false;
+        {
+            lock_guard<mutex> guard(_mutex);
+            _channelOpen = false;
+            _channelInError = false;
+            _queueReady = false;
+            _channelFinalized = false;
+        }
         
         _bufferedConnection.Open(loginInfo.HostIpAddress);
         
@@ -260,6 +263,8 @@ namespace MyAMQP {
     
     void MyAMQPClientImpl::Pause() {
         _pauseClient = true;
+        _receiveTaskProcessor.Stop(false);
+        _ackProcessor.Stop(false);
     }
     
     void MyAMQPClientImpl::Resume() {
@@ -267,6 +272,8 @@ namespace MyAMQP {
             lock_guard<mutex> guard(_mutex);
             _pauseClient = false;
         }
+        _ackProcessor.Resume();
+        _receiveTaskProcessor.Start();
         
         _conditional.notify_all();
     }
@@ -287,13 +294,6 @@ namespace MyAMQP {
                            string const& message,
                            uint64_t tag,
                            bool redelivered) {
-        {
-            // This blocks the task processor. We have to be very careful with deadlock. The only reason for this
-            // lock is to wait. We do not need to protect the user handler. This is being called from one thread
-            // context only - the task processor.
-            unique_lock<mutex> lock(_mutex);
-            _conditional.wait(lock, [this]() { return !_pauseClient; });
-        }
         
         // User handler may throw, in which case we don't return tag for acknowledgment.
         userHandler(message, tag, redelivered);
@@ -302,15 +302,9 @@ namespace MyAMQP {
     }
     
     void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {
-        {
-            // This blocks the ack processor. We have to be very careful with deadlock. The only reason for this
-            // lock is to wait. We do not need to protect the ack call.
-            unique_lock<mutex> lock(_mutex);
-            _conditional.wait(lock, [this]() { return !_pauseClient; });
-        }
 
         // FIX ME. Simulating delay on ack send.
-        this_thread::sleep_for(milliseconds(1));
+        // this_thread::sleep_for(milliseconds(1));
         // cout << "Acked tag: " << deliveryTag << endl;
         _channel->ack(deliveryTag);
         
@@ -320,9 +314,11 @@ namespace MyAMQP {
         // Take a copy of handler.
         auto receiveHandler = [this,userHandler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
             try {
-                // This blocks the network thread. Task and ack processor not running when this callback is in effect.
-                unique_lock<mutex> lock(_mutex);
-                _conditional.wait(lock, [this]() { return !_pauseClient; });
+                {
+                    // This blocks the network thread. Task and ack processor not running when this callback is in effect.
+                    unique_lock<mutex> lock(_mutex);
+                    _conditional.wait(lock, [this]() { return !_pauseClient; });
+                }
                 
                 // The Copernica library invokes this callback in the context for the socket read thread.
                 // So rather than block this thread we package the handler to be invoked by another task.
@@ -350,9 +346,11 @@ namespace MyAMQP {
         // Take a copy of handler.
         auto receiveHandler = [this,userHandler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
             try {
-                // This blocks the network thread.
-                unique_lock<mutex> lock(_mutex);
-                _conditional.wait(lock, [this]() { return !_pauseClient; });
+                {
+                    // This blocks the network thread.
+                    unique_lock<mutex> lock(_mutex);
+                    _conditional.wait(lock, [this]() { return !_pauseClient; });
+                }
 
                 // Because messages will be cached in the queue, we need to take a copy.
                 string messageCopy{message.message()};

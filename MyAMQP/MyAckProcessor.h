@@ -35,6 +35,7 @@ namespace MyAMQP {
         
         void Start(std::function<void(int64_t)> const& ackHandler);
         void Stop(bool flush);
+        void Resume();
         
         void Push(std::future<int64_t>&& deliveryTagFuture);
         

@@ -27,6 +27,7 @@ namespace MyAMQP {
         std::function<void(int64_t)> _ackHandler;
 
         std::atomic<bool> _shouldRun;
+        std::atomic<bool> _flushRequested;
     public:
         MyAckProcessor();
         

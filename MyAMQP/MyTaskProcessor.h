@@ -19,10 +19,11 @@
 
 namespace MyAMQP {
     class MyTaskProcessor final {
-        std::atomic<bool> _shouldRun;
-        MyReceiveTaskQueue<std::packaged_task<int64_t(void)>> _taskQueue;
-        
+        MyReceiveTaskQueue<std::packaged_task<int64_t(void)>> _taskQueue;        
         std::future<int> _loopHandle;
+        
+        std::atomic<bool> _shouldRun;
+        std::atomic<bool> _flushRequested;
         
     public:
         MyTaskProcessor();

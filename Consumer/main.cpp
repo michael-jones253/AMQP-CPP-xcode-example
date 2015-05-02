@@ -228,10 +228,11 @@ int main(int argc, const char * argv[]) {
                     breakWait = true;
                 }
                 
-                cout << message << ", tag: " << tag << ", redelivered: " << redelivered << endl;
                 ++messageCount;
             }
             
+            cout << message << ", tag: " << tag << ", redelivered: " << redelivered << endl;
+
             if (isEndMessage && benchmarkStopwatch.IsRunning()) {
                 benchmarkCondition.notify_one();
             }

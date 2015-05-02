@@ -23,7 +23,8 @@ namespace MyAMQP {
     _taskQueue{},
     _loopHandle{},
     _ackHandler{},
-    _shouldRun{}
+    _shouldRun{},
+    _flushRequested{}
     {
         
     }
@@ -38,6 +39,7 @@ namespace MyAMQP {
     
     void MyAckProcessor::Start(function<void(int64_t)> const& ackHandler) {
         _shouldRun = true;
+        _flushRequested = false;
         _taskQueue.Reset();
         _ackHandler = ackHandler;
         _loopHandle = async(launch::async, [this]() { return ProcessLoop(); });
@@ -49,16 +51,13 @@ namespace MyAMQP {
         }
         
         _shouldRun = false;
+        _flushRequested = flush;
         _taskQueue.BreakWait();
         
         auto ret = _loopHandle.get();
         
         if (ret < 0) {
             cout << "MyAckProcessor abnormal exit" << endl;
-        }
-        
-        if (flush) {
-            Flush();
         }
     }
     
@@ -96,6 +95,10 @@ namespace MyAMQP {
             } catch (exception const& ex) {
                 cerr << "MyAckProcessor: " << ex.what() << endl;
             }
+        }
+        
+        if (_flushRequested) {
+            Flush();
         }
         
         return 0;

@@ -16,7 +16,8 @@ namespace MyAMQP {
     MyTaskProcessor::MyTaskProcessor() :
     _taskQueue{},
     _loopHandle{},
-    _shouldRun{}
+    _shouldRun{},
+    _flushRequested{}    
     {
         
     }
@@ -31,6 +32,7 @@ namespace MyAMQP {
     
     void MyTaskProcessor::Start() {
         _shouldRun = true;
+        _flushRequested = false;
         _taskQueue.Reset();
         _loopHandle = async(launch::async, [this]() { return ProcessLoop(); });
     }
@@ -41,16 +43,13 @@ namespace MyAMQP {
         }
         
         _shouldRun = false;
+        _flushRequested = flush;
         _taskQueue.BreakWait();
         
         auto ret = _loopHandle.get();
         
         if (ret < 0) {
             cout << "MyTaskProcessor abnormal exit" << endl;
-        }
-        
-        if (flush) {
-            Flush();
         }
     }
     
@@ -83,6 +82,10 @@ namespace MyAMQP {
             
             // Does not throw. The get of the future gets any task exceptions.
             task();
+        }
+        
+        if (_flushRequested) {
+            Flush();
         }
         
         return 0;

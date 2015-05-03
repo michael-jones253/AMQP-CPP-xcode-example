@@ -18,13 +18,16 @@
 /* The classes below are exported */
 #pragma GCC visibility push(default)
 
+// Forward declaration to hide impl and all OS specific include files.
+struct MyUnixNetworkConnectionImpl;
+
 class MyUnixNetworkConnection final : public MyAMQP::MyNetworkConnection {
-    int _socketFd;
-    std::atomic<bool> _canRead;
+    std::unique_ptr<MyUnixNetworkConnectionImpl> _impl;
     
 public:
     
     MyUnixNetworkConnection();
+    ~MyUnixNetworkConnection();
     
 private:
     // For use by super class only.

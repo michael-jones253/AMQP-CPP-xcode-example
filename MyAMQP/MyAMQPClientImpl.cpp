@@ -224,11 +224,19 @@ namespace MyAMQP {
         
         int retCode{};
         
-        _receiveTaskProcessor.Stop(flush);
-        
-        // Presumably flushing of acks needs to be done before the channel is closed.
-        // Definitely before the connection is closed.
-        _ackProcessor.Stop(flush);
+        if (flush) {
+            // All tasks must be executed first before waiting on the futures.
+            _receiveTaskProcessor.Stop(flush);
+            
+            // Presumably flushing of acks needs to be done before the channel is closed.
+            // Definitely before the connection is closed.
+            _ackProcessor.Stop(flush);
+        }
+        else {
+            // Immediate stop means don't wait for tasks to finish.
+            _ackProcessor.Stop(flush);
+            _receiveTaskProcessor.Stop(flush);
+        }
 
         auto finalize = [&](){
             cout << "channel finalized" << endl;
@@ -267,8 +275,9 @@ namespace MyAMQP {
     
     void MyAMQPClientImpl::Pause() {
         _pauseClient = true;
-        _receiveTaskProcessor.Stop(false);
+        _bufferedConnection.PauseReadLoop();
         _ackProcessor.Stop(false);
+        _receiveTaskProcessor.Stop(false);
     }
     
     void MyAMQPClientImpl::Resume() {
@@ -281,12 +290,7 @@ namespace MyAMQP {
             _receiveTaskProcessor.Start();
         }
         
-        {
-            lock_guard<mutex> guard(_mutex);
-            _pauseClient = false;
-        }
-        
-        _conditional.notify_all();
+        _bufferedConnection.ResumeReadLoop();
     }
     
     void MyAMQPClientImpl::SimulateAckDelay(bool delay) {
@@ -330,12 +334,6 @@ namespace MyAMQP {
         // Take a copy of handler.
         auto receiveHandler = [this,userHandler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
             try {
-                {
-                    // This blocks the network thread. Task and ack processor not running when this callback is in effect.
-                    unique_lock<mutex> lock(_mutex);
-                    _conditional.wait(lock, [this]() { return !_pauseClient; });
-                }
-                
                 // The Copernica library invokes this callback in the context for the socket read thread.
                 // So rather than block this thread we package the handler to be invoked by another task.
                 // This model assumes that the invoking of the handler needs to be done serially.
@@ -362,12 +360,6 @@ namespace MyAMQP {
         // Take a copy of handler.
         auto receiveHandler = [this,userHandler](const AMQP::Message &message, uint64_t deliveryTag, bool redelivered) {
             try {
-                {
-                    // This blocks the network thread.
-                    unique_lock<mutex> lock(_mutex);
-                    _conditional.wait(lock, [this]() { return !_pauseClient; });
-                }
-
                 // Because messages will be cached in the queue, we need to take a copy.
                 string messageCopy{message.message()};
                 

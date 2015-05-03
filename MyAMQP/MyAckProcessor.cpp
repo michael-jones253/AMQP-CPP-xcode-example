@@ -66,8 +66,6 @@ namespace MyAMQP {
     }
     
     void MyAckProcessor::Push(future<int64_t>&& task) {
-        assert(_shouldRun);
-        
         if (!_shouldRun) {
             return;
         }

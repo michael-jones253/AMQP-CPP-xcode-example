@@ -56,23 +56,7 @@ namespace MyAMQP {
         
         Connect(ipAddress, 5672);
         
-        _readShouldRun = true;
-        
-        auto readLoop = [this]() ->int {
-            auto errCode = int{};
-            try {
-                ReadLoop();
-            } catch (exception& ex) {
-                errCode = -1;
-                _loopExitAssertionId = this_thread::get_id();
-                _onError(ex.what());
-            }
-            
-            return errCode;
-        };
-        
-        auto handle = async(launch::async, readLoop);
-        _readLoopHandle = move(handle);
+        ResumeReadLoop();
     }
     
     void MyAMQPBufferedConnection::Close() {
@@ -96,6 +80,51 @@ namespace MyAMQP {
         }
         
         cout << "Maximum buffered: " << _amqpBuffer.Buffered()  << endl;
+    }
+    
+    void MyAMQPBufferedConnection::PauseReadLoop() {
+        // Must not be called from the context of the onError callback.
+        assert(this_thread::get_id() != _loopExitAssertionId);
+        
+        if (!_readLoopHandle.valid()) {
+            // Ensure robust to multiple closes.
+            return;
+        }
+
+        _readShouldRun = false;
+        
+        _networkConnection->UnblockRead();
+
+        // Wait for async task to exit. (Equivalent of thread join).
+        auto exitCode = _readLoopHandle.get();
+        if (exitCode < 0) {
+            cerr << "Pause Read loop exited with error code" << endl;
+        }
+    }
+    
+    void MyAMQPBufferedConnection::ResumeReadLoop() {
+        if (_readLoopHandle.valid()) {
+            return;
+        }
+        
+        _readShouldRun = true;
+        _networkConnection->ResumeRead();
+        
+        auto readLoop = [this]() ->int {
+            auto errCode = int{};
+            try {
+                ReadLoop();
+            } catch (exception& ex) {
+                errCode = -1;
+                _loopExitAssertionId = this_thread::get_id();
+                _onError(ex.what());
+            }
+            
+            return errCode;
+        };
+        
+        auto handle = async(launch::async, readLoop);
+        _readLoopHandle = move(handle);
     }
     
     void MyAMQPBufferedConnection::Connect(std::string const& ipAddress, int port) {

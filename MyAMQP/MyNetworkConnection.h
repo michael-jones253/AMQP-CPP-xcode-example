@@ -29,6 +29,10 @@ namespace MyAMQP {
         
         virtual void WriteAll(char const* buf, size_t len) = 0;
         
+        virtual void UnblockRead() = 0;
+        
+        virtual void ResumeRead() = 0;
+        
         void ReadLoop();
     };
 }

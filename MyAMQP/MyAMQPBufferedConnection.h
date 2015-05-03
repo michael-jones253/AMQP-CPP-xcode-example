@@ -62,6 +62,10 @@ namespace MyAMQP {
         
         void Close();
         
+        void PauseReadLoop();
+        
+        void ResumeReadLoop();
+        
         void SendToServer(char const* buf, size_t len) { WriteAll(buf, len); }
         
     private:

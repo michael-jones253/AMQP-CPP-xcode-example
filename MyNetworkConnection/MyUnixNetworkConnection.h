@@ -40,6 +40,10 @@ private:
     
     void WriteAll(char const* buf, size_t len) override;
     
+    void UnblockRead() override;
+    
+    void ResumeRead() override;
+    
 };
 
 #pragma GCC visibility pop

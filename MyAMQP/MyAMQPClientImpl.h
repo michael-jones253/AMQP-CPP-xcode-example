@@ -57,9 +57,9 @@ namespace MyAMQP {
         
         std::atomic<bool> _threadedReceive;
         
-        std::atomic<bool> _delayAcks;
+        std::atomic<bool> _simulateAckDelay;
         
-        std::atomic<bool> _pauseClient;
+        std::atomic<bool> _pauseClient;        
         
         MyTaskProcessor _receiveTaskProcessor;
         
@@ -143,6 +143,8 @@ namespace MyAMQP {
         void Pause();
         
         void Resume();
+        
+        void SimulateAckDelay(bool delay);
         
     private:
         MyAMQPClientImpl(std::unique_ptr<MyNetworkConnection> networkConnection);

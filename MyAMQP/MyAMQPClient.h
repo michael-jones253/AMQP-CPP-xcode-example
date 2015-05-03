@@ -60,6 +60,8 @@ namespace MyAMQP {
         
         void Resume();
         
+        void SimulateAckDelay(bool delay);
+        
     private:
         size_t OnNetworkRead(char const* buf, int len);
         

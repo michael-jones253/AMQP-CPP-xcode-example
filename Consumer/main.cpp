@@ -154,7 +154,7 @@ int main(int argc, const char * argv[]) {
         auto ctrlCHandler = [&](bool, bool) {
             ampqClient.Pause();
             
-            vector<string> options{"abort", "flush and quit", "continue"};
+            vector<string> options{"abort", "flush and quit", "delay acks", "continue with no delay"};
             auto input = MyKeyboardInput::GetOption(options);
             switch (input) {
                 case 'a':
@@ -169,7 +169,12 @@ int main(int argc, const char * argv[]) {
                     breakWait = true;
                     break;
                     
+                case 'd':
+                    ampqClient.SimulateAckDelay(true);
+                    break;
+                    
                 case 'c':
+                    ampqClient.SimulateAckDelay(false);
                     break;
                     
                 default:

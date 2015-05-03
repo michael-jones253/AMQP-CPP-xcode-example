@@ -77,4 +77,8 @@ namespace MyAMQP {
     void MyAMQPClient::Resume() {
         _impl->Resume();
     }
+    
+    void MyAMQPClient::SimulateAckDelay(bool delay) {
+        _impl->SimulateAckDelay(delay);
+    }
 }

@@ -39,7 +39,7 @@ namespace MyAMQP {
     _channelInError{},
     _queueReady{},
     _threadedReceive{},
-    _delayAcks{},
+    _simulateAckDelay{},
     _receiveTaskProcessor{},
     _channelFinalized{},
     _completionNotifier{}
@@ -289,6 +289,10 @@ namespace MyAMQP {
         _conditional.notify_all();
     }
     
+    void MyAMQPClientImpl::SimulateAckDelay(bool delay) {
+        _simulateAckDelay = delay;
+    }
+    
     size_t MyAMQPClientImpl::OnNetworkRead(char const* buf, int len) {
         auto parsedBytes = _amqpConnection->parse(buf, len);
         
@@ -314,8 +318,9 @@ namespace MyAMQP {
     
     void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {
 
-        // FIX ME. Simulating delay on ack send.
-        // this_thread::sleep_for(milliseconds(1));
+        if (_simulateAckDelay) {
+            this_thread::sleep_for(milliseconds(1));
+        }
         // cout << "Acked tag: " << deliveryTag << endl;
         _channel->ack(deliveryTag);
         

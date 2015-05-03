@@ -38,6 +38,8 @@ namespace MyAMQP {
     _channelOpen{},
     _channelInError{},
     _queueReady{},
+    _threadedReceive{},
+    _delayAcks{},
     _receiveTaskProcessor{},
     _channelFinalized{},
     _completionNotifier{}
@@ -125,6 +127,8 @@ namespace MyAMQP {
         
         auto messageHandler = threaded ? CreateThreadedMessageCallback(userHandler)
                                         : CreateInlineMessageCallback(userHandler);
+        
+        _threadedReceive = threaded;
         
         if (threaded) {
             auto ackChannel = bind(&MyAMQPClientImpl::AckMessage, this, placeholders::_1);
@@ -268,12 +272,19 @@ namespace MyAMQP {
     }
     
     void MyAMQPClientImpl::Resume() {
+        if (!_pauseClient) {
+            return;
+        }
+        
+        if (_threadedReceive) {
+            _ackProcessor.Resume();
+            _receiveTaskProcessor.Start();
+        }
+        
         {
             lock_guard<mutex> guard(_mutex);
             _pauseClient = false;
         }
-        _ackProcessor.Resume();
-        _receiveTaskProcessor.Start();
         
         _conditional.notify_all();
     }

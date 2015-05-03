@@ -55,6 +55,10 @@ namespace MyAMQP {
         
         std::atomic<bool> _queueReady;
         
+        std::atomic<bool> _threadedReceive;
+        
+        std::atomic<bool> _delayAcks;
+        
         std::atomic<bool> _pauseClient;
         
         MyTaskProcessor _receiveTaskProcessor;

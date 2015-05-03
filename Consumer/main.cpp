@@ -129,6 +129,7 @@ int main(int argc, const char * argv[]) {
         bool isEndMessage{};
         bool caughtTerminate{};
         bool caughtReload{};
+        bool resumeRequested{};
         
         auto termHandler = [&](bool x, bool y) {
             cout << "SIGTERM." << endl;
@@ -151,10 +152,6 @@ int main(int argc, const char * argv[]) {
         MyAMQPClient ampqClient{};
         
         auto ctrlCHandler = [&](bool, bool) {
-            // FIX ME - because of sigtramp (Signal Trampoline) where the signalling line of execution parks itself
-            // on some random part of the main thread this sometimes goes wrong depending on what the main thread
-            // was doing. Take the approach of the other handlers and signal a condition only (without the lock in
-            // case the lock is already taken).
             ampqClient.Pause();
             
             vector<string> options{"abort", "flush and quit", "continue"};
@@ -164,22 +161,26 @@ int main(int argc, const char * argv[]) {
                     // NB Signal Trampoline means we must not lock the mutex.
                     flushOnClose = false;
                     breakWait = true;
-                    benchmarkCondition.notify_one();
                     break;
                     
                 case 'f':
                     // NB Signal Trampoline means we must not lock the mutex.
                     flushOnClose = true;
                     breakWait = true;
-                    benchmarkCondition.notify_one();
+                    break;
+                    
+                case 'c':
                     break;
                     
                 default:
                     break;
             }
             
-            ampqClient.Resume();
-            
+            // Because of sigtramp (Signal Trampoline) where the signalling line of execution parks itself
+            // on some random part of the main thread restarting of threads is done in the main line of execution
+            // on the main thread, so we signal without the lock here (in case lock was taken just before sigtramp).
+            resumeRequested = true;
+            benchmarkCondition.notify_one();
         };
         
         auto pipeHandler = [](bool, bool) {
@@ -212,7 +213,7 @@ int main(int argc, const char * argv[]) {
             benchmarkCondition.notify_one();
         };
         
-        // Move a client with network connection in.
+        // Move assignment of a client with network connection.
         ampqClient = MyAMQPClient{move(netConnection)};
         
         auto completionHandlers = ampqClient.Open(loginInfo);
@@ -256,6 +257,7 @@ int main(int argc, const char * argv[]) {
                 benchmarkCondition.wait(lock, [&]{
                     return (isEndMessage && benchmarkStopwatch.IsRunning())
                     || breakWait
+                    || resumeRequested
                     || caughtReload; });
                 
                 auto elapsedMs = benchmarkStopwatch.GetElapsedMilliseconds();
@@ -268,7 +270,14 @@ int main(int argc, const char * argv[]) {
                 benchmarkStopwatch.Stop();
             }
             
+            if (resumeRequested) {
+                cout << "Resuming" << endl;
+                ampqClient.Resume();
+                resumeRequested = false;
+            }
+            
             if (caughtReload) {
+                cout << "Reopening" << endl;
                 ampqClient.Close(flushOnClose);
                 ampqClient.Open(loginInfo);
                 OpenQueueForReceive(ampqClient, exchangeType, routingInfo, threaded, messageHandler);

@@ -43,9 +43,11 @@ MyUnixNetworkConnection::~MyUnixNetworkConnection() {
 void MyUnixNetworkConnection::Connect(string const& ipAddress, int port) {
     cout << "connecting" << endl;
     
-    auto retPipe = pipe(_impl->ControlFdPair);
+    // Datagrams will not be lost across AF_UNIX/loopback. We will be nowhere near overflowing the socket buffer.
+    // This way we get an immediate send with no delayed buffering.
+    auto retPipe = socketpair(AF_UNIX, SOCK_DGRAM, 0, _impl->ControlFdPair);
     if (retPipe < 0) {
-        throw MyNetworkException("Unable to create pipe for break read");
+        throw MyNetworkException("Unable to create pipe for control connection.");
     }
     
     // Setup socket and connect it.
@@ -107,11 +109,11 @@ ssize_t MyUnixNetworkConnection::Read(char* buf, size_t len) {
             throw MyNetworkException("MyUnixNetworkConnection select failed");
         }
         
-        // Check for non data instruction first and exit select loop here leaving behind any data
+        // Check for control first and exit select loop here leaving behind any data
         // on the main socket (which will be read when we resume because we do not close the socket on pause.
         if (FD_ISSET(_impl->ControlFdPair[0], &_impl->ReadSet) != 0) {
             char ch{};
-            auto nonDataRead = read(_impl->ControlFdPair[0], &ch, 1);
+            auto nonDataRead = recv(_impl->ControlFdPair[0], &ch, 1, 0);
             if (nonDataRead < 0) {
                 throw MyNetworkException("MyUnixNetworkConnection Break FD read error");
             }
@@ -120,6 +122,8 @@ ssize_t MyUnixNetworkConnection::Read(char* buf, size_t len) {
                 break;
             }
             
+            // This is normal if the read loop exited because data on the data socket unblocked the read
+            // before data on the control socket.
             cerr << "MyUnixNetworkConnection: Spurious control data" << endl;
         }
 
@@ -148,7 +152,7 @@ ssize_t MyUnixNetworkConnection::Read(char* buf, size_t len) {
 
 void MyUnixNetworkConnection::UnblockRead() {
     _impl->ControlUnblockFlagged = true;
-    auto bytes = write(_impl->ControlFdPair[1], "u", 1);
+    auto bytes = send(_impl->ControlFdPair[1], "u", 1, 0);
     if (bytes < 0) {
         throw MyNetworkException("MyUnixNetworkConnection Break FD write error");
     }

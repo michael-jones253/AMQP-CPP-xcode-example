@@ -21,9 +21,10 @@ using namespace MyUtilities;
 using namespace std;
 
 struct MyUnixNetworkConnectionImpl {
-    int SocketFd;
-    int NonDataFdPair[2];
-    std::atomic<bool> CanRead;
+    int DataSocketFd;
+    int ControlFdPair[2];
+    std::atomic<bool> DataConnectionOpen;
+    std::atomic<bool> ControlUnblockFlagged;
     fd_set ReadSet;
     int FdCount;
 };
@@ -42,14 +43,14 @@ MyUnixNetworkConnection::~MyUnixNetworkConnection() {
 void MyUnixNetworkConnection::Connect(string const& ipAddress, int port) {
     cout << "connecting" << endl;
     
-    auto retPipe = pipe(_impl->NonDataFdPair);
+    auto retPipe = pipe(_impl->ControlFdPair);
     if (retPipe < 0) {
         throw MyNetworkException("Unable to create pipe for break read");
     }
     
     // Setup socket and connect it.
-    _impl->SocketFd = socket(AF_INET, SOCK_STREAM, 0);
-    if (_impl->SocketFd < 0)
+    _impl->DataSocketFd = socket(AF_INET, SOCK_STREAM, 0);
+    if (_impl->DataSocketFd < 0)
     {
         string err = "Socket for: " + ipAddress;
         throw MyNetworkException(err);
@@ -70,63 +71,67 @@ void MyUnixNetworkConnection::Connect(string const& ipAddress, int port) {
     }
     
     // Connect to you on send socket.
-    int con_ret = connect(_impl->SocketFd, (sockaddr*)&sinServer, sizeof(sinServer));
+    int con_ret = connect(_impl->DataSocketFd, (sockaddr*)&sinServer, sizeof(sinServer));
     if (con_ret < 0)
     {
         string err = "connect: " + ipAddress;
         throw MyNetworkException(err);
     }
     
-    _impl->CanRead = true;
+    _impl->DataConnectionOpen = true;
 }
 
 void MyUnixNetworkConnection::Disconnect() {
-    _impl->CanRead = false;
-    close(_impl->SocketFd);
-    close(_impl->NonDataFdPair[0]);
+    _impl->DataConnectionOpen = false;
+    UnblockRead();
+    close(_impl->DataSocketFd);
+    close(_impl->ControlFdPair[0]);
 }
 
 ssize_t MyUnixNetworkConnection::Read(char* buf, size_t len) {
     ssize_t bytesRead{};
-    while (_impl->CanRead) {
+    while (_impl->DataConnectionOpen) {
         FD_ZERO(&_impl->ReadSet);
-        FD_SET(_impl->SocketFd, &_impl->ReadSet);
-        FD_SET(_impl->NonDataFdPair[0], &_impl->ReadSet);
+        FD_SET(_impl->DataSocketFd, &_impl->ReadSet);
+        FD_SET(_impl->ControlFdPair[0], &_impl->ReadSet);
         
-        int numberDescriptors = max(_impl->SocketFd, _impl->NonDataFdPair[0]) + 1;
+        int numberDescriptors = max(_impl->DataSocketFd, _impl->ControlFdPair[0]) + 1;
         
         auto selectRet = select(numberDescriptors, &_impl->ReadSet, nullptr, nullptr, nullptr);
         
-        if (selectRet < 0 && _impl->CanRead) {
-            throw MyNetworkException("MyUnixNetworkConnection select failed");
+        if (!_impl->DataConnectionOpen) {
+            break;
         }
         
-        // Review
         if (selectRet < 0) {
-            break;
+            throw MyNetworkException("MyUnixNetworkConnection select failed");
         }
         
         // Check for non data instruction first and exit select loop here leaving behind any data
         // on the main socket (which will be read when we resume because we do not close the socket on pause.
-        if (FD_ISSET(_impl->NonDataFdPair[0], &_impl->ReadSet) != 0) {
+        if (FD_ISSET(_impl->ControlFdPair[0], &_impl->ReadSet) != 0) {
             char ch{};
-            auto nonDataRead = read(_impl->NonDataFdPair[0], &ch, 1);
+            auto nonDataRead = read(_impl->ControlFdPair[0], &ch, 1);
             if (nonDataRead < 0) {
                 throw MyNetworkException("MyUnixNetworkConnection Break FD read error");
             }
             
-            break;
+            if (_impl->ControlUnblockFlagged) {
+                break;
+            }
+            
+            cerr << "MyUnixNetworkConnection: Spurious control data" << endl;
         }
 
-        if (FD_ISSET(_impl->SocketFd, &_impl->ReadSet) != 0) {
+        if (FD_ISSET(_impl->DataSocketFd, &_impl->ReadSet) != 0) {
             
-            bytesRead = recv(_impl->SocketFd, buf, len, 0);
+            bytesRead = recv(_impl->DataSocketFd, buf, len, 0);
             if (bytesRead <= 0) {
                 auto reason = bytesRead == 0 ? string{": connection closed by host"} : "";
                 auto errStr = "MyUnixNetworkConnection read failed" + reason;
                 auto useSysError = bytesRead != 0;
                 
-                if (_impl->CanRead) {
+                if (_impl->DataConnectionOpen) {
                     throw MyNetworkException(errStr, useSysError);
                 }
                 
@@ -142,15 +147,15 @@ ssize_t MyUnixNetworkConnection::Read(char* buf, size_t len) {
 }
 
 void MyUnixNetworkConnection::UnblockRead() {
-    _impl->CanRead = false;
-    auto bytes = write(_impl->NonDataFdPair[1], "u", 1);
+    _impl->ControlUnblockFlagged = true;
+    auto bytes = write(_impl->ControlFdPair[1], "u", 1);
     if (bytes < 0) {
         throw MyNetworkException("MyUnixNetworkConnection Break FD write error");
     }
 }
 
 void MyUnixNetworkConnection::ResumeRead() {
-    _impl->CanRead = true;
+    _impl->ControlUnblockFlagged = false;
 }
 
 void MyUnixNetworkConnection::WriteAll(char const* buf, size_t len) {
@@ -158,7 +163,7 @@ void MyUnixNetworkConnection::WriteAll(char const* buf, size_t len) {
     
     while (amountWritten > 0) {
         
-        auto ret = send(_impl->SocketFd, buf, len, 0);
+        auto ret = send(_impl->DataSocketFd, buf, len, 0);
         
         // FIX ME there are errno codes such as EINTR which need handling.
         if (ret < 0) {

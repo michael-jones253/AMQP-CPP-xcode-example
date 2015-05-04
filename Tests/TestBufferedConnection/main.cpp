@@ -53,7 +53,7 @@ int main(int argc, const char * argv[]) {
         }
         
         
-        string junk{"xxx"};
+        string junk{"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"};
         
         bufferedConnection.SendToServer(junk.data(), junk.length());
         

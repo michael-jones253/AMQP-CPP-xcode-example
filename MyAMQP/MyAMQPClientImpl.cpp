@@ -41,6 +41,8 @@ namespace MyAMQP {
     _threadedReceive{},
     _simulateAckDelay{},
     _receiveTaskProcessor{},
+    _ackProcessor{},
+    _requestProcessor{},
     _channelFinalized{},
     _completionNotifier{}
     {
@@ -62,12 +64,12 @@ namespace MyAMQP {
     
     void MyAMQPClientImpl::CreateHelloQueue(ExchangeType exchangeType, MyAMQPRoutingInfo const& routingInfo) {
         unique_lock<mutex> lock(_mutex);
-
+        
         // Prevent a race with queue creation before underlying channel is created.
         // Don't wait forever if channel callback never happens.
         auto ok = _conditional.wait_for(lock, CopernicaCompletionTimeout , [this]() {
-                    return _channelOpen || _channelInError;
-                });
+            return _channelOpen || _channelInError;
+        });
         
         if (!ok) {
             throw runtime_error("Channel open timed out");
@@ -126,7 +128,7 @@ namespace MyAMQP {
                                               bool threaded) {
         
         auto messageHandler = threaded ? CreateThreadedMessageCallback(userHandler)
-                                        : CreateInlineMessageCallback(userHandler);
+        : CreateInlineMessageCallback(userHandler);
         
         _threadedReceive = threaded;
         
@@ -216,7 +218,9 @@ namespace MyAMQP {
                                                                                         loginInfo.Password), "/"));
         _amqpConnection->login();
         
-        return _completionNotifier.CreateCompletionCallbacks();        
+        _requestProcessor.Start();
+        
+        return _completionNotifier.CreateCompletionCallbacks();
     }
     
     void MyAMQPClientImpl::Close(bool flush) {
@@ -237,21 +241,23 @@ namespace MyAMQP {
             _ackProcessor.Stop(flush);
             _receiveTaskProcessor.Stop(flush);
         }
-
+        
         auto finalize = [&](){
             cout << "channel finalized" << endl;
             {
-                // Good coding standard, but mutex not necessary for single bool that is not being tested.
+                // Consistent coding standard, but mutex not necessary for single bool that is not being tested.
                 lock_guard<mutex> guard(_mutex);
                 _channelFinalized = true;
             }
             _conditional.notify_all();
         };
         
+        
+        
         if (_channel && flush) {
             _channel->close().onFinalize(finalize);
             
-            unique_lock<mutex> lock(_mutex);            
+            unique_lock<mutex> lock(_mutex);
             auto ok = _conditional.wait_for(lock, CopernicaCompletionTimeout, [&]() { return _channelFinalized; });
             if (!ok) {
                 cerr << "Channel finalize timed out" << endl;
@@ -259,18 +265,35 @@ namespace MyAMQP {
             }
         }
         
-        cout << "Client closing" << endl;
+        auto closeConnection = [this]() -> ssize_t {
+            ssize_t retCode{};
+            cout << "Client closing" << endl;
+            if (_amqpConnection) {
+                auto closed = _amqpConnection->close();
+                retCode = closed ? 0:-1;
+            }
+            return retCode;
+        };
         
-        if (_amqpConnection) {
-            _amqpConnection->close();
+        // API Calls to the Copernica library are not thread safe.
+        // Connection calls are serialised through the "request processor" so there is no contention with
+        // calls to the "parse" call coming in on the network thread.
+        auto closeTask = packaged_task<ssize_t(void)>{ closeConnection  };
+        auto closeResult = closeTask.get_future();
+        auto executed = _requestProcessor.Push(move(closeTask));
+        
+        if (executed) {
+            retCode = static_cast<int>(closeResult.get());
         }
         
         // This will block until read loop exits.
         _bufferedConnection.Close();
         _completionNotifier.NotifyExit(retCode);
-
+        
         _channel.reset();
         _amqpConnection.reset();
+        
+        _requestProcessor.Stop();
     }
     
     void MyAMQPClientImpl::Pause() {
@@ -298,7 +321,19 @@ namespace MyAMQP {
     }
     
     size_t MyAMQPClientImpl::OnNetworkRead(char const* buf, int len) {
-        auto parsedBytes = _amqpConnection->parse(buf, len);
+        // Called from the context of the network read thread so parse requests and
+        // other requests such as close on the Copernica API are serialised through
+        // the "request processor".
+        auto parseTask = packaged_task<ssize_t(void)>{ [this, buf, len]() -> ssize_t {
+            auto parsedBytes = _amqpConnection->parse(buf, len);
+            return parsedBytes;
+        }};
+        
+        auto parseResult = parseTask.get_future();
+        
+        _requestProcessor.Push(move(parseTask));
+        
+        auto parsedBytes = parseResult.get();
         
         return parsedBytes;
     }
@@ -310,9 +345,9 @@ namespace MyAMQP {
     
     
     int64_t MyAMQPClientImpl::DeliverMessage(MyAMQP::MyMessageCallback const &userHandler,
-                           string const& message,
-                           uint64_t tag,
-                           bool redelivered) {
+                                             string const& message,
+                                             uint64_t tag,
+                                             bool redelivered) {
         
         // User handler may throw, in which case we don't return tag for acknowledgment.
         userHandler(message, tag, redelivered);
@@ -321,7 +356,7 @@ namespace MyAMQP {
     }
     
     void MyAMQPClientImpl::AckMessage(int64_t deliveryTag) {
-
+        
         if (_simulateAckDelay) {
             this_thread::sleep_for(milliseconds(1));
         }
@@ -341,7 +376,7 @@ namespace MyAMQP {
                 
                 // FIX ME. simulating delay on ack send.
                 this_thread::sleep_for(milliseconds(1));
-
+                
                 // Acks are done from the context of this callback, which means they could potentially block on a
                 // network send.
                 _channel->ack(deliveryTag);
@@ -352,7 +387,7 @@ namespace MyAMQP {
             }
             
         };
-
+        
         return receiveHandler;
     }
     

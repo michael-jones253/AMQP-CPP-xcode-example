@@ -52,7 +52,7 @@ namespace MyAMQP {
     void MyReceiveTaskQueue<T>::BreakWait() {
         _breakWait = true;
         
-        _conditional.notify_one();
+        _conditional.notify_all();
     }
 
     template <typename T>
@@ -81,4 +81,5 @@ namespace MyAMQP {
     // the above, then explicit template instantiations are needed for all template specialisations.
     template class MyReceiveTaskQueue<packaged_task<int64_t(void)>>;
     template class MyReceiveTaskQueue<std::future<int64_t>>;
+    template class MyReceiveTaskQueue<packaged_task<ssize_t(void)>>;
 }

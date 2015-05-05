@@ -19,6 +19,7 @@
 
 #include "MyTaskProcessor.h"
 #include "MyAckProcessor.h"
+#include "MyRequestProcessor.h"
 
 #include <string>
 #include <mutex>
@@ -64,6 +65,8 @@ namespace MyAMQP {
         MyTaskProcessor _receiveTaskProcessor;
         
         MyAckProcessor _ackProcessor;
+        
+        MyRequestProcessor _requestProcessor;
         
         bool _channelFinalized;
         

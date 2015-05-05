@@ -193,6 +193,8 @@
 		B29989881AEB63B600435A5E /* MyStopwatch.h in Headers */ = {isa = PBXBuildFile; fileRef = B29989861AEB63B600435A5E /* MyStopwatch.h */; };
 		B29989891AEB678E00435A5E /* libMyUtilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B299897A1AEB631400435A5E /* libMyUtilities.a */; };
 		B29989951AEB750A00435A5E /* libMyUtilities.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B299897A1AEB631400435A5E /* libMyUtilities.a */; };
+		B29E25AD1AF88E6B00BDC559 /* MyRequestProcessor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B29E25AB1AF88E6B00BDC559 /* MyRequestProcessor.cpp */; };
+		B29E25AE1AF88E6B00BDC559 /* MyRequestProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = B29E25AC1AF88E6B00BDC559 /* MyRequestProcessor.h */; };
 		B2AB37611AF09FE400242E40 /* MySignalHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2AB375F1AF09FE400242E40 /* MySignalHandler.cpp */; };
 		B2AB37621AF09FE400242E40 /* MySignalHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = B2AB37601AF09FE400242E40 /* MySignalHandler.h */; };
 		B2BE4F401AE358D5009B8194 /* libAMQPSTL.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = B23A095C1AE0A22F00533FFA /* libAMQPSTL.dylib */; };
@@ -473,6 +475,8 @@
 		B29989851AEB63B600435A5E /* MyStopwatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyStopwatch.cpp; sourceTree = "<group>"; };
 		B29989861AEB63B600435A5E /* MyStopwatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyStopwatch.h; sourceTree = "<group>"; };
 		B299898E1AEB74F500435A5E /* TestUtilities */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestUtilities; sourceTree = BUILT_PRODUCTS_DIR; };
+		B29E25AB1AF88E6B00BDC559 /* MyRequestProcessor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyRequestProcessor.cpp; sourceTree = "<group>"; };
+		B29E25AC1AF88E6B00BDC559 /* MyRequestProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyRequestProcessor.h; sourceTree = "<group>"; };
 		B2AB375F1AF09FE400242E40 /* MySignalHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MySignalHandler.cpp; sourceTree = "<group>"; };
 		B2AB37601AF09FE400242E40 /* MySignalHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MySignalHandler.h; sourceTree = "<group>"; };
 		B2BE4F411AE35ABB009B8194 /* MyAMQPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAMQPClient.h; sourceTree = "<group>"; };
@@ -613,6 +617,8 @@
 				B24A9E7E1AE738B500B8879B /* MyAMQPClientImpl.h */,
 				B24A9E7D1AE738B500B8879B /* MyAMQPClientImpl.cpp */,
 				B235F8361AE9D78200B9D7A8 /* MyAMQPTypes.h */,
+				B29E25AC1AF88E6B00BDC559 /* MyRequestProcessor.h */,
+				B29E25AB1AF88E6B00BDC559 /* MyRequestProcessor.cpp */,
 				B235801C1AE8692600DA1EC3 /* MyTaskProcessor.h */,
 				B235801B1AE8692600DA1EC3 /* MyTaskProcessor.cpp */,
 				B200A9621AE8904100ED0A27 /* MyAckProcessor.h */,
@@ -928,6 +934,7 @@
 				B22E60D51AE796D700CB0B2F /* MyReceiveTaskQueue.h in Headers */,
 				B2FDFDFF1AE30BEB00542DA0 /* MyAMQPCircularBuffer.h in Headers */,
 				B237D8641AEEEB36008CAD0B /* MyCompletionNotifier.h in Headers */,
+				B29E25AE1AF88E6B00BDC559 /* MyRequestProcessor.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1389,6 +1396,7 @@
 				B23007D41AE1CDB9005BAB20 /* MyAMQPBufferedConnection.cpp in Sources */,
 				B237D85F1AEEEA46008CAD0B /* MyCompletionCallbacks.cpp in Sources */,
 				B22E60D41AE796D700CB0B2F /* MyReceiveTaskQueue.cpp in Sources */,
+				B29E25AD1AF88E6B00BDC559 /* MyRequestProcessor.cpp in Sources */,
 				B2344B4F1AE0CB7A00B47CB2 /* MyAMQPClient.cp in Sources */,
 				B200A9631AE8904100ED0A27 /* MyAckProcessor.cpp in Sources */,
 				B237D8631AEEEB36008CAD0B /* MyCompletionNotifier.cpp in Sources */,

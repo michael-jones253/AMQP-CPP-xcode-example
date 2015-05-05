@@ -162,6 +162,10 @@ namespace MyAMQP {
                                bool redelivered);
         
         void AckMessage(int64_t deliveryTag);
+        
+        void CloseAmqpChannel(bool flush);
+        
+        void CloseAmqpConnection();
 
         AMQP::MessageCallback CreateInlineMessageCallback(MyMessageCallback const& userHandler);
         

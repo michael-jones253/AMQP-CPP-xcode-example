@@ -242,48 +242,12 @@ namespace MyAMQP {
             _receiveTaskProcessor.Stop(flush);
         }
         
-        auto finalize = [&](){
-            cout << "channel finalized" << endl;
-            {
-                // Consistent coding standard, but mutex not necessary for single bool that is not being tested.
-                lock_guard<mutex> guard(_mutex);
-                _channelFinalized = true;
-            }
-            _conditional.notify_all();
-        };
-        
-        
-        
-        if (_channel && flush) {
-            _channel->close().onFinalize(finalize);
-            
-            unique_lock<mutex> lock(_mutex);
-            auto ok = _conditional.wait_for(lock, CopernicaCompletionTimeout, [&]() { return _channelFinalized; });
-            if (!ok) {
-                cerr << "Channel finalize timed out" << endl;
-                retCode = -1;
-            }
-        }
-        
-        auto closeConnection = [this]() -> ssize_t {
-            ssize_t retCode{};
-            cout << "Client closing" << endl;
-            if (_amqpConnection) {
-                auto closed = _amqpConnection->close();
-                retCode = closed ? 0:-1;
-            }
-            return retCode;
-        };
-        
-        // API Calls to the Copernica library are not thread safe.
-        // Connection calls are serialised through the "request processor" so there is no contention with
-        // calls to the "parse" call coming in on the network thread.
-        auto closeTask = packaged_task<ssize_t(void)>{ closeConnection  };
-        auto closeResult = closeTask.get_future();
-        auto executed = _requestProcessor.Push(move(closeTask));
-        
-        if (executed) {
-            retCode = static_cast<int>(closeResult.get());
+        try {
+            CloseAmqpChannel(flush);
+            CloseAmqpConnection();
+        } catch (exception const& ex) {
+            cerr << "AMQP close error: " << ex.what() << endl;
+            retCode = -1;
         }
         
         // This will block until read loop exits.
@@ -363,6 +327,65 @@ namespace MyAMQP {
         // cout << "Acked tag: " << deliveryTag << endl;
         _channel->ack(deliveryTag);
         
+    }
+    
+    void MyAMQPClientImpl::CloseAmqpChannel(bool flush) {
+        auto finalize = [&](){
+            cout << "channel finalized" << endl;
+            {
+                // Consistent coding standard, but mutex not necessary for single bool that is not being tested.
+                lock_guard<mutex> guard(_mutex);
+                _channelFinalized = true;
+            }
+            _conditional.notify_all();
+        };
+        
+        auto closeChannel = [this, finalize]() {
+            _channel->close().onFinalize(finalize);
+            return 0;
+        };
+        
+        if (_channel && flush) {
+            auto closeTask = packaged_task<ssize_t(void)> { closeChannel };
+            // API Calls to the Copernica library are not thread safe, so serialize throught the request processor.
+            auto accepted = _requestProcessor.Push(move(closeTask));
+            
+            if (accepted) {
+                // We don't care about the result future of the above task, because success is dependent on receiving
+                // the finalize callback.
+                unique_lock<mutex> lock(_mutex);
+                auto ok = _conditional.wait_for(lock, CopernicaCompletionTimeout, [&]() { return _channelFinalized; });
+                if (!ok) {
+                    throw runtime_error("Channel finalize timed out");
+                }
+            }
+        }
+    }
+    
+    void MyAMQPClientImpl::CloseAmqpConnection() {
+        auto closeConnection = [this]() -> ssize_t {
+            ssize_t retCode{};
+            cout << "Client closing" << endl;
+            if (_amqpConnection) {
+                auto closed = _amqpConnection->close();
+                retCode = closed ? 0:-1;
+            }
+            
+            return retCode;
+        };
+        
+        // API Calls to the Copernica library are not thread safe, so serialize throught the request processor.
+        auto closeTask = packaged_task<ssize_t(void)>{ closeConnection  };
+        auto closeResult = closeTask.get_future();
+        auto accepted = _requestProcessor.Push(move(closeTask));
+        
+        if (accepted) {
+            auto retCode = static_cast<int>(closeResult.get());
+            
+            // We don't care about the result, but we try and get it to capture any exception that was thrown.
+            (void)retCode;
+        }
+
     }
     
     MessageCallback MyAMQPClientImpl::CreateInlineMessageCallback(MyMessageCallback const& userHandler) {

@@ -79,21 +79,7 @@ namespace MyAMQP {
             throw runtime_error("Hello Channel not created");
         }
         
-        // According to Copernica messages are cached, so for this example we assume queue declaration,
-        // exchange declaration and bind can be sent one after another.
-        
-        // we declare a queue, an exchange and we publish a message
-        _channel->declareQueue(routingInfo.QueueName).onSuccess([this]() {
-            std::cout << "queue declared" << std::endl;
-        });
-        
-        // declare an exchange
-        _channel->declareExchange(routingInfo.ExchangeName, exchangeType).onSuccess([]() {
-            std::cout << "exchange declared" << std::endl;
-        });
-        
-        // bind queue and exchange
-        _channel->bindQueue(routingInfo.ExchangeName, routingInfo.QueueName, routingInfo.Key).onSuccess([this]() {
+        auto onSuccess = [this]() {
             std::cout << "queue bound to exchange" << std::endl;
             // If the bind worked then we can assume that the above operations of exchange and queue declare worked.
             {
@@ -101,7 +87,10 @@ namespace MyAMQP {
                 _queueReady = true;
             }
             _conditional.notify_one();
-        });
+        };
+
+        
+        BindAmqpQueueToExchange(exchangeType, routingInfo, onSuccess);
         
         // Prevent a race with sending messages before the queue is ready for use.
         cout << "waiting for queue" << endl;
@@ -112,6 +101,7 @@ namespace MyAMQP {
         if (!status) {
             throw runtime_error("Queue bind timed out");
         }
+        
     }
     
     void MyAMQPClientImpl::SendHelloWorld(string const& exchange, string const& key, string const& greeting) {
@@ -327,6 +317,46 @@ namespace MyAMQP {
         // cout << "Acked tag: " << deliveryTag << endl;
         _channel->ack(deliveryTag);
         
+    }
+    
+    void MyAMQPClientImpl::BindAmqpQueueToExchange(ExchangeType exchangeType,
+                                                   MyAMQPRoutingInfo const& routingInfo,
+                                                   function<void(void)> const& onSuccess) {
+        
+        // According to Copernica example messages are cached. So for this example we assume queue declaration,
+        // exchange declaration and bind can be sent one after another without waiting for the completion callbacks.
+        auto bind = [this, exchangeType, &routingInfo, &onSuccess]()->ssize_t {
+        
+            // we declare a queue, an exchange and we publish a message
+            _channel->declareQueue(routingInfo.QueueName).onSuccess([this]() {
+                std::cout << "queue declared" << std::endl;
+            });
+            
+            // declare an exchange
+            _channel->declareExchange(routingInfo.ExchangeName, exchangeType).onSuccess([]() {
+                std::cout << "exchange declared" << std::endl;
+            });
+            
+            // bind queue and exchange
+            _channel->bindQueue(routingInfo.ExchangeName, routingInfo.QueueName, routingInfo.Key).onSuccess(onSuccess);
+            return 0;
+        };
+        
+        // The Copernica API is not thread safe and queue operations from the main application thread can contend with
+        // parse requests from the network thread. So we serialise via the request processor.
+        // Prior to serialising via the "request processor" I have not seen a problem during this opening sequence
+        // however I have seen a crash under load during the close down. However, because of the potential we should fix
+        // it every where.
+        auto bindTask = packaged_task<ssize_t(void)>{ bind };
+        auto bindResult = bindTask.get_future();
+        auto accepted = _requestProcessor.Push(move(bindTask));
+        
+        if (accepted) {
+            auto result = bindResult.get();
+            // We don't care about the result, because success is dependent on invoking the onSuccess callback,
+            // within the timeout limit.
+            (void)result;
+        }        
     }
     
     void MyAMQPClientImpl::CloseAmqpChannel(bool flush) {

@@ -163,6 +163,10 @@ namespace MyAMQP {
         
         void AckMessage(int64_t deliveryTag);
         
+        void BindAmqpQueueToExchange(AMQP::ExchangeType exchangeType,
+                                     MyAMQPRoutingInfo const& routingInfo,
+                                     std::function<void(void)> const& onSuccess);
+        
         void CloseAmqpChannel(bool flush);
         
         void CloseAmqpConnection();

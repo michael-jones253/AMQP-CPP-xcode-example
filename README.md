@@ -43,7 +43,13 @@ std::thread relieves us of the need to provide an OS abstraction layer over pthr
 Allows consistent waiting/notifiying of the predicate because the conditional wait is capable of testing the predicate and unlocking the mutex around the predicate when it goes into the wait in one atomic operation. See MyReceiveTaskQueue for the wait on a task to arrive, MyAMQPClientImpl on orderly queue creation and the Close() method.
 
 ## Test driven development.
-Apart from the obvious of providing better testing, this methodology encourages  modular component design. The test driven coder soon realises that unit testing is facilitated by providing classes that can be tested in isolation without having to drag in heaps of dependencies and #include files. The pure abstract class or interface is one such technique - see MyNetworkInterface in the MyAMQP directory of this project. Passing of callbacks as arguments is also another technique. Visual studio has test projects as does Xcode for Swift and Objective-C, but not C++, hence my use of assert with an && “comment” in the directories underneath “Test”.
+Apart from the obvious of providing better testing, this methodology encourages  modular component design. The test driven coder soon realises that unit testing is facilitated by providing classes that can be tested in isolation without having to drag in heaps of dependencies and #include files. The pure abstract class or interface is one such technique - see MyNetworkInterface in the MyAMQP directory of this project. Passing of callbacks as arguments is also another technique.
+
+Abstraction via an interface or generic callbacks allows the test program to provide dummy abstractions.
+
+Another advantage of test driven development is that it can be quicker to get something working. Particularly with some client server situations setting up the conditions to test new functionality in situ can be a waste of time compared to setting it up via a unit test.
+
+Visual studio has test projects as does Xcode for Swift and Objective-C, but not C++, hence my use of assert with an && “comment” in the directories underneath “Test”.
 
 ## Minimise use of singletons.
 Generally these are BAD, because they are global data which make it very difficult for the coder to determine destruction order of such data - sometimes with unexpected program behaviour on exit. They can also lead to a convoluted object ownership model - similar problem to a design based on shared_ptr (see above).
@@ -53,6 +59,8 @@ However, in the MyUtilities directory I have used the singleton pattern for a si
 ## Notes:
 Copernica’s  AMQP-CPP repository compiled without modification except for adding the pragmas to export the symbols in “classes.h” from a dylib.
 
-By default these clients connect to a local RabbitMQ server and send and receive from each other. Various command line options have been implemented. The consumer client can be paused with Ctrl-C and resumed without losing any messages. The consumer can also be disconnected and reconnected to the RabbitMQ server by sending SIGHUP (signal hangup). This has allowed me to test the robustness of the open close pattern and the ability to stop and start modules by terminating and recreating the std::async threads associated with the module. These features added extra complexity to this project, but part of the motivation for this is to have some fun. In a commercial product, unecessary complexity should be avoided.
+By default these clients connect to a local RabbitMQ server and send and receive from each other. Various command line options have been implemented. The consumer client can be paused with Ctrl-C and resumed without losing any messages. The consumer can also be disconnected and reconnected to the RabbitMQ server by sending SIGHUP (signal hangup). This has allowed me to test the robustness of the open close pattern and the ability to stop and start modules by terminating and recreating the std::async threads associated with the module.
+
+I have tested closing and opening under load by using the --count <message count> option with a large number on the client to send a flood of messages. These features added extra complexity to this project, but part of the motivation for this is to have some fun. In a commercial product, unecessary complexity should be avoided.
 
 

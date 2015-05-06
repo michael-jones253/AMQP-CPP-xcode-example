@@ -314,9 +314,20 @@ namespace MyAMQP {
         if (_simulateAckDelay) {
             this_thread::sleep_for(milliseconds(1));
         }
-        // cout << "Acked tag: " << deliveryTag << endl;
-        _channel->ack(deliveryTag);
         
+        auto ackTask = packaged_task<ssize_t(void)> {[this, deliveryTag]() ->ssize_t{
+            auto acked = _channel->ack(deliveryTag);
+                return acked ? 0:-1;
+        }};
+        
+        auto ackResult = ackTask.get_future();
+        _requestProcessor.Push(move(ackTask));
+        auto result = ackResult.get();
+        
+        // We don't care about the value of the result, but we do a get to capture any exceptions
+        // on the network send. It also make this call synchronous which is the effect we want when
+        // flushing acks during shutdown.
+        (void)result;
     }
     
     void MyAMQPClientImpl::BindAmqpQueueToExchange(ExchangeType exchangeType,
@@ -370,7 +381,7 @@ namespace MyAMQP {
             _conditional.notify_all();
         };
         
-        auto closeChannel = [this, finalize]() {
+        auto closeChannel = [this, &finalize]() {
             _channel->close().onFinalize(finalize);
             return 0;
         };
@@ -427,8 +438,9 @@ namespace MyAMQP {
                 // This model assumes that the invoking of the handler needs to be done serially.
                 userHandler(message.message(), deliveryTag, redelivered);
                 
-                // FIX ME. simulating delay on ack send.
-                this_thread::sleep_for(milliseconds(1));
+                if (_simulateAckDelay) {
+                    this_thread::sleep_for(milliseconds(1));
+                }
                 
                 // Acks are done from the context of this callback, which means they could potentially block on a
                 // network send.

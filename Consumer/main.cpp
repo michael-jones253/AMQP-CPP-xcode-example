@@ -50,8 +50,9 @@ int main(int argc, const char * argv[]) {
             { "exchange",     required_argument,            nullptr,'e'},
             { "key",     required_argument,            nullptr,     'k'},
             { "queue",     required_argument,            nullptr,   'q'},
-            { "sleep",   required_argument,      nullptr,           's' },
-            { NULL,    0,                 nullptr,           0 }
+            { "sleep",   required_argument,      nullptr,           's'},
+            { "delay",   no_argument,     nullptr,                  'd'},
+            { NULL,    0,                 nullptr,                    0}
         };
         
         MyLoginCredentials loginInfo{"127.0.0.1", "guest", "guest"};
@@ -64,11 +65,12 @@ int main(int argc, const char * argv[]) {
         int sleepSeconds{};
         bool threaded{true};
         bool flushOnClose{true};
+        bool messageProcessDelay{};
         
         auto const usageStr = string("Usage: [--fanout | --topic {default direct}] [--count <integer>] [--sleep <seconds>]");
         
         do {
-            auto ch = getopt_long(argc, (char* const *)(argv), "ftie:k:q:c:s:", longopts, nullptr);
+            auto ch = getopt_long(argc, (char* const *)(argv), "ftie:k:q:c:s:d", longopts, nullptr);
             
             switch (ch) {
                 case 'f':
@@ -102,6 +104,9 @@ int main(int argc, const char * argv[]) {
                     
                 case 's':
                     sleepSeconds = stoi(optarg);
+                    
+                case 'd':
+                    messageProcessDelay = true;
                     
                 case -1:
                     break;
@@ -154,27 +159,32 @@ int main(int argc, const char * argv[]) {
         auto ctrlCHandler = [&](bool, bool) {
             ampqClient.Pause();
             
-            vector<string> options{"abort", "flush and quit", "delay acks", "continue with no delay"};
+            vector<string> options{"terminate", "quit and flush", "ack delay", "message delay", "continue with no delay"};
             auto input = MyKeyboardInput::GetOption(options);
             switch (input) {
-                case 'a':
+                case 't':
                     // NB Signal Trampoline means we must not lock the mutex.
                     flushOnClose = false;
                     breakWait = true;
                     break;
                     
-                case 'f':
+                case 'q':
                     // NB Signal Trampoline means we must not lock the mutex.
                     flushOnClose = true;
                     breakWait = true;
                     break;
                     
-                case 'd':
+                case 'a':
                     ampqClient.SimulateAckDelay(true);
+                    break;
+                    
+                case 'm':
+                    messageProcessDelay = true;
                     break;
                     
                 case 'c':
                     ampqClient.SimulateAckDelay(false);
+                    messageProcessDelay = false;
                     break;
                     
                 default:
@@ -239,6 +249,10 @@ int main(int argc, const char * argv[]) {
                 }
                 
                 ++messageCount;
+                if (messageProcessDelay) {
+                    sleep_for(milliseconds(1));
+                }
+                
                 cout << message << ", tag: " << tag << ", redelivered: " << redelivered << endl;
             }
             

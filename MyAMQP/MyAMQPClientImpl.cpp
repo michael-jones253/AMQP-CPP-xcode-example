@@ -195,7 +195,7 @@ namespace MyAMQP {
         
         // create channel if it does not yet exist
         if (!_channel) {
-            _channel = unique_ptr<AMQP::Channel>(new AMQP::Channel(connection));
+            _channel = make_unique<AMQP::Channel>(connection);
             
             // Set callbacks.
             _channel->onReady(onChannelOpen);
@@ -224,9 +224,8 @@ namespace MyAMQP {
         
         _bufferedConnection.Open(loginInfo.HostIpAddress);
         
-        _amqpConnection = unique_ptr<AMQP::Connection>(new AMQP::Connection(this,
-                                                                            AMQP::Login(loginInfo.UserName,
-                                                                                        loginInfo.Password), "/"));
+        _amqpConnection = make_unique<AMQP::Connection>(this,
+                                                        AMQP::Login(loginInfo.UserName, loginInfo.Password), "/");
         _amqpConnection->login();
         
         _requestProcessor.Start();

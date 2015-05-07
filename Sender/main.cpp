@@ -117,7 +117,7 @@ int main(int argc, const char * argv[]) {
         } while (true);
         
         
-        auto netConnection = unique_ptr<MyUnixNetworkConnection>(new MyUnixNetworkConnection());
+        auto netConnection = make_unique<MyUnixNetworkConnection>();
         
         MyAMQPClient myAmqp{move(netConnection)};
         

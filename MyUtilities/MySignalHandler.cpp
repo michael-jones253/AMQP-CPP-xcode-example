@@ -29,9 +29,9 @@ namespace MyUtilities {
         auto signalHandler = bind(&MySignalHandler::Handle, this, _1, _2, _3);
         
 #if defined(__APPLE__)
-        _impl = unique_ptr<MyUnixSignalHandlerImpl>( new MyUnixSignalHandlerImpl(signalHandler) );
+        _impl = make_unique<MyUnixSignalHandlerImpl>(signalHandler);
 #else
-        _impl = unique_ptr<MyWindowsSignalHandlerImpl>( new MyWindowsSignalHandlerImpl(signalHandler) );
+        _impl = make_unique<MyWindowsSignalHandlerImpl>(signalHandler);
 #endif
         
     }
@@ -41,6 +41,7 @@ namespace MyUtilities {
     
     MySignalHandler* MySignalHandler::Instance() {
         if (Singleton == nullptr) {
+            // make_unique generates a private constructor error here.
             Singleton = unique_ptr<MySignalHandler>( new MySignalHandler);
         }
         

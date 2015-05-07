@@ -33,7 +33,7 @@ struct MyUnixNetworkConnectionImpl {
 MyUnixNetworkConnection::MyUnixNetworkConnection() :
 MyNetworkConnection{},
 _impl{} {
-    _impl = unique_ptr<MyUnixNetworkConnectionImpl>(new MyUnixNetworkConnectionImpl);
+    _impl = make_unique<MyUnixNetworkConnectionImpl>();
 }
 
 // Necessary to get the impl to link.

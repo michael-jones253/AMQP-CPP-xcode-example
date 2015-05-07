@@ -7,6 +7,7 @@
 //
 
 #include "MyReceiveTaskQueue.h"
+#include "MyRequestResult.h"
 #include <future>
 
 using namespace std;
@@ -82,4 +83,5 @@ namespace MyAMQP {
     template class MyReceiveTaskQueue<packaged_task<int64_t(void)>>;
     template class MyReceiveTaskQueue<std::future<int64_t>>;
     template class MyReceiveTaskQueue<packaged_task<ssize_t(void)>>;
+    template class MyReceiveTaskQueue<packaged_task<MyRequestResult(void)>>;
 }

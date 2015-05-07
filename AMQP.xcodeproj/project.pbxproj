@@ -294,6 +294,7 @@
 		B200A9621AE8904100ED0A27 /* MyAckProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAckProcessor.h; sourceTree = "<group>"; };
 		B21154681AEDD21B003FA861 /* MyNetworkUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyNetworkUtilities.cpp; sourceTree = "<group>"; };
 		B21154691AEDD21B003FA861 /* MyNetworkUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNetworkUtilities.h; sourceTree = "<group>"; };
+		B21A55C61AFB03120015E8A4 /* MyRequestResult.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyRequestResult.h; sourceTree = "<group>"; };
 		B21BEEE01AF1FAFB003BC26A /* MyUnixSignalHandlerImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyUnixSignalHandlerImpl.cpp; sourceTree = "<group>"; };
 		B21BEEE11AF1FAFB003BC26A /* MyUnixSignalHandlerImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyUnixSignalHandlerImpl.h; sourceTree = "<group>"; };
 		B222A31E1AF057C300C7762E /* MyNetworkException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MyNetworkException.cpp; sourceTree = "<group>"; };
@@ -631,6 +632,7 @@
 				B23007CC1AE1BCF4005BAB20 /* MyAMQPBufferedConnection.h */,
 				B23007D31AE1CDB9005BAB20 /* MyAMQPBufferedConnection.cpp */,
 				B29989711AEB1E1400435A5E /* MyNetworkConnection.h */,
+				B21A55C61AFB03120015E8A4 /* MyRequestResult.h */,
 				B22E60D31AE796D700CB0B2F /* MyReceiveTaskQueue.h */,
 				B22E60D21AE796D700CB0B2F /* MyReceiveTaskQueue.cpp */,
 				B237D8621AEEEB36008CAD0B /* MyCompletionNotifier.h */,

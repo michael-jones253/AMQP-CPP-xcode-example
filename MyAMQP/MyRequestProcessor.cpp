@@ -50,7 +50,7 @@ namespace MyAMQP {
         }
     }
     
-    bool MyRequestProcessor::Push(std::packaged_task<ssize_t(void)>&& task) {
+    bool MyRequestProcessor::Push(std::packaged_task<MyRequestResult(void)>&& task) {
         if (!_shouldRun) {
             // Discard further messages once stop is called.
             return false;
@@ -67,7 +67,7 @@ namespace MyAMQP {
         }
         
         while (_shouldRun) {
-            packaged_task<ssize_t(void)> task{};
+            packaged_task<MyRequestResult(void)> task{};
             
             auto ok = _taskQueue.Wait(task);
             

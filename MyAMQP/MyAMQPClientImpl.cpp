@@ -81,14 +81,13 @@ namespace MyAMQP {
         
         auto onSuccess = [this]() {
             std::cout << "queue bound to exchange" << std::endl;
-            // If the bind worked then we can assume that the above operations of exchange and queue declare worked.
             {
                 lock_guard<mutex> guard(_mutex);
                 _queueReady = true;
             }
             _conditional.notify_one();
         };
-
+        
         
         BindAmqpQueueToExchange(exchangeType, routingInfo, onSuccess);
         
@@ -105,10 +104,17 @@ namespace MyAMQP {
     }
     
     void MyAMQPClientImpl::SendHelloWorld(string const& exchange, string const& key, string const& greeting) {
-        cout << greeting << endl;
-        auto ret = _channel->publish(exchange, key, greeting.c_str());
+        auto publish = [this, &exchange, &key, &greeting]()->MyRequestResult {
+            cout << greeting << endl;
+            auto ok = _channel->publish(exchange, key, greeting.c_str());
+            return MyRequestResult{ ok };
+        };
         
-        if (!ret) {
+        auto publishTask = packaged_task<MyRequestResult(void)>{ publish };
+        auto publishResult = publishTask.get_future();
+        _requestProcessor.Push(move(publishTask));
+        
+        if (!publishResult.get().Ok) {
             throw runtime_error("message publish failed");
         }
     }
@@ -129,7 +135,22 @@ namespace MyAMQP {
         }
         
         // Register callback with Copernica library.
-        _channel->consume(queue).onReceived(messageHandler);
+        auto registerReceiveHandler = [this, &queue, &messageHandler]()->MyRequestResult {
+            // Copernica library takes a copy of the handler so ok to pass a reference to a
+            // temporary.
+            _channel->consume(queue).onReceived(messageHandler);
+            
+            // Assume it worked.
+            return MyRequestResult{ true };
+        };
+        
+        auto registerReceiveTask = packaged_task<MyRequestResult(void)>{ registerReceiveHandler };
+        auto registerResult = registerReceiveTask.get_future();
+        _requestProcessor.Push(move(registerReceiveTask));
+        auto result = registerResult.get();
+        
+        // We don't care about the result, but do the get to make this synchronous.
+        (void)result;
     }
     
     // Interface implementation of data from the client that is destined for the server.
@@ -278,9 +299,9 @@ namespace MyAMQP {
         // Called from the context of the network read thread so parse requests and
         // other requests such as close on the Copernica API are serialised through
         // the "request processor".
-        auto parseTask = packaged_task<ssize_t(void)>{ [this, buf, len]() -> ssize_t {
+        auto parseTask = packaged_task<MyRequestResult(void)>{ [this, buf, len]() -> MyRequestResult {
             auto parsedBytes = _amqpConnection->parse(buf, len);
-            return parsedBytes;
+            return MyRequestResult{ static_cast<ssize_t>(parsedBytes) };
         }};
         
         auto parseResult = parseTask.get_future();
@@ -289,7 +310,7 @@ namespace MyAMQP {
         
         auto parsedBytes = parseResult.get();
         
-        return parsedBytes;
+        return parsedBytes.ByteCount;
     }
     
     void MyAMQPClientImpl::OnNetworkReadError(std::string const& errorStr){
@@ -315,9 +336,9 @@ namespace MyAMQP {
             this_thread::sleep_for(milliseconds(1));
         }
         
-        auto ackTask = packaged_task<ssize_t(void)> {[this, deliveryTag]() ->ssize_t{
+        auto ackTask = packaged_task<MyRequestResult(void)> {[this, deliveryTag]() ->MyRequestResult{
             auto acked = _channel->ack(deliveryTag);
-                return acked ? 0:-1;
+            return MyRequestResult{ acked };
         }};
         
         auto ackResult = ackTask.get_future();
@@ -336,8 +357,8 @@ namespace MyAMQP {
         
         // According to Copernica example messages are cached. So for this example we assume queue declaration,
         // exchange declaration and bind can be sent one after another without waiting for the completion callbacks.
-        auto bind = [this, exchangeType, &routingInfo, &onSuccess]()->ssize_t {
-        
+        auto bind = [this, exchangeType, &routingInfo, &onSuccess]()->MyRequestResult {
+            
             // we declare a queue, an exchange and we publish a message
             _channel->declareQueue(routingInfo.QueueName).onSuccess([this]() {
                 std::cout << "queue declared" << std::endl;
@@ -350,7 +371,7 @@ namespace MyAMQP {
             
             // bind queue and exchange
             _channel->bindQueue(routingInfo.ExchangeName, routingInfo.QueueName, routingInfo.Key).onSuccess(onSuccess);
-            return 0;
+            return MyRequestResult{ true };
         };
         
         // The Copernica API is not thread safe and queue operations from the main application thread can contend with
@@ -358,7 +379,7 @@ namespace MyAMQP {
         // Prior to serialising via the "request processor" I have not seen a problem during this opening sequence
         // however I have seen a crash under load during the close down. However, because of the potential we should fix
         // it every where.
-        auto bindTask = packaged_task<ssize_t(void)>{ bind };
+        auto bindTask = packaged_task<MyRequestResult(void)>{ bind };
         auto bindResult = bindTask.get_future();
         auto accepted = _requestProcessor.Push(move(bindTask));
         
@@ -367,7 +388,7 @@ namespace MyAMQP {
             // We don't care about the result, because success is dependent on invoking the onSuccess callback,
             // within the timeout limit.
             (void)result;
-        }        
+        }
     }
     
     void MyAMQPClientImpl::CloseAmqpChannel(bool flush) {
@@ -383,11 +404,11 @@ namespace MyAMQP {
         
         auto closeChannel = [this, &finalize]() {
             _channel->close().onFinalize(finalize);
-            return 0;
+            return MyRequestResult{ true };
         };
         
         if (_channel && flush) {
-            auto closeTask = packaged_task<ssize_t(void)> { closeChannel };
+            auto closeTask = packaged_task<MyRequestResult(void)> { closeChannel };
             // API Calls to the Copernica library are not thread safe, so serialize throught the request processor.
             auto accepted = _requestProcessor.Push(move(closeTask));
             
@@ -404,29 +425,28 @@ namespace MyAMQP {
     }
     
     void MyAMQPClientImpl::CloseAmqpConnection() {
-        auto closeConnection = [this]() -> ssize_t {
-            ssize_t retCode{};
+        auto closeConnection = [this]() -> MyRequestResult {
+            bool ok{};
             cout << "Client closing" << endl;
             if (_amqpConnection) {
-                auto closed = _amqpConnection->close();
-                retCode = closed ? 0:-1;
+                ok = _amqpConnection->close();
             }
             
-            return retCode;
+            return MyRequestResult{ ok };
         };
         
         // API Calls to the Copernica library are not thread safe, so serialize throught the request processor.
-        auto closeTask = packaged_task<ssize_t(void)>{ closeConnection  };
+        auto closeTask = packaged_task<MyRequestResult(void)>{ closeConnection  };
         auto closeResult = closeTask.get_future();
         auto accepted = _requestProcessor.Push(move(closeTask));
         
         if (accepted) {
-            auto retCode = static_cast<int>(closeResult.get());
+            auto retCode = closeResult.get();
             
             // We don't care about the result, but we try and get it to capture any exception that was thrown.
             (void)retCode;
         }
-
+        
     }
     
     MessageCallback MyAMQPClientImpl::CreateInlineMessageCallback(MyMessageCallback const& userHandler) {

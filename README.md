@@ -29,7 +29,9 @@ std::unique_ptr is the first choice for efficiency and clear ownership reasons. 
 ## The thread safe queue.
 This is a classic real time design pattern and allows a module/thread to have sole control over certain resources thus avoiding sharing resources across threads and ending up with convoluted deadlock prone code.
 
-The thread safe queue and std::package_task. When operations on resources need to be performed by multiple threads the approach of sharing those resources and protecting contention with a mutex can lead to convoluted deadlock prone design. The classic thread safe queue model avoids this by allowing a subsystem to have sole control of those resources and be the reader of a queue containing messages that trigger operations on those resources. See MyReceiveTaskQueue and its use in MyAckProcessor and MyTaskProcessor in the MyAMQP directory of this project.
+The thread safe queue and a modern approach with std::package_task. If you are not familiar with packaged tasks then see my explanation at the end of this readme.
+
+When operations on resources need to be performed by multiple threads the approach of sharing those resources and protecting contention with a mutex can lead to convoluted deadlock prone design. The classic thread safe queue model avoids this by allowing a subsystem to have sole control of those resources and be the reader of a queue containing messages that trigger operations on those resources. See MyReceiveTaskQueue and its use in MyAckProcessor and MyTaskProcessor in the MyAMQP directory of this project.
 
 In the situation of where the sender of the message needs to receive a reply notification that the operation has completed the classic approach would provide a queue in the other direction. However, this approach can also lead to convoluted design. With C11 we can simplify this design pattern by queueing packaged tasks to be invoked by the reader of the queue. Before the sender of the task enqueues the std::packaged_task it can take a std::future and wait on it. When the queue reader pops the task from its queue and executes it the sender waiting on the future will get notified. Unlike the classic approach with queues in both directions the packaged_task allows the processor of the messages to be free of any handles to the sender.
 
@@ -62,5 +64,18 @@ Copernica’s  AMQP-CPP repository compiled without modification except for addi
 By default these clients connect to a local RabbitMQ server and send and receive from each other. Various command line options have been implemented. The consumer client can be paused with Ctrl-C and resumed without losing any messages. The consumer can also be disconnected and reconnected to the RabbitMQ server by sending SIGHUP (signal hangup). This has allowed me to test the robustness of the open close pattern and the ability to stop and start modules by terminating and recreating the std::async threads associated with the module.
 
 I have tested closing and opening under load by using the --count <message count> option with a large number on the client to send a flood of messages. These features added extra complexity to this project, but part of the motivation for this is to have some fun. In a commercial product, unecessary complexity should be avoided.
+
+## An explanation of packaged tasks.
+
+What is a packaged task? It is a bundle of work that can be ran asynchronously i.e the dispatcher can get that bundle of work run without blocking and wait for or get the result asynchronously (the future).
+
+What is this bundle of work? It is a method/function that can be run - it could be a loop that runs for a long time or just a short execution. However this method needs to be associated with some data i.e it needs to be bound to some data or parameters. The binding of method to data can be done with std::bind or by using a lambda as the method.
+
+Example usage might be to launch a number of tasks one after another without blocking on each launch, then wait for the results all in one go. Another pattern would be to have a different thread from the launcher wait for the result.
+
+std::async class seems to do this? However the difference between std::async and std::packaged task is that the packaged task is just a bundle of work which does not include a thread for running it. Packaged tasks need to be handed to a thread to get the work run. Whereas std::async comes with a launch method that will run the bundle of work in a dedicated thread.
+
+The programmer therefore needs to decide in what thread the packaged task will be run which makes it more flexible than std::async. e.g. a single thread can run many packaged tasks in a serialised manner whereas std::async is a associated with a thread 1:1 which will terminate once the future is delivered. If the design has a 1:1 association of work with thread then std::async will be the more convenient choice.
+
 
 

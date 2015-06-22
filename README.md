@@ -13,7 +13,7 @@ I moved it into /opt/local because I know that OS X does not use this directory 
 
 1. Start the rabbitMQ server in a shell window.
   <pre><code>sudo ./rabbitmq-server</code></pre>
-2. Start the consumer from the build location, for a quick test of the non packaged debug build:
+2. Start the consumer from the build location in another shell window. For a quick test of the non packaged debug build:
   <pre><code>cd ~/Library/Developer/Xcode/DerivedData/AMQP-...../Build/Products/Debug
   export DYLD_LIBRARY_PATH=.
   ./Consumer</code></pre>
@@ -21,13 +21,13 @@ I moved it into /opt/local because I know that OS X does not use this directory 
   <pre><code>export DYLD_LIBRARY_PATH=.
   ./Sender</code></pre>
 
-You should see 100 messages transmitted and received. To show what is offerred by a message broker, then try the following:
+You should see 100 messages transmitted and received. To show some of the reliability features offered by a message broker try the following:
 
 1. Kill the Consumer.
-2. Run the Sender again.
+2. Run the Sender again. NB Consumer is not running.
 3. Start up the Consumer and note how it receives the messages buffered in the rabbitMQ broker.
 
-To Load test run the sender with a large message count:
+To Load test, run the sender with a large message count:
   <pre><code>./Sender --count 1000000</code></pre>
 
 

@@ -7,9 +7,33 @@ This repo shows how to use Copernica’s AMQP-CPP C++ library to create a Rabbit
 
 Everything which begins with “My” is my code. Most of my interesting stuff described below is in the MyAMQP directory. Everything in the AMQPSTL directory is code from Copernica packaged into a dynamic library for ease of Xcode on OS X development.
 
-Some techniques demonstrated are:
+## How to run
+On mac I chose this installation https://www.rabbitmq.com/install-standalone-mac.html
+I moved it into /opt/local because I know that OS X does not use this directory (it is the directory used by macports).
 
-## Threading/performance considerations.
+1. Start the rabbitMQ server in a shell window.
+  <pre><code>sudo ./rabbitmq-server</code></pre>
+2. Start the consumer from the build location, for a quick test of the non packaged debug build:
+  <pre><code>cd ~/Library/Developer/Xcode/DerivedData/AMQP-...../Build/Products/Debug
+  export DYLD_LIBRARY_PATH=.
+  ./Consumer</code></pre>
+3. Start the sender from the build location in another shell window:
+  <pre><code>export DYLD_LIBRARY_PATH=.
+  ./Sender</code></pre>
+
+You should see 100 messages transmitted and received. To show what is offerred by a message broker, then try the following:
+
+1. Kill the Consumer.
+2. Run the Sender again.
+3. Start up the Consumer and note how it receives the messages buffered in the rabbitMQ broker.
+
+To Load test run the sender with a large message count:
+  <pre><code>./Sender --count 1000000</code></pre>
+
+
+## Software design techniques demonstrated are:
+
+### Threading/performance considerations.
 I can see from the debugger that the user message receive callback from the Copernica library is being invoked in the context of the network read thread. So to avoid message processing in the client holding up network writing in the RabbbitMQ server due to TCP flow control, messages are queued in the context of the network read rather than processed. The MyTaskProcessor class takes a modern approach to queueing and processing in its own thread. See below for details on how I did this using std::packaged_task and std::async.
 
 Similarly the debugger tells me that the Copernica API to send the message Ack involves a network write in the same thread context as the API call. So instead of potentially holding up the message processing by blocking on a network write, the sending of acks are also handled by another thread (via the MyAckProcessor class). See below for details on how std::future is waited on for sending the acks.
@@ -18,15 +42,15 @@ The Consumer app has command line options to either perform the above threading 
 
 If I simulate a network delay in sending acks with a small sleep on each ack write, then running the app in threaded mode processes the messages considerably faster. This is due to the concurrent processing of messages and ack sending. Using a benchmark of 1000 messages and a delay of 1 millisecond per ack the threaded model runs 10 times faster!
 
-## The impl or hidden implementation.
+### The impl or hidden implementation.
 Implementation include files are confined to the impl and hidden from the wrapper class by use of a forward declaration for the impl. This reduces application dependencies, speeds application compilation and it is easy to make the wrapper object movable. See MyAMQPClientImpl in the MyAMQP directory and note that all the non 'impl' classes and include files are hidden from the application in this impl. Also see MySignalHandler in the MyUtilities directory for how an impl can be used to make platform specific variants.
 
 Another style of impl I have used is the POD (plain old data) which is just a hidden struct and all control flow logic is held in the owning class. The POD style impl is not suited to threaded situations where move operations are needed. See MyUnixNetworkConnection in the MyNetworkConnection directory for an example of this 
 
-## Smart pointers.
+### Smart pointers.
 std::unique_ptr is the first choice for efficiency and clear ownership reasons. Design based on the alternative std::shared_ptr can sometimes become a tangled model where ownership/responsibility is not clear to the maintainer and destruction order can be difficult to determine. However std::shared_ptr does have its uses. Usage of shared_ptr and weak_ptr is demonstrated in the MyCallbacksNotifier class which uses weak_ptr to model the situation where the ownership of the callbacks is outside of the client and temporary ownership for notification is required by the client.
 
-## The thread safe queue.
+### The thread safe queue.
 This is a classic real time design pattern and allows a module/thread to have sole control over certain resources thus avoiding sharing resources across threads and ending up with convoluted deadlock prone code.
 
 The thread safe queue and a modern approach with std::package_task. If you are not familiar with packaged tasks then see my explanation at the end of this readme.
@@ -35,16 +59,16 @@ When operations on resources need to be performed by multiple threads the approa
 
 In the situation of where the sender of the message needs to receive a reply notification that the operation has completed the classic approach would provide a queue in the other direction. However, this approach can also lead to convoluted design. With C11 we can simplify this design pattern by queueing packaged tasks to be invoked by the reader of the queue. Before the sender of the task enqueues the std::packaged_task it can take a std::future and wait on it. When the queue reader pops the task from its queue and executes it the sender waiting on the future will get notified. Unlike the classic approach with queues in both directions the packaged_task allows the processor of the messages to be free of any handles to the sender.
 
-## Move semantics.
+### Move semantics.
 Prior to C11 avoiding copying of objects whose ownership is transferred via parameters or method returns would require the use of pointers. The thread safe queue in this example avoids the need to have a queue of pointers to objects by providing a generic template on movable objects. C11 features such as std::future, std::packaged_task, std::thread lambdas etc are movable. However in the case of lambdas it can be neater to take a copy rather than move them. They are quite lightweight. See MyAMQPClient in the MyAMQP client for how an impl makes writing move operations simple.
 
-## Async threading and futures.
+### Async threading and futures.
 std::thread relieves us of the need to provide an OS abstraction layer over pthreads or windows threads when writing cross platform code. However, I found that there is generally no need to program with this low level object and instead std::async relieves us of the complexities of joining and simplifies exception catching. See Open and Close methods of MyAMQPBufferedConnection,  MyAckProcessor and MyTaskProcessor classes in the MyAMQP directory of this project.
 
-## Condition variables.
+### Condition variables.
 Allows consistent waiting/notifiying of the predicate because the conditional wait is capable of testing the predicate and unlocking the mutex around the predicate when it goes into the wait in one atomic operation. See MyReceiveTaskQueue for the wait on a task to arrive, MyAMQPClientImpl on orderly queue creation and the Close() method.
 
-## Test driven development.
+### Test driven development.
 Apart from the obvious of providing better testing, this methodology encourages  modular component design. The test driven coder soon realises that unit testing is facilitated by providing classes that can be tested in isolation without having to drag in heaps of dependencies and #include files. The pure abstract class or interface is one such technique - see MyNetworkInterface in the MyAMQP directory of this project. Passing of callbacks as arguments is also another technique.
 
 Abstraction via an interface or generic callbacks allows the test program to provide dummy abstractions to the component being tested.
@@ -53,7 +77,7 @@ Another advantage of test driven development is that it can be quicker to get so
 
 Visual studio has test projects as does Xcode for Swift and Objective-C, but not C++, hence my use of assert with an && “comment” in the directories underneath “Test”.
 
-## Minimise use of singletons.
+### Minimise use of singletons.
 Generally these are BAD, because they are global data which make it very difficult for the coder to determine destruction order of such data - sometimes with unexpected program behaviour on exit. They can also lead to a convoluted object ownership model - similar problem to a design based on shared_ptr (see above).
 
 However, in the MyUtilities directory I have used the singleton pattern for a signal handler which by its nature is a singleton operation. To avoid the unclear destruction order problem that singletons suffer from I have used the RAII design pattern. The destruction of the signal callbacks is on the stack and deterministic and their destructor releases the installed signal handlers and restores system default handling. Thus ensuring that when our handlers go out of scope, system defaults take over. See MySignalCallbacks in the MyUtilities directory.
